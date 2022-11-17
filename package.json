@@ -7,13 +7,18 @@
   "author": "POPPIN-FUMI",
   "license": "Apache-2.0",
   "private": false,
+  "bin": {
+    "skeet": "./dist/index.js"
+  },
   "scripts": {
     "update:packages": "ncu -u && yarn",
     "build": "tsc",
+    "publish": "npm publish",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "commander": "^9.4.1",
     "dotenv": "16.0.3"
   },
   "devDependencies": {
