@@ -1,0 +1,10 @@
+{
+  "name": "skeet",
+  "version": "0.0.1",
+  "description": "Full-stack TypeScript Serverless Framework",
+  "main": "dist/index.js",
+  "repository": "https://github.com/elsoul/skeet.git",
+  "author": "POPPIN-FUMI",
+  "license": "Apache-2.0",
+  "private": false
+}
