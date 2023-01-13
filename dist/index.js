@@ -48,8 +48,7 @@ const add = async () => {
 exports.add = add;
 const create = async () => {
     const appName = process.argv[3] || '';
-    await Skeet.Create.cloneRepo(appName);
-    await Skeet.Create.printEndroll(appName);
+    await Skeet.cloneRepo(appName);
 };
 exports.create = create;
 const db = async () => {

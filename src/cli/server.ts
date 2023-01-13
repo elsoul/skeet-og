@@ -1,11 +1,9 @@
-import { exec } from 'node:child_process'
+import { spawn } from 'child_process'
 
-export const runServer = async () =>
-  exec(`yarn dev`, (err, output) => {
-    if (err) {
-      console.error('could not execute command: ', err)
-      return
-    }
-    console.log(output)
-    return true
+export const runServer = async () => {
+  const childProcess = spawn('yarn', ['dev'])
+
+  childProcess.stdout.on('data', (chunk) => {
+    console.log(chunk.toString())
   })
+}

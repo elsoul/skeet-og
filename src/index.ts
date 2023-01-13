@@ -23,8 +23,7 @@ export const add = async () => {
 
 export const create = async () => {
   const appName = process.argv[3] || ''
-  await Skeet.Create.cloneRepo(appName)
-  await Skeet.Create.printEndroll(appName)
+  await Skeet.cloneRepo(appName)
 }
 
 export const db = async () => {
