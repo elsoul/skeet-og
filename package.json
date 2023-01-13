@@ -1,6 +1,6 @@
 {
   "name": "skeet",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Full-stack TypeScript Serverless Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/elsoul/skeet.git",
@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "commander": "9.4.1",
-    "dotenv": "16.0.3"
+    "dotenv": "16.0.3",
+    "skeet": "^0.3.2"
   },
   "devDependencies": {
     "@types/express": "4.17.14",
