@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sh = exports.s = exports.db = exports.create = exports.add = void 0;
+exports.test = exports.s = exports.migrate = exports.create = exports.deploy = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const commander_1 = require("commander");
 const version_json_1 = require("./lib/version.json");
@@ -41,35 +41,34 @@ dotenv_1.default.config();
 async function run() {
     console.log('running skeet!');
 }
-const add = async () => {
-    const appName = process.argv[3] || '--help';
-    console.log('creating skeet!');
+const deploy = async () => {
+    await Skeet.deploy();
 };
-exports.add = add;
+exports.deploy = deploy;
 const create = async () => {
     const appName = process.argv[3] || '';
     await Skeet.cloneRepo(appName);
 };
 exports.create = create;
-const db = async () => {
-    await Skeet.runServer();
+const migrate = async () => {
+    await Skeet.migrate();
 };
-exports.db = db;
+exports.migrate = migrate;
 const s = async () => {
     await Skeet.runServer();
 };
 exports.s = s;
-const sh = async () => {
-    const command = process.argv[3] || '--help';
-    console.log('run sh');
+const test = async () => {
+    await Skeet.test();
 };
-exports.sh = sh;
+exports.test = test;
 async function main() {
     try {
-        program.command('run').action(run);
         program.command('create').action(exports.create);
-        program.command('add').action(exports.add);
+        program.command('migrate').action(exports.migrate);
         program.command('s').action(exports.s);
+        program.command('deploy').action(exports.deploy);
+        program.command('test').action(exports.test);
         await program.parseAsync(process.argv);
     }
     catch (error) {
