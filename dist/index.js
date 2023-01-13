@@ -32,6 +32,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const commander_1 = require("commander");
 const version_json_1 = require("./lib/version.json");
 const Skeet = __importStar(require("./cli"));
+const logger_1 = require("./lib/logger");
 const program = new commander_1.Command();
 program
     .name('skeet')
@@ -39,7 +40,7 @@ program
     .version(version_json_1.version);
 dotenv_1.default.config();
 async function run() {
-    console.log('running skeet!');
+    logger_1.Logger.skeetAA();
 }
 const deploy = async () => {
     await Skeet.deploy();
@@ -67,6 +68,7 @@ async function main() {
         program.command('create').action(exports.create);
         program.command('migrate').action(exports.migrate);
         program.command('s').action(exports.s);
+        program.command('run').action(run);
         program.command('deploy').action(exports.deploy);
         program.command('test').action(exports.test);
         await program.parseAsync(process.argv);

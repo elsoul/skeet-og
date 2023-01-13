@@ -2,7 +2,7 @@ import Dotenv from 'dotenv'
 import { Command } from 'commander'
 import { version } from './lib/version.json'
 import * as Skeet from './cli'
-
+import { Logger } from './lib/logger'
 const program = new Command()
 
 program
@@ -13,7 +13,7 @@ program
 Dotenv.config()
 
 async function run() {
-  console.log('running skeet!')
+  Logger.skeetAA()
 }
 
 export const deploy = async () => {
@@ -42,6 +42,7 @@ async function main() {
     program.command('create').action(create)
     program.command('migrate').action(migrate)
     program.command('s').action(s)
+    program.command('run').action(run)
     program.command('deploy').action(deploy)
     program.command('test').action(test)
     await program.parseAsync(process.argv)
