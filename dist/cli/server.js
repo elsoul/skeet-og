@@ -7,6 +7,7 @@ const runServer = async () => (0, node_child_process_1.exec)(`yarn dev`, (err, o
         console.error('could not execute command: ', err);
         return;
     }
+    console.log(output);
     return true;
 });
 exports.runServer = runServer;

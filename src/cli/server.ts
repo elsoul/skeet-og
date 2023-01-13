@@ -6,5 +6,6 @@ export const runServer = async () =>
       console.error('could not execute command: ', err)
       return
     }
+    console.log(output)
     return true
   })
