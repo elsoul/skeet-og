@@ -55,4 +55,15 @@ export module Logger {
   Go To : http://localhost:4200/graphql`
     console.log(whiteHex(text))
   }
+
+  export const cmText = async () => {
+    const text = `
+    💃🤝🕺 We Support OpenSource Software Comunities 💃🤝🕺
+  Why?  - OpenSouce Software Comunities should be deserved more 💎
+  How?  - Incentivization for OpenSource Developments 💰
+  What? - Solve/Create GitHub Issues as always 🛠️
+  Epics Alpha: https://alpha.epics.dev/en/how-it-works/
+  `
+    console.log(syncHex(text))
+  }
 }

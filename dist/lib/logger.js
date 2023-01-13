@@ -54,5 +54,15 @@ var Logger;
   Go To : http://localhost:4200/graphql`;
         console.log(Logger.whiteHex(text));
     };
+    Logger.cmText = async () => {
+        const text = `
+    💃🤝🕺 We Support OpenSource Software Comunities 💃🤝🕺
+  Why?  - OpenSouce Software Comunities should be deserved more 💎
+  How?  - Incentivization for OpenSource Developments 💰
+  What? - Solve/Create GitHub Issues as always 🛠️
+  Epics Alpha: https://alpha.epics.dev/en/how-it-works/
+  `;
+        console.log(Logger.syncHex(text));
+    };
 })(Logger = exports.Logger || (exports.Logger = {}));
 //# sourceMappingURL=logger.js.map
