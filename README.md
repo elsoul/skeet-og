@@ -21,10 +21,16 @@ Powered by TypeScript GraphQL, Prisma, Jest, Prettier, and Google Cloud.
 
 ## Usage
 
-## yarn install
+## Install skeet
 
 ```bash
-$ yarn
+$ npm i -g skeet
+```
+
+## Create Skeet API
+
+```bash
+$ skeet create ${appName}
 ```
 
 ## Start PostgreSQL with docker
