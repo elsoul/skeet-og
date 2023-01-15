@@ -1,2 +1,5 @@
 export * from './create'
 export * from './server'
+export * from './migrate'
+export * from './deploy'
+export * from './test'

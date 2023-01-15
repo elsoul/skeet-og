@@ -2,7 +2,7 @@ import Dotenv from 'dotenv'
 import { Command } from 'commander'
 import { version } from './lib/version.json'
 import * as Skeet from './cli'
-
+import { Logger } from './lib/logger'
 const program = new Command()
 
 program
@@ -13,39 +13,38 @@ program
 Dotenv.config()
 
 async function run() {
-  console.log('running skeet!')
+  Logger.skeetAA()
 }
 
-export const add = async () => {
-  const appName = process.argv[3] || '--help'
-  console.log('creating skeet!')
+export const deploy = async () => {
+  await Skeet.deploy()
 }
 
 export const create = async () => {
   const appName = process.argv[3] || ''
-  await Skeet.Create.cloneRepo(appName)
-  await Skeet.Create.printEndroll(appName)
+  await Skeet.cloneRepo(appName)
 }
 
-export const db = async () => {
-  await Skeet.runServer()
+export const migrate = async () => {
+  await Skeet.migrate()
 }
 
 export const s = async () => {
   await Skeet.runServer()
 }
 
-export const sh = async () => {
-  const command = process.argv[3] || '--help'
-  console.log('run sh')
+export const test = async () => {
+  await Skeet.test()
 }
 
 async function main() {
   try {
-    program.command('run').action(run)
     program.command('create').action(create)
-    program.command('add').action(add)
+    program.command('migrate').action(migrate)
     program.command('s').action(s)
+    program.command('run').action(run)
+    program.command('deploy').action(deploy)
+    program.command('test').action(test)
     await program.parseAsync(process.argv)
   } catch (error) {
     console.log(error)
