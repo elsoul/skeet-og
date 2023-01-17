@@ -50,8 +50,9 @@ export module Logger {
   export const welcomText = async (appName: string) => {
     const text = `
   ⚡⚡⚡ Buidl GraphQL API for Relay Fast ⚡⚡⚡
-  $ cd ${appName}
-  $ yarn setup && skeet s
+  $ cd ${appName}/apps/api
+  $ skeet docker setup
+  $ skeet s
   Go To : http://localhost:4200/graphql`
     console.log(whiteHex(text))
   }
