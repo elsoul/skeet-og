@@ -16,11 +16,16 @@
     "resolveJsonModule": true,
     "lib": ["esnext"],
     "sourceMap": true,
+    "allowJs": true,
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": [
+    "src/**/*",
+    "src/lib/skeet-master.config.js",
+    "skeet-cloud.config.js"
+  ],
   "exclude": ["dist", "node_modules"],
   "compileOnSave": false
 }
