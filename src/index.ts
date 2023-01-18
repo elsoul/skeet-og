@@ -2,9 +2,20 @@ import Dotenv from 'dotenv'
 import { Command } from 'commander'
 import { version } from './lib/version.json'
 import * as Skeet from './cli'
-import { Logger } from './lib/logger'
-import path from 'path'
-import fs from 'fs'
+import { skeetCloudConfig } from '../skeet-cloud.config'
+
+export type skeetCloudConfigType = {
+  api: GCPConfig
+}
+
+export type GCPConfig = {
+  appName: string
+  projectId: string
+  region: string
+  cpu: string
+  memory: string
+}
+
 const program = new Command()
 
 program
@@ -15,9 +26,9 @@ program
 Dotenv.config()
 
 async function run() {
-  const currentDirArray = process.cwd().split('/')
-  const currentDir = currentDirArray[currentDirArray.length - 1]
-  console.log(currentDirArray[currentDirArray.length - 1])
+  const projectId = skeetCloudConfig.api.projectId || ''
+  const appName = skeetCloudConfig.api.appName || ''
+  await Skeet.createServiceAccount(projectId, appName)
 }
 
 export const deploy = async () => {
@@ -33,8 +44,12 @@ export const migrate = async () => {
   await Skeet.dbMigrate()
 }
 
-export const setup = async () => {}
-
+async function setupIam() {
+  const projectId = skeetCloudConfig.api.projectId || ''
+  const appName = skeetCloudConfig.api.appName || ''
+  //await Skeet.runEnableAllPermission(projectId)
+  await Skeet.runAddAllRole(projectId, appName)
+}
 export const s = async () => {
   await Skeet.runServer()
 }
@@ -51,6 +66,7 @@ async function main() {
     program.command('run').action(run)
     program.command('deploy').action(deploy)
     program.command('db:migrate').action(migrate)
+    program.command('setup').action(setupIam)
     program.command('test').action(test)
     await program.parseAsync(process.argv)
   } catch (error) {

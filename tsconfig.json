@@ -3,7 +3,7 @@
     "target": "ESNext",
     "module": "CommonJS",
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "strict": true,
     "moduleResolution": "node",
     "baseUrl": "src",
@@ -20,7 +20,8 @@
       "@/*": ["src/*"]
     }
   },
+  "files": ["package.json", "skeet-cloud.config.ts"],
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules", "skeet-cloud.config.js"],
+  "exclude": ["dist", "node_modules"],
   "compileOnSave": false
 }
