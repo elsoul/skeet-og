@@ -14,10 +14,13 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./create"), exports);
-__exportStar(require("./server"), exports);
-__exportStar(require("./migrate"), exports);
-__exportStar(require("./deploy"), exports);
-__exportStar(require("./test"), exports);
-__exportStar(require("./dbMigrate"), exports);
+__exportStar(require("./package.json"), exports);
+__exportStar(require("./prettierrc"), exports);
+__exportStar(require("./prettierignore"), exports);
+__exportStar(require("./tsconfig.json"), exports);
+__exportStar(require("./eslintrc.json"), exports);
+__exportStar(require("./eslintignore"), exports);
+__exportStar(require("./gitignore"), exports);
+__exportStar(require("./apienv"), exports);
+__exportStar(require("./skeet-cloud.config"), exports);
 //# sourceMappingURL=index.js.map

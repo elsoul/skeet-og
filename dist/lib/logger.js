@@ -48,10 +48,22 @@ var Logger;
     };
     Logger.welcomText = async (appName) => {
         const text = `
-  ⚡⚡⚡ Buidl GraphQL API for Relay Fast ⚡⚡⚡
-  $ cd ${appName}
-  $ yarn setup && skeet s
-  Go To : http://localhost:4200/graphql`;
+⚡⚡⚡ Buidl GraphQL API for Relay Fast ⚡⚡⚡
+$ cd ${appName}
+$ skeet s
+Go To : http://localhost:4200/graphql
+
+--- ✡ Try Your first Query ✡ ---
+mutation {
+  createUser(
+    name: "EpicsDAO"
+  ) {
+    id
+    rawId
+    name
+  }
+}
+--------------------------------`;
         console.log(Logger.whiteHex(text));
     };
     Logger.cmText = async () => {

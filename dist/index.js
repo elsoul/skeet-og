@@ -27,12 +27,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.s = exports.migrate = exports.create = exports.deploy = void 0;
+exports.test = exports.s = exports.setup = exports.migrate = exports.create = exports.deploy = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const commander_1 = require("commander");
 const version_json_1 = require("./lib/version.json");
 const Skeet = __importStar(require("./cli"));
-const logger_1 = require("./lib/logger");
 const program = new commander_1.Command();
 program
     .name('skeet')
@@ -40,7 +39,9 @@ program
     .version(version_json_1.version);
 dotenv_1.default.config();
 async function run() {
-    logger_1.Logger.skeetAA();
+    const currentDirArray = process.cwd().split('/');
+    const currentDir = currentDirArray[currentDirArray.length - 1];
+    console.log(currentDirArray[currentDirArray.length - 1]);
 }
 const deploy = async () => {
     await Skeet.deploy();
@@ -48,13 +49,15 @@ const deploy = async () => {
 exports.deploy = deploy;
 const create = async () => {
     const appName = process.argv[3] || '';
-    await Skeet.cloneRepo(appName);
+    await Skeet.init(appName);
 };
 exports.create = create;
 const migrate = async () => {
-    await Skeet.migrate();
+    await Skeet.dbMigrate();
 };
 exports.migrate = migrate;
+const setup = async () => { };
+exports.setup = setup;
 const s = async () => {
     await Skeet.runServer();
 };
@@ -70,6 +73,7 @@ async function main() {
         program.command('s').action(exports.s);
         program.command('run').action(run);
         program.command('deploy').action(exports.deploy);
+        program.command('db:migrate').action(exports.migrate);
         program.command('test').action(exports.test);
         await program.parseAsync(process.argv);
     }

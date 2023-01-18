@@ -1,0 +1,1 @@
+{"version":3,"file":"apienv.js","sourceRoot":"","sources":["../../../../src/cli/templates/init/apienv.ts"],"names":[],"mappings":";;;AAAO,MAAM,MAAM,GAAG,KAAK,EAAE,OAAe,EAAE,EAAE;IAC9C,MAAM,QAAQ,GAAG,GAAG,OAAO,gBAAgB,CAAA;IAC3C,MAAM,IAAI,GAAG,oEAAoE,OAAO;2BAC/D,CAAA;IACzB,OAAO;QACL,QAAQ;QACR,IAAI;KACL,CAAA;AACH,CAAC,CAAA;AARY,QAAA,MAAM,UAQlB"}
