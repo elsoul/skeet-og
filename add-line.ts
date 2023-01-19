@@ -11,4 +11,4 @@ const writer = async (file: string) => {
   }
 }
 
-writer('./dist/index.js')
+writer('./dist/src/index.js')

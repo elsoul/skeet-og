@@ -1,1 +1,0 @@
-{"version":3,"file":"skeet-cloud.config.js","sourceRoot":"","sources":["../../../../src/cli/templates/init/skeet-cloud.config.ts"],"names":[],"mappings":";;;AAAO,MAAM,mBAAmB,GAAG,KAAK,EAAE,OAAe,EAAE,EAAE;IAC3D,MAAM,QAAQ,GAAG,GAAG,OAAO,wBAAwB,CAAA;IACnD,MAAM,IAAI,GAAG;;;;iBAIE,OAAO;;;;;;;;CAQvB,CAAA;IACC,OAAO;QACL,QAAQ;QACR,IAAI;KACL,CAAA;AACH,CAAC,CAAA;AAnBY,QAAA,mBAAmB,uBAmB/B"}

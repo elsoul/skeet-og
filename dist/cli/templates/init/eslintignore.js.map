@@ -1,1 +1,0 @@
-{"version":3,"file":"eslintignore.js","sourceRoot":"","sources":["../../../../src/cli/templates/init/eslintignore.ts"],"names":[],"mappings":";;;AAAO,MAAM,YAAY,GAAG,KAAK,EAAE,OAAe,EAAE,EAAE;IACpD,MAAM,QAAQ,GAAG,GAAG,OAAO,gBAAgB,CAAA;IAC3C,MAAM,IAAI,GAAG;;;;;;;GAOZ,CAAA;IACD,OAAO;QACL,QAAQ;QACR,IAAI;KACL,CAAA;AACH,CAAC,CAAA;AAdY,QAAA,YAAY,gBAcxB"}

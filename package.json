@@ -1,6 +1,6 @@
 {
   "name": "skeet",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Full-stack TypeScript Serverless Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/elsoul/skeet.git",
@@ -14,7 +14,7 @@
     "update:packages": "ncu -u && yarn",
     "update:version": "npx ts-node release.ts",
     "add:line": "npx ts-node add-line.ts",
-    "build": "yarn update:version && tsc",
+    "build": "yarn update:version && tsc && yarn add:line",
     "publish": "npm publish",
     "dev": "npx ts-node src/index.ts",
     "start": "node dist/index.js"
