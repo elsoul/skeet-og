@@ -13,7 +13,7 @@ exports.skeetCloudConfig = {
             dbPassword: process.env.DB_PASSWORD || '',
             cpu: '1',
             memory: '4096MB',
-            whiteList: '95.96.156.55',
+            whiteList: '',
         },
     },
 };
