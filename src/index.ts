@@ -1,12 +1,14 @@
 import Dotenv from 'dotenv'
 import { Command } from 'commander'
-import { version } from '@/lib/version.json'
+import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
+import fs from 'fs'
 
 export const importConfig = async () => {
   try {
-    const config = await import(`${process.cwd()}/skeet-cloud.config`)
-    return config
+    const config = fs.readFileSync(`${process.cwd()}/skeet-cloud.config.json`)
+    const json: SkeetCloudConfig = JSON.parse(String(config))
+    return json
   } catch (error) {
     console.log(error)
     process.exit(1)
@@ -39,7 +41,7 @@ const program = new Command()
 program
   .name('skeet')
   .description('CLI to Skeet TypeScript Serverless Framework')
-  .version(version)
+  .version(VERSION)
 
 Dotenv.config()
 

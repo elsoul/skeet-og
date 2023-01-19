@@ -1,0 +1,16 @@
+{
+  "api": {
+    "appName": "skeet-framework",
+    "projectId": "skeet-framework",
+    "region": "europe-west4",
+    "cpu": "1",
+    "memory": "1Gi",
+    "db": {
+      "databaseVersion": "POSTGRES_14",
+      "dbPassword": "password",
+      "cpu": "1",
+      "memory": "4096MB",
+      "whiteList": ""
+    }
+  }
+}

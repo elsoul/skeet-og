@@ -8,7 +8,7 @@ module.exports = {
     filename: 'dist/src/index.js',
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js', '.json'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
     },

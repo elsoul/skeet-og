@@ -1,6 +1,6 @@
 {
   "name": "skeet",
-  "version": "0.12.0",
+  "version": "0.12.2",
   "description": "Full-stack TypeScript Serverless Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/elsoul/skeet.git",
@@ -12,11 +12,11 @@
   },
   "scripts": {
     "update:packages": "ncu -u && yarn",
-    "update:version": "npx ts-node release.ts",
-    "add:line": "npx ts-node add-line.ts",
+    "update:version": "ts-node -r tsconfig-paths/register release.ts",
+    "add:line": "ts-node -r tsconfig-paths/register add-line.ts",
     "build": "yarn update:version && webpack && yarn add:line",
     "publish": "npm publish",
-    "dev": "npx ts-node src/index.ts",
+    "dev": "ts-node -r tsconfig-paths/register src/index.ts",
     "start": "node dist/src/index.js"
   },
   "dependencies": {
@@ -34,8 +34,9 @@
     "prettier": "2.7.1",
     "ts-loader": "9.4.1",
     "ts-node": "10.9.1",
+    "tsconfig-paths": "4.1.2",
+    "typescript": "4.9.3",
     "webpack": "5.75.0",
-    "webpack-cli": "5.0.1",
-    "typescript": "4.9.3"
+    "webpack-cli": "5.0.1"
   }
 }

@@ -3,17 +3,12 @@ import * as fsPromise from 'fs/promises'
 
 console.log(`updated version to ${pjson.version}`)
 
-type Version = {
-  version: string
-}
-
-const version: Version = {
-  version: pjson.version,
-}
-const json = JSON.stringify(version)
+const versionString = `export const VERSION = '${pjson.version}'`
 
 const fileWrite = async () => {
-  await fsPromise.writeFile('./src/lib/version.json', json, { flag: 'w' })
+  await fsPromise.writeFile('./src/lib/version.ts', versionString, {
+    flag: 'w',
+  })
 }
 
 fileWrite()
