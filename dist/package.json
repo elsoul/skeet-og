@@ -22,8 +22,7 @@
     "dependencies": {
         "chalk": "4.1.2",
         "commander": "9.4.1",
-        "dotenv": "16.0.3",
-        "fs": "0.0.1-security"
+        "dotenv": "16.0.3"
     },
     "devDependencies": {
         "@types/express": "4.17.14",
