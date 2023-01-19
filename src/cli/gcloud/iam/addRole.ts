@@ -1,6 +1,4 @@
-import { exec } from 'child_process'
-import { execSyncCmd } from '../../../lib/execSyncCmd'
-import { Logger } from '../../../lib/logger'
+import { execSyncCmd } from '@/lib/execSyncCmd'
 
 export const runAddAllRole = async (projectId: string, appName: string) => {
   await addAllRoles(projectId, appName, roleList)

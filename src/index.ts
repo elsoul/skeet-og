@@ -1,10 +1,19 @@
 import Dotenv from 'dotenv'
 import { Command } from 'commander'
-import { version } from './lib/version.json'
-import * as Skeet from './cli'
-import { skeetCloudConfig } from '../skeet-cloud.config'
+import { version } from '@/lib/version.json'
+import * as Skeet from '@/cli'
 
-export type skeetCloudConfigType = {
+export const importConfig = async () => {
+  try {
+    const config = await import(`${process.cwd()}/skeet-cloud.config`)
+    return config
+  } catch (error) {
+    console.log(error)
+    process.exit(1)
+  }
+}
+
+export type SkeetCloudConfig = {
   api: GCPConfig
 }
 
@@ -25,15 +34,6 @@ export type GCPConfig = {
   db: DbConfig
 }
 
-const projectId = skeetCloudConfig.api.projectId || ''
-const appName = skeetCloudConfig.api.appName || ''
-const region = skeetCloudConfig.api.region || ''
-const dbPassword = skeetCloudConfig.api.db.dbPassword || ''
-const databaseVersion = skeetCloudConfig.api.db.databaseVersion || ''
-const cpu = skeetCloudConfig.api.db.cpu || ''
-const memory = skeetCloudConfig.api.db.memory || ''
-const ips = skeetCloudConfig.api.db.whiteList
-
 const program = new Command()
 
 program
@@ -44,50 +44,66 @@ program
 Dotenv.config()
 
 async function run() {
-  await Skeet.getContainerRegion(region)
+  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+  console.log(skeetCloudConfig)
+  // await Skeet.getContainerRegion(skeetCloudConfig.api.region)
 }
 
 export const deploy = async () => {}
 
-export const create = async (initAppName: string) => {
-  await Skeet.init(initAppName)
-}
-
-export const migrate = async () => {
-  await Skeet.dbMigrate()
-}
-
 async function setupIam() {
-  await Skeet.runEnableAllPermission(projectId)
-  await Skeet.runAddAllRole(projectId, appName)
+  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+  await Skeet.runEnableAllPermission(skeetCloudConfig.api.projectId)
+  await Skeet.runAddAllRole(
+    skeetCloudConfig.api.projectId,
+    skeetCloudConfig.api.appName
+  )
 }
 
 export const sqlCreate = async () => {
+  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
   await Skeet.createSQL(
-    projectId,
-    appName,
-    region,
-    dbPassword,
-    databaseVersion,
-    cpu,
-    memory
+    skeetCloudConfig.api.projectId,
+    skeetCloudConfig.api.appName,
+    skeetCloudConfig.api.region,
+    skeetCloudConfig.api.db.dbPassword,
+    skeetCloudConfig.api.db.databaseVersion,
+    skeetCloudConfig.api.db.cpu,
+    skeetCloudConfig.api.db.memory
   )
 }
 
 export const sqlStop = async () => {
-  await Skeet.patchSQL(projectId, appName, 'NEVER')
+  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+  await Skeet.patchSQL(
+    skeetCloudConfig.api.projectId,
+    skeetCloudConfig.api.appName,
+    'NEVER'
+  )
 }
 
 export const sqlStart = async () => {
-  await Skeet.patchSQL(projectId, appName, 'always')
+  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+  await Skeet.patchSQL(
+    skeetCloudConfig.api.projectId,
+    skeetCloudConfig.api.appName,
+    'always'
+  )
 }
 
 export const sqlList = async () => {
-  await Skeet.listSQL(projectId)
+  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+  await Skeet.listSQL(skeetCloudConfig.api.projectId)
 }
 
 export const sqlIp = async () => {
-  await Skeet.patchSQL(projectId, appName, '', ips)
+  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+  await Skeet.patchSQL(
+    skeetCloudConfig.api.projectId,
+    skeetCloudConfig.api.appName,
+    '',
+    skeetCloudConfig.api.db.whiteList
+  )
 }
 
 export const s = async () => {
@@ -105,14 +121,13 @@ async function main() {
       .description('Create Skeet App')
       .argument('<initAppName>', 'Skeet App Name')
       .action(async (initAppName) => {
-        await create(initAppName)
+        await Skeet.create(initAppName)
       })
-    program.command('migrate').action(migrate)
     program.command('server').alias('s').action(s)
     program.command('setup').action(setupIam)
     program.command('run').action(run)
     program.command('deploy').action(deploy)
-    program.command('db:migrate').action(migrate)
+    program.command('db:migrate').action(Skeet.dbMigrate)
     program.command('sql:create').action(sqlCreate)
     program.command('sql:stop').action(sqlStop)
     program.command('sql:start').action(sqlStart)
@@ -120,16 +135,34 @@ async function main() {
     program.command('sql:ip').action(sqlIp)
 
     program.command('api:build').action(async () => {
-      await Skeet.apiBuild(appName)
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.apiBuild(skeetCloudConfig.api.appName)
     })
     program.command('api:tag').action(async () => {
-      await Skeet.apiTag(projectId, appName, region)
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.apiTag(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName,
+        skeetCloudConfig.api.region
+      )
     })
     program.command('api:push').action(async () => {
-      await Skeet.apiPush(projectId, appName, region)
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.apiPush(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName,
+        skeetCloudConfig.api.region
+      )
     })
     program.command('api:deploy').action(async () => {
-      await Skeet.apiDeploy(projectId, appName, region, memory, cpu)
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.apiDeploy(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName,
+        skeetCloudConfig.api.region,
+        skeetCloudConfig.api.memory,
+        skeetCloudConfig.api.cpu
+      )
     })
     program.command('test').action(test)
     await program.parseAsync(process.argv)

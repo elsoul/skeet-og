@@ -1,1 +1,0 @@
-{"version":3,"file":"listSQL.js","sourceRoot":"","sources":["../../../../../src/cli/gcloud/sql/listSQL.ts"],"names":[],"mappings":";;;AAAA,0DAAsD;AAE/C,MAAM,OAAO,GAAG,KAAK,EAAE,SAAiB,EAAE,EAAE;IACjD,MAAM,KAAK,GAAG,CAAC,QAAQ,EAAE,KAAK,EAAE,WAAW,EAAE,MAAM,EAAE,WAAW,EAAE,SAAS,CAAC,CAAA;IAC5E,MAAM,IAAA,yBAAW,EAAC,KAAK,CAAC,CAAA;AAC1B,CAAC,CAAA;AAHY,QAAA,OAAO,WAGnB"}

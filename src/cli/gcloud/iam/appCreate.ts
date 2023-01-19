@@ -1,4 +1,4 @@
-import { execSyncCmd } from '../../../lib/execSyncCmd'
+import { execSyncCmd } from '@/lib/execSyncCmd'
 
 export const appCreate = async (projectId: string, region: string) => {
   const shCmd = [

@@ -6,7 +6,7 @@
     "rootDir": ".",
     "strict": true,
     "moduleResolution": "node",
-    "baseUrl": "src",
+    "baseUrl": ".",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -22,6 +22,6 @@
   },
   "files": ["package.json", "skeet-cloud.config.ts"],
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"],
+  "exclude": ["dist", "node_modules", "webpack.config.js"],
   "compileOnSave": false
 }

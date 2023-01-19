@@ -1,5 +1,4 @@
-import { execSyncCmd } from '../../../lib/execSyncCmd'
-import { Logger } from '../../../lib/logger'
+import { execSyncCmd } from '@/lib/execSyncCmd'
 
 export const runEnableAllPermission = async (projectId: string) => {
   await enableServiceListPermission(projectId, serviceList)
@@ -11,8 +10,6 @@ export const enableServiceListPermission = async (
 ) => {
   serviceList.forEach(async (serviceName) => {
     await enablePermission(projectId, serviceName)
-    await new Promise((r) => setTimeout(r, 1000))
-    Logger.success(`added ${serviceName}!`)
   })
 }
 

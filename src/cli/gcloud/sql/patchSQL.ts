@@ -1,4 +1,4 @@
-import { execSyncCmd } from '../../../lib/execSyncCmd'
+import { execSyncCmd } from '@/lib/execSyncCmd'
 
 export const patchSQL = async (
   projectId: string,

@@ -4,6 +4,10 @@ import path from 'path'
 import { execSyncCmd } from '../lib/execSyncCmd'
 import * as fileDataOf from './templates/init'
 
+export const create = async (initAppName: string) => {
+  await init(initAppName)
+}
+
 export const init = async (appName: string) => {
   const appDir = await createApiDir(appName)
   const gitCloneCmd = ['gh', 'repo', 'clone', 'elsoul/skeet-api', appDir]

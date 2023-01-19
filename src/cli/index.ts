@@ -1,6 +1,5 @@
 export * from './create'
 export * from './server'
-export * from './migrate'
 export * from './api'
 export * from './test'
 export * from './dbMigrate'

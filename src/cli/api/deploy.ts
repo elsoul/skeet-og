@@ -1,5 +1,4 @@
-import { spawn } from 'child_process'
-import { execSyncCmd } from '../../lib/execSyncCmd'
+import { execSyncCmd } from '@/lib/execSyncCmd'
 
 export const apiBuild = async (appName: string) => {
   const imageName = appName + '-api'
