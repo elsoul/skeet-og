@@ -1,20 +1,20 @@
 import { Logger } from '../lib/logger'
 import fs from 'fs'
 import path from 'path'
-import { execCmd } from '../lib/execCmd'
+import { execSyncCmd } from '../lib/execSyncCmd'
 import * as fileDataOf from './templates/init'
 
 export const init = async (appName: string) => {
   const appDir = await createApiDir(appName)
   const gitCloneCmd = ['gh', 'repo', 'clone', 'elsoul/skeet-api', appDir]
-  await execCmd(gitCloneCmd)
+  await execSyncCmd(gitCloneCmd)
   const yarnCmd = ['yarn']
-  await execCmd(yarnCmd, appDir)
+  await execSyncCmd(yarnCmd, appDir)
   const rmDefaultGit = ['rm', '-rf', '.git']
-  await execCmd(rmDefaultGit, appDir)
+  await execSyncCmd(rmDefaultGit, appDir)
   await generateInitFiles(appName)
   const createNetworkCmd = ['docker', 'network', 'create', 'skeet-network']
-  await execCmd(createNetworkCmd)
+  await execSyncCmd(createNetworkCmd)
   await runPsql()
   await new Promise((r) => setTimeout(r, 2000))
   await initDbMigrate(appDir)
@@ -71,7 +71,7 @@ export const generateInitFiles = async (appName: string) => {
   const gitignore = await fileDataOf.gitignore(appName)
   fs.writeFileSync(gitignore.filePath, gitignore.body)
   const rmDefaultEnv = ['rm', '.env']
-  await execCmd(rmDefaultEnv, apiDir)
+  await execSyncCmd(rmDefaultEnv, apiDir)
   const apiEnv = await fileDataOf.apiEnv(appName)
   fs.writeFileSync(apiEnv.filePath, apiEnv.body)
 }
@@ -92,7 +92,7 @@ export const createGitHubRepo = async (
     '--souce=./',
     '--remote=upstream',
   ]
-  await execCmd(cmdLine)
+  await execSyncCmd(cmdLine)
 }
 
 export const runPsql = async () => {
@@ -118,11 +118,11 @@ export const runPsql = async () => {
     'POSTGRES_DB=skeet-api-dev',
     'postgres:14-alpine',
   ]
-  await execCmd(runPsqlCmd)
+  await execSyncCmd(runPsqlCmd)
   console.log('docker psql container is up!')
 }
 
 export const initDbMigrate = async (apiDir: string) => {
   const prismaMigrateCmd = ['npx', 'prisma', 'migrate', 'dev', '--name', 'init']
-  await execCmd(prismaMigrateCmd, apiDir)
+  await execSyncCmd(prismaMigrateCmd, apiDir)
 }

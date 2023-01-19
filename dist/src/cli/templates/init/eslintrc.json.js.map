@@ -1,0 +1,1 @@
+{"version":3,"file":"eslintrc.json.js","sourceRoot":"","sources":["../../../../../src/cli/templates/init/eslintrc.json.ts"],"names":[],"mappings":";;;AAAO,MAAM,YAAY,GAAG,KAAK,EAAE,OAAe,EAAE,EAAE;IACpD,MAAM,QAAQ,GAAG,GAAG,OAAO,iBAAiB,CAAA;IAC5C,MAAM,IAAI,GAAG;QACX,OAAO,EAAE,CAAC,UAAU,CAAC;KACtB,CAAA;IACD,OAAO;QACL,QAAQ;QACR,IAAI;KACL,CAAA;AACH,CAAC,CAAA;AATY,QAAA,YAAY,gBASxB"}

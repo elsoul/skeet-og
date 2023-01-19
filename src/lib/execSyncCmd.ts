@@ -8,6 +8,5 @@ export const execSyncCmd = async (
     cwd,
     stdio: 'inherit',
   })
-  const output = result.stderr.toString()
-  console.log(output)
+  const _output = result.stderr
 }

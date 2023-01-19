@@ -1,4 +1,4 @@
-import { execCmd } from '../../lib/execCmd'
+import { execSyncCmd } from '../../../lib/execSyncCmd'
 
 export const createServiceAccount = async (
   projectId: string,
@@ -15,5 +15,5 @@ export const createServiceAccount = async (
     '--project',
     projectId,
   ]
-  await execCmd(createServiceAccountCmd)
+  await execSyncCmd(createServiceAccountCmd)
 }

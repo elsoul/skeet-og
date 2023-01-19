@@ -1,5 +1,5 @@
-import { execCmd } from '../../lib/execCmd'
-import { Logger } from '../../lib/logger'
+import { execSyncCmd } from '../../../lib/execSyncCmd'
+import { Logger } from '../../../lib/logger'
 
 export const runEnableAllPermission = async (projectId: string) => {
   await enableServiceListPermission(projectId, serviceList)
@@ -28,7 +28,7 @@ export const enablePermission = async (
     '--project',
     projectId,
   ]
-  await execCmd(serviceEnableCmd)
+  await execSyncCmd(serviceEnableCmd)
 }
 
 export const serviceList = [
