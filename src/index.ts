@@ -4,6 +4,8 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 
+export const hey = async () => {}
+
 export const importConfig = async () => {
   try {
     const config = fs.readFileSync(`${process.cwd()}/skeet-cloud.config.json`)
@@ -46,9 +48,11 @@ program
 Dotenv.config()
 
 async function run() {
-  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-  console.log(skeetCloudConfig)
-  // await Skeet.getContainerRegion(skeetCloudConfig.api.region)
+  try {
+    await hey()
+  } catch (error) {
+    console.log(`error: ${error}`)
+  }
 }
 
 export const deploy = async () => {}
@@ -59,19 +63,6 @@ async function setupIam() {
   await Skeet.runAddAllRole(
     skeetCloudConfig.api.projectId,
     skeetCloudConfig.api.appName
-  )
-}
-
-export const sqlCreate = async () => {
-  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-  await Skeet.createSQL(
-    skeetCloudConfig.api.projectId,
-    skeetCloudConfig.api.appName,
-    skeetCloudConfig.api.region,
-    skeetCloudConfig.api.db.dbPassword,
-    skeetCloudConfig.api.db.databaseVersion,
-    skeetCloudConfig.api.db.cpu,
-    skeetCloudConfig.api.db.memory
   )
 }
 
@@ -134,7 +125,27 @@ async function main() {
     program.command('run').action(run)
     program.command('deploy').action(deploy)
     program.command('db:migrate').action(Skeet.dbMigrate)
-    program.command('sql:create').action(sqlCreate)
+
+    program.command('sql:create').action(async () => {
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.runSqlCreate(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName,
+        skeetCloudConfig.api.region,
+        skeetCloudConfig.api.db.databaseVersion,
+        skeetCloudConfig.api.db.cpu,
+        skeetCloudConfig.api.db.memory
+      )
+    })
+
+    program.command('sql:user').action(async () => {
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.runSqlUserCreate(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName
+      )
+    })
+
     program.command('sql:stop').action(sqlStop)
     program.command('sql:start').action(sqlStart)
     program.command('sql:list').action(sqlList)

@@ -78,14 +78,34 @@ $ skeet build
 $ skeet start
 ```
 
-## Deploy
+## Zero to Deploy
 
-### Create GitHub Repository
+### Git Init
 
 ```bash
 $ skeet git:init
-$ skeet git:create
 ```
+
+### Make a first commit
+
+```bash
+$ git add .
+$ git commit -m "first commit"
+```
+
+### Create/Push GitHub Repo
+
+```bash
+$ skeet git:create elsoul/skeet
+```
+
+If you want to go with OpenSource;
+
+```bash
+$ skeet git:create elsoul/skeet --public
+```
+
+### Setup Google Cloud IAM
 
 ###
 

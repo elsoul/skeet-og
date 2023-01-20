@@ -1,4 +1,46 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
+import prompt from 'prompt'
+
+export const runSqlCreate = async (
+  projectId: string,
+  appName: string,
+  region: string,
+  databaseVersion: string,
+  cpu: string,
+  memory: string
+) => {
+  const dbPassPrompt = {
+    properties: {
+      password: {
+        description: 'Enter DB Root Password',
+        hidden: true,
+        replace: '*',
+      },
+      passwordConfirm: {
+        description: 'Confirm Password',
+        hidden: true,
+        replace: '*',
+      },
+    },
+  }
+  prompt.start()
+  prompt.get(dbPassPrompt, async (err, result) => {
+    if (result.password !== result.passwordConfirm) {
+      console.log('password does not match!')
+    } else {
+      const password = String(result.password)
+      await createSQL(
+        projectId,
+        appName,
+        region,
+        password,
+        databaseVersion,
+        cpu,
+        memory
+      )
+    }
+  })
+}
 
 export const createSQL = async (
   projectId: string,
