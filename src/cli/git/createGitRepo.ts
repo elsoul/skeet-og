@@ -13,7 +13,7 @@ export const createGitRepo = async (
     repoName,
     `--${publishType}`,
     '--push',
-    '--souce=./',
+    '--source=./',
     '--remote=upstream',
   ]
   await execSyncCmd(cmdLine)

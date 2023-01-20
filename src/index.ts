@@ -125,7 +125,11 @@ async function main() {
       .action(async (initAppName) => {
         await Skeet.create(initAppName)
       })
-    program.command('server').alias('s').action(s)
+    program
+      .command('server')
+      .description('Run Skeet API Server')
+      .alias('s')
+      .action(s)
     program.command('setup').action(setupIam)
     program.command('run').action(run)
     program.command('deploy').action(deploy)
@@ -172,7 +176,11 @@ async function main() {
     program
       .command('git:create')
       .description('Create GitHub Repository')
-      .argument('<repoPath>', 'e.g. elsoul/skeet')
+      .argument(
+        '<repoPath>',
+        `example: 
+            $ skeet git:create elsoul/skeet`
+      )
       .option('--public', 'Create Public Repository for OpenSouce Buidlers 🛠️')
       .action(async (repoPath, options) => {
         const openSource = options.public || false
