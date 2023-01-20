@@ -55,7 +55,7 @@ mutation {
 --------------------------------
 ```
 
-### Run local
+## Run local
 
 ```bash
 $ skeet s
@@ -65,18 +65,29 @@ Now you can access;
 
 `http://localhost:4200/graphql`
 
-### Test
+## Test
 
 ```bash
 $ skeet test
 ```
 
-### Build & Run
+## Build & Run
 
 ```bash
 $ skeet build
 $ skeet start
 ```
+
+## Deploy
+
+### Create GitHub Repository
+
+```bash
+$ skeet git:init
+$ skeet git:create
+```
+
+###
 
 ## Contributing
 

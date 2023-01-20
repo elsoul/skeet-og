@@ -171,11 +171,13 @@ async function main() {
 
     program
       .command('git:create')
-      .option('--public', 'Create Public Repository')
-      .action(async (options) => {
-        const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      .description('Create GitHub Repository')
+      .argument('<repoPath>', 'e.g. elsoul/skeet')
+      .option('--public', 'Create Public Repository for OpenSouce Buidlers 🛠️')
+      .action(async (repoPath, options) => {
         const openSource = options.public || false
-        await Skeet.createGitRepo(skeetCloudConfig.api.appName, openSource)
+        const repoName = repoPath || ''
+        await Skeet.createGitRepo(repoName, openSource)
       })
 
     program.command('test').action(test)
