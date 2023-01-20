@@ -166,6 +166,18 @@ async function main() {
         skeetCloudConfig.api.cpu
       )
     })
+
+    program.command('git:init').action(Skeet.gitInit)
+
+    program
+      .command('git:create')
+      .option('--public', 'Create Public Repository')
+      .action(async (options) => {
+        const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+        const openSource = options.public || false
+        await Skeet.createGitRepo(skeetCloudConfig.api.appName, openSource)
+      })
+
     program.command('test').action(test)
     await program.parseAsync(process.argv)
   } catch (error) {

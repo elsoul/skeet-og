@@ -80,25 +80,6 @@ export const generateInitFiles = async (appName: string) => {
   fs.writeFileSync(apiEnv.filePath, apiEnv.body)
 }
 
-export const createGitHubRepo = async (
-  repoName: string,
-  openSource: boolean = false
-) => {
-  const publishType = openSource == true ? 'public' : 'private'
-
-  const cmdLine = [
-    'gh',
-    'repo',
-    'create',
-    repoName,
-    `--${publishType}`,
-    '--push',
-    '--souce=./',
-    '--remote=upstream',
-  ]
-  await execSyncCmd(cmdLine)
-}
-
 export const runPsql = async () => {
   const runPsqlCmd = [
     'docker',
