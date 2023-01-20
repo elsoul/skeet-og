@@ -2,12 +2,12 @@ import chalk from 'chalk'
 
 export module Logger {
   export const successHex = chalk.hex('#39A845')
-  export const warningHex = chalk.hex('#FFC300')
+  export const warningHex = chalk.hex('#FFD02E')
   export const errorHex = chalk.hex('#B5332E')
   export const syncHex = chalk.hex('#3073B7')
-  export const whiteHex = chalk.hex('#F6F8F9')
-  export const indigoHex = chalk.hex('#273C76')
-  export const redHex = chalk.hex('#A73730')
+  export const greyHex = chalk.hex('#BEBDBD')
+  export const indigoHex = chalk.hex('#3950A0')
+  export const pinkHex = chalk.hex('#D8A1C4')
 
   export const success = async (text: string) => {
     console.log(successHex(text))
@@ -25,21 +25,21 @@ export module Logger {
     console.log(syncHex(text))
   }
 
-  export const white = async (text: string) => {
-    console.log(whiteHex(text))
+  export const grey = async (text: string) => {
+    console.log(greyHex(text))
   }
 
   export const skeetAA = async () => {
-    const row1SKEE = Logger.successHex('   _____ __ __ ____________')
-    const row1T = Logger.warningHex('______')
-    const row2SKEE = Logger.successHex('  / ___// //_// ____/ ____/')
-    const row2T = Logger.warningHex('_  __/')
-    const row3SKEE = Logger.successHex('  \\__ \\/ ,<  / __/ / __/ ')
-    const row3T = Logger.warningHex('  / / ')
-    const row4SKEE = Logger.successHex(' ___/ / /| |/ /___/ /___ ')
-    const row4T = Logger.warningHex(' / /    ')
-    const row5SKEE = Logger.successHex('/____/_/ |_/_____/_____/')
-    const row5T = Logger.warningHex(' /_/    🛠️🛠️')
+    const row1SKEE = Logger.syncHex('   _____ __ __ ____________')
+    const row1T = Logger.errorHex('______')
+    const row2SKEE = Logger.syncHex('  / ___// //_// ____/ ____/')
+    const row2T = Logger.errorHex('_  __/')
+    const row3SKEE = Logger.syncHex('  \\__ \\/ ,<  / __/ / __/ ')
+    const row3T = Logger.errorHex('  / / ')
+    const row4SKEE = Logger.syncHex(' ___/ / /| |/ /___/ /___ ')
+    const row4T = Logger.errorHex(' / /    ')
+    const row5SKEE = Logger.syncHex('/____/_/ |_/_____/_____/')
+    const row5T = Logger.errorHex(' /_/    🛠️🛠️')
     console.log(`${row1SKEE}${row1T}`)
     console.log(`${row2SKEE}${row2T}`)
     console.log(`${row3SKEE}${row3T}`)
@@ -48,8 +48,10 @@ export module Logger {
   }
 
   export const welcomText = async (appName: string) => {
+    const title = warningHex(
+      '\n⚡⚡⚡ Buidl TypeScript Fullstack App Fast ⚡⚡⚡'
+    )
     const text = `
-⚡⚡⚡ Buidl GraphQL API for Relay Fast ⚡⚡⚡
 $ cd ${appName}
 $ skeet s
 Go To : http://localhost:4200/graphql
@@ -65,7 +67,8 @@ mutation {
   }
 }
 --------------------------------`
-    console.log(whiteHex(text))
+    console.log(title)
+    console.log(greyHex(text))
   }
 
   export const cmText = async () => {
@@ -76,6 +79,6 @@ mutation {
   What? - Solve/Create GitHub Issues as always 🛠️
   Epics Alpha: https://alpha.epics.dev/en/how-it-works/
   `
-    console.log(syncHex(text))
+    console.log(successHex(text))
   }
 }

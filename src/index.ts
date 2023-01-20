@@ -3,6 +3,7 @@ import { Command } from 'commander'
 import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
+import { Logger } from '@/lib/logger'
 
 export const hey = async () => {}
 
@@ -49,7 +50,9 @@ Dotenv.config()
 
 async function run() {
   try {
-    await hey()
+    await Logger.skeetAA()
+    await Logger.welcomText('hey')
+    await Logger.cmText()
   } catch (error) {
     console.log(`error: ${error}`)
   }

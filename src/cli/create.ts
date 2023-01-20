@@ -24,8 +24,8 @@ export const init = async (appName: string) => {
   await initDbMigrate(appDir)
   await Logger.skeetAA()
   await Logger.welcomText(appName)
-  const nmb = Math.floor(Math.random() * 5)
-  if (nmb === 5) {
+  const nmb = Math.floor(Math.random() * 4 + 1)
+  if (nmb === 4) {
     await Logger.cmText()
   }
 }
