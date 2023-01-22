@@ -1,5 +1,18 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 
+export const runApiDeploy = async (
+  projectId: string,
+  appName: string,
+  region: string,
+  memory: string,
+  cpu: string
+) => {
+  await apiBuild(appName)
+  await apiTag(projectId, appName, region)
+  await apiPush(projectId, appName, region)
+  await apiDeploy(projectId, appName, region, memory, cpu)
+}
+
 export const apiBuild = async (appName: string) => {
   const imageName = appName + '-api'
   const shCmd = ['docker', 'build', './apps/api', '-t', imageName]

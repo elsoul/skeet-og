@@ -5,16 +5,11 @@ import * as Skeet from '@/cli'
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
 import { execSync } from 'child_process'
+import percentEncode from '@stdlib/string-percent-encode'
 
 export const hey = async () => {
-  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-  const projectId = skeetCloudConfig.api.projectId
-  const appName = skeetCloudConfig.api.appName
-  const shCmd = ['gcloud', 'sql', 'instances', 'list', '--project', projectId]
-  const cmd = `gcloud sql instances list --project=${projectId} | grep ${appName} | awk '{print $5}'`
-  const res = execSync(cmd)
-  const r = String(res).replace(/r?n/g, '')
-  console.log(r)
+  const res = percentEncode('/cloudsql/epics-beta:asia-northeast1:epics-beta')
+  console.log(res)
 }
 
 export const importConfig = async () => {
@@ -192,7 +187,7 @@ async function main() {
     })
     program.command('api:deploy').action(async () => {
       const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-      await Skeet.apiDeploy(
+      await Skeet.runApiDeploy(
         skeetCloudConfig.api.projectId,
         skeetCloudConfig.api.appName,
         skeetCloudConfig.api.region,
