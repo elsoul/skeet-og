@@ -4,13 +4,17 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
-import percentEncode from '@stdlib/string-percent-encode'
-import { execSyncCmd } from './lib/execSyncCmd'
+import { execSync } from 'child_process'
 
-export const hey = async (projectId: string, appName: string) => {
+export const hey = async () => {
+  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+  const projectId = skeetCloudConfig.api.projectId
+  const appName = skeetCloudConfig.api.appName
   const shCmd = ['gcloud', 'sql', 'instances', 'list', '--project', projectId]
-  const res = await execSyncCmd(shCmd)
-  console.log(res)
+  const cmd = `gcloud sql instances list --project=${projectId} | grep ${appName} | awk '{print $5}'`
+  const res = execSync(cmd)
+  const r = String(res).replace(/r?n/g, '')
+  console.log(r)
 }
 
 export const importConfig = async () => {
@@ -56,8 +60,7 @@ Dotenv.config()
 
 async function run() {
   try {
-    const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-    await hey(skeetCloudConfig.api.projectId, skeetCloudConfig.api.appName)
+    await hey()
   } catch (error) {
     console.log(`error: ${error}`)
   }

@@ -3,6 +3,7 @@ import prompt from 'prompt'
 import percentEncode from '@stdlib/string-percent-encode'
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
+import { execSync } from 'child_process'
 
 export const runSqlCreate = async (
   projectId: string,
@@ -42,7 +43,8 @@ export const runSqlCreate = async (
         memory
       )
       const encodedPassword = percentEncode(password)
-      await generateEnvProduction(appName, 'ip', encodedPassword)
+      const databaseIp = await getDatabaseIp(projectId, appName)
+      await generateEnvProduction(appName, databaseIp, encodedPassword)
     }
   })
 }
@@ -58,6 +60,17 @@ const generateEnvProduction = async (
   const envProduction = databaseUrl + nodeSetting
   fs.writeFileSync(filePath, '', { flag: 'w' })
   Logger.success('successfully exported! - ./apps/api/.env.production')
+}
+
+const getDatabaseIp = async (projectId: string, appName: string) => {
+  try {
+    const cmd = `gcloud sql instances list --project=${projectId} | grep ${appName} | awk '{print $5}'`
+    const res = execSync(cmd)
+    const databaseIp = String(res).replace(/r?n/g, '')
+    return databaseIp
+  } catch (error) {
+    return `error: ${error}`
+  }
 }
 
 export const createSQL = async (
