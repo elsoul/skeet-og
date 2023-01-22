@@ -62,8 +62,7 @@ export const apiDeploy = async (
     '--project',
     projectId,
   ]
-  console.log(shCmd.join(' '))
-  // execSyncCmd(shCmd)
+  execSyncCmd(shCmd)
 }
 
 export const getContainerRegion = async (region: string) => {
