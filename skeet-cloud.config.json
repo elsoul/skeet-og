@@ -10,7 +10,7 @@
       "dbPassword": "password",
       "cpu": "1",
       "memory": "4096MB",
-      "whiteList": ""
+      "whiteList": "xx.x.xx.x"
     }
   }
 }
