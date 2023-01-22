@@ -4,8 +4,14 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
+import percentEncode from '@stdlib/string-percent-encode'
+import { execSyncCmd } from './lib/execSyncCmd'
 
-export const hey = async () => {}
+export const hey = async (projectId: string, appName: string) => {
+  const shCmd = ['gcloud', 'sql', 'instances', 'list', '--project', projectId]
+  const res = await execSyncCmd(shCmd)
+  console.log(res)
+}
 
 export const importConfig = async () => {
   try {
@@ -50,9 +56,8 @@ Dotenv.config()
 
 async function run() {
   try {
-    await Logger.skeetAA()
-    await Logger.welcomText('hey')
-    await Logger.cmText()
+    const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+    await hey(skeetCloudConfig.api.projectId, skeetCloudConfig.api.appName)
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -63,6 +68,14 @@ export const deploy = async () => {}
 async function setupIam() {
   const skeetCloudConfig: SkeetCloudConfig = await importConfig()
   await Skeet.runEnableAllPermission(skeetCloudConfig.api.projectId)
+  await Skeet.createServiceAccount(
+    skeetCloudConfig.api.projectId,
+    skeetCloudConfig.api.appName
+  )
+  await Skeet.createServiceAccountKey(
+    skeetCloudConfig.api.projectId,
+    skeetCloudConfig.api.appName
+  )
   await Skeet.runAddAllRole(
     skeetCloudConfig.api.projectId,
     skeetCloudConfig.api.appName

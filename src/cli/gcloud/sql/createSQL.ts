@@ -1,5 +1,8 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import prompt from 'prompt'
+import percentEncode from '@stdlib/string-percent-encode'
+import fs from 'fs'
+import { Logger } from '@/lib/logger'
 
 export const runSqlCreate = async (
   projectId: string,
@@ -38,8 +41,23 @@ export const runSqlCreate = async (
         cpu,
         memory
       )
+      const encodedPassword = percentEncode(password)
+      await generateEnvProduction(appName, 'ip', encodedPassword)
     }
   })
+}
+
+const generateEnvProduction = async (
+  appName: string,
+  databaseIp: string,
+  encodedPassword: string
+) => {
+  const filePath = './apps/api/.env.production'
+  const databaseUrl = `DATABASE_URL=postgresql://postgres:${encodedPassword}@${databaseIp}:5432/skeet-${appName}-production?schema=public\n`
+  const nodeSetting = 'NO_PEER_DEPENDENCY_CHECK=1\nSKEET_ENV=production'
+  const envProduction = databaseUrl + nodeSetting
+  fs.writeFileSync(filePath, '', { flag: 'w' })
+  Logger.success('successfully exported! - ./apps/api/.env.production')
 }
 
 export const createSQL = async (
