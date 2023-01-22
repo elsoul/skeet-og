@@ -41,7 +41,7 @@ export const apiDeploy = async (
   const imageName = appName + '-api'
   const imageUrl = cRegion + '/' + projectId + '/' + imageName + ':latest'
   const shCmd = [
-    'docker',
+    'gcloud',
     'run',
     'deploy',
     imageName,
@@ -62,7 +62,8 @@ export const apiDeploy = async (
     '--project',
     projectId,
   ]
-  execSyncCmd(shCmd)
+  console.log(shCmd.join(' '))
+  // execSyncCmd(shCmd)
 }
 
 export const getContainerRegion = async (region: string) => {
