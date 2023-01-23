@@ -59,7 +59,7 @@ const generateEnvProduction = async (
   const databaseUrl = `DATABASE_URL=postgresql://postgres:${encodedPassword}@${databaseIp}:5432/skeet-${appName}-production?schema=public\n`
   const nodeSetting = 'NO_PEER_DEPENDENCY_CHECK=1\nSKEET_ENV=production'
   const envProduction = databaseUrl + nodeSetting
-  fs.writeFileSync(filePath, '', { flag: 'w' })
+  fs.writeFileSync(filePath, envProduction, { flag: 'w' })
   Logger.success('successfully exported! - ./apps/api/.env.production')
 }
 
