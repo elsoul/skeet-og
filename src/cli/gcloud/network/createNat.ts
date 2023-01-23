@@ -1,30 +1,29 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
+import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
 export const createNat = async (
   projectId: string,
   appName: string,
-  region: string,
-  subnet: string
+  region: string
 ) => {
-  const natName = appName + '-nat'
-  const routerName = appName + '-router'
-  const subnetName = appName + '-subnet'
-  const ipName = appName + '-ip'
+  const networkNames = await getNetworkConfig(projectId, appName)
   const shCmd = [
     'gcloud',
     'compute',
     'routers',
     'nats',
     'create',
-    natName,
+    networkNames.natName,
     '--router',
-    routerName,
+    networkNames.routerName,
     '--region',
     region,
     '--nat-custom-subnet-ip-ranges',
-    subnetName,
+    networkNames.subnetName,
     '--nat-external-ip-pool',
-    ipName,
+    networkNames.ipName,
+    '--project',
+    projectId,
   ]
   await execSyncCmd(shCmd)
 }

@@ -1,6 +1,16 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
+import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
-export const createNetwork = async (appName: string) => {
-  const shCmd = ['gcloud', 'compute', 'networks', 'create', appName]
+export const createNetwork = async (projectId: string, appName: string) => {
+  const networkName = (await getNetworkConfig(projectId, appName)).networkName
+  const shCmd = [
+    'gcloud',
+    'compute',
+    'networks',
+    'create',
+    networkName,
+    '--project',
+    projectId,
+  ]
   await execSyncCmd(shCmd)
 }

@@ -1,23 +1,24 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import { GCP_IP_RANGE } from '.'
+import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
 export const createSubnet = async (
+  projectId: string,
   appName: string,
-  network: string,
   region: string
 ) => {
-  const subnetName = appName + '-subnet'
+  const networkNames = await getNetworkConfig(projectId, appName)
   const shCmd = [
     'gcloud',
     'compute',
     'networks',
     'subnets',
     'create',
-    subnetName,
+    networkNames.subnetName,
     '--range',
     GCP_IP_RANGE,
     '--network',
-    network,
+    networkNames.networkName,
     '--region',
     region,
   ]

@@ -1,19 +1,20 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
+import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
 export const createRouter = async (
+  projectId: string,
   appName: string,
-  network: string,
   region: string
 ) => {
-  const routerName = appName + '-router'
+  const networkNames = await getNetworkConfig(projectId, appName)
   const shCmd = [
     'gcloud',
     'compute',
     'routers',
     'create',
-    routerName,
+    networkNames.routerName,
     '--network',
-    network,
+    networkNames.networkName,
     '--region',
     region,
   ]
