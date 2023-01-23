@@ -7,6 +7,9 @@ import { createNat } from './createNat'
 import { createNetwork } from './createNetwork'
 import { createRouter } from './createRouter'
 import { createSubnet } from './createSubnet'
+import { connectVpc } from './connectVpc'
+import { createIpRange } from './createIpRange'
+import { patchSQL } from '../sql'
 
 export const runVpcNat = async (
   projectId: string,
@@ -22,5 +25,8 @@ export const runVpcNat = async (
   await createRouter(projectId, appName, region)
   await createExternalIp(projectId, appName, region)
   await createNat(projectId, appName, region)
-  // setup_private_ip - reffer to SOULs
+  // Setup Private IP to CloudSQL
+  await createIpRange(projectId, appName)
+  await connectVpc(projectId, appName)
+  await patchSQL(projectId, appName, '', '', networkConfig.networkName)
 }

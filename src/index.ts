@@ -196,7 +196,28 @@ async function main() {
       )
     })
 
+    program.command('api:yarn').action(async () => {
+      await Skeet.apiYarn()
+    })
+
+    program.command('api:yarn:build').action(async () => {
+      await Skeet.apiYarnBuild()
+    })
+
+    program.command('api:yarn:start').action(async () => {
+      await Skeet.apiYarnStart()
+    })
+
     program.command('git:init').action(Skeet.gitInit)
+
+    program.command('setup:network').action(async () => {
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.runVpcNat(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName,
+        skeetCloudConfig.api.region
+      )
+    })
 
     program
       .command('git:create')

@@ -14,12 +14,13 @@ export const patchSQL = async (
   ips: string = '',
   network: string = ''
 ) => {
+  const networkConfig = await getNetworkConfig(projectId, appName)
   const shCmd = [
     'gcloud',
     'sql',
     'instances',
     'patch',
-    appName,
+    networkConfig.instanceName,
     '--project',
     projectId,
   ]
@@ -43,8 +44,7 @@ export const patchSQL = async (
     )
   }
   if (patchOption.network !== '') {
-    const networkName = (await getNetworkConfig(projectId, appName)).networkName
-    shCmd.push('--network', networkName)
+    shCmd.push('--network', networkConfig.networkName)
   }
   await execSyncCmd(shCmd)
 }

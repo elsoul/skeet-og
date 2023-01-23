@@ -4,6 +4,7 @@ import percentEncode from '@stdlib/string-percent-encode'
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
 import { execSync } from 'child_process'
+import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
 export const runSqlCreate = async (
   projectId: string,
@@ -82,12 +83,13 @@ export const createSQL = async (
   cpu: string = '1',
   memory: string = '4096MB'
 ) => {
+  const instanceName = (await getNetworkConfig(projectId, appName)).instanceName
   const shCmd = [
     'gcloud',
     'sql',
     'instances',
     'create',
-    appName,
+    instanceName,
     '--database-version',
     databaseVersion,
     '--cpu',

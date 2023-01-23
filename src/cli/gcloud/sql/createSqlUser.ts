@@ -1,5 +1,6 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import prompt from 'prompt'
+import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
 export const runSqlUserCreate = async (projectId: string, appName: string) => {
   const dbPassPrompt = {
@@ -38,6 +39,7 @@ export const createSqlUser = async (
   userName: string,
   password: string
 ) => {
+  const instanceName = (await getNetworkConfig(projectId, appName)).instanceName
   const shCmd = [
     'gcloud',
     'sql',
@@ -45,7 +47,7 @@ export const createSqlUser = async (
     'create',
     userName,
     '--instance',
-    appName,
+    instanceName,
     '--password',
     password,
     '--project',
