@@ -107,7 +107,72 @@ $ skeet git:create elsoul/skeet --public
 
 ### Setup Google Cloud IAM
 
-###
+```bash
+$ skeet setup
+```
+
+### Create Google CloudSQL
+
+```bash
+$ skeet sql:create
+```
+
+### Add your global IP to DB whiteList
+
+Get your global IP
+
+```bash
+$ curl inet-ip.info
+xx.xx.x.x
+```
+
+Add it to `./skeet-cloud.config.json`
+
+```json
+{
+  "api": {
+    "appName": "skeet-framework",
+    "projectId": "skeet-framework",
+    "region": "europe-west4",
+    "cpu": "1",
+    "memory": "1Gi",
+    "db": {
+      "databaseVersion": "POSTGRES_14",
+      "cpu": "1",
+      "memory": "4096MB",
+      "whiteList": "xx.xx.x.x" or "xx.xx.x.x,yy.yy.y.y"
+    }
+  }
+}
+```
+
+- csv string for multiple IPs
+
+Patch CloudSQL settings
+
+```bash
+$ skeet sql:ip
+```
+
+### DB migrate
+
+```bash
+$ skeet db:init -e production
+```
+
+### Build/Push Docker Container to Google Container Registry
+
+```bash
+$ skeet api:build
+$ skeet api:tag
+$ skeet api:push
+```
+
+### Deploy to Google Cloud Run
+
+```bash
+$ skeet api:deploy
+```
 
 ## Contributing
 

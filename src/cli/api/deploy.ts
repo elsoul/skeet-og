@@ -1,4 +1,5 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
+import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
 export const runApiDeploy = async (
   projectId: string,
@@ -53,6 +54,8 @@ export const apiDeploy = async (
   const cRegion = await getContainerRegion(region)
   const imageName = appName + '-api'
   const imageUrl = cRegion + '/' + projectId + '/' + imageName + ':latest'
+  const connectorName = (await getNetworkConfig(projectId, appName))
+    .connectorName
   const shCmd = [
     'gcloud',
     'run',
@@ -74,6 +77,8 @@ export const apiDeploy = async (
     '8080',
     '--project',
     projectId,
+    '--vpc-connector',
+    connectorName,
   ]
   execSyncCmd(shCmd)
 }
