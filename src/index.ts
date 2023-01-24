@@ -3,8 +3,6 @@ import { Command } from 'commander'
 import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
-import { Logger } from '@/lib/logger'
-import { execSync } from 'child_process'
 import percentEncode from '@stdlib/string-percent-encode'
 
 export const hey = async () => {
@@ -139,6 +137,8 @@ async function main() {
     program.command('run').action(run)
     program.command('deploy').action(deploy)
     program.command('db:migrate').action(Skeet.dbMigrate)
+    program.command('db:gen').action(Skeet.dbGen)
+    program.command('db:init').action(Skeet.dbInit)
 
     program.command('sql:create').action(async () => {
       const skeetCloudConfig: SkeetCloudConfig = await importConfig()
