@@ -160,14 +160,6 @@ $ skeet sql:ip
 $ skeet db:init -e production
 ```
 
-### Build/Push Docker Container to Google Container Registry
-
-```bash
-$ skeet api:build
-$ skeet api:tag
-$ skeet api:push
-```
-
 ### Deploy to Google Cloud Run
 
 ```bash

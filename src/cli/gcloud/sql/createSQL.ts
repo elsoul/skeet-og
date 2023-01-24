@@ -5,6 +5,7 @@ import fs from 'fs'
 import { Logger } from '@/lib/logger'
 import { execSync } from 'child_process'
 import { getNetworkConfig } from '@/lib/getNetworkConfig'
+import { patchSQL } from './patchSQL'
 
 export const runSqlCreate = async (
   projectId: string,
@@ -33,6 +34,8 @@ export const runSqlCreate = async (
     if (result.password !== result.passwordConfirm) {
       console.log('password does not match!')
     } else {
+      const networkName = (await getNetworkConfig(projectId, appName))
+        .networkName
       const password = String(result.password)
       await createSQL(
         projectId,
@@ -45,27 +48,42 @@ export const runSqlCreate = async (
       )
       const encodedPassword = percentEncode(password)
       const databaseIp = await getDatabaseIp(projectId, appName)
-      await generateEnvProduction(appName, databaseIp, encodedPassword)
+      await generateEnvFile(appName, databaseIp, encodedPassword)
+
+      await patchSQL(projectId, appName, '', '', networkName)
+      const databasePrivateIp = await getDatabaseIp(projectId, appName, true)
+      const filePath = './apps/api/.env.production'
+      await generateEnvFile(
+        appName,
+        databasePrivateIp,
+        encodedPassword,
+        filePath
+      )
     }
   })
 }
 
-const generateEnvProduction = async (
+const generateEnvFile = async (
   appName: string,
   databaseIp: string,
-  encodedPassword: string
+  encodedPassword: string,
+  filePath: string = './apps/api/.env.build'
 ) => {
-  const filePath = './apps/api/.env.production'
   const databaseUrl = `DATABASE_URL=postgresql://postgres:${encodedPassword}@${databaseIp}:5432/skeet-${appName}-production?schema=public\n`
   const nodeSetting = 'NO_PEER_DEPENDENCY_CHECK=1\nSKEET_ENV=production'
-  const envProduction = databaseUrl + nodeSetting
-  fs.writeFileSync(filePath, envProduction, { flag: 'w' })
+  const envFile = databaseUrl + nodeSetting
+  fs.writeFileSync(filePath, envFile, { flag: 'w' })
   Logger.success('successfully exported! - ./apps/api/.env.production')
 }
 
-const getDatabaseIp = async (projectId: string, appName: string) => {
+const getDatabaseIp = async (
+  projectId: string,
+  appName: string,
+  privateIp: boolean = false
+) => {
   try {
-    const cmd = `gcloud sql instances list --project=${projectId} | grep ${appName} | awk '{print $5}'`
+    const ipCol = privateIp === true ? '$6' : '$5'
+    const cmd = `gcloud sql instances list --project=${projectId} | grep ${appName} | awk '{print ${ipCol}}'`
     const res = execSync(cmd)
     const databaseIp = String(res).replace(/r?n/g, '')
     return databaseIp

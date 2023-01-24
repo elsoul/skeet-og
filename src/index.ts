@@ -3,12 +3,6 @@ import { Command } from 'commander'
 import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
-import percentEncode from '@stdlib/string-percent-encode'
-
-export const hey = async () => {
-  const res = percentEncode('/cloudsql/epics-beta:asia-northeast1:epics-beta')
-  console.log(res)
-}
 
 export const importConfig = async () => {
   try {
@@ -53,30 +47,12 @@ Dotenv.config()
 
 async function run() {
   try {
-    await hey()
   } catch (error) {
     console.log(`error: ${error}`)
   }
 }
 
 export const deploy = async () => {}
-
-async function setupIam() {
-  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-  await Skeet.runEnableAllPermission(skeetCloudConfig.api.projectId)
-  await Skeet.createServiceAccount(
-    skeetCloudConfig.api.projectId,
-    skeetCloudConfig.api.appName
-  )
-  await Skeet.createServiceAccountKey(
-    skeetCloudConfig.api.projectId,
-    skeetCloudConfig.api.appName
-  )
-  await Skeet.runAddAllRole(
-    skeetCloudConfig.api.projectId,
-    skeetCloudConfig.api.appName
-  )
-}
 
 export const sqlStop = async () => {
   const skeetCloudConfig: SkeetCloudConfig = await importConfig()
@@ -133,7 +109,7 @@ async function main() {
       .description('Run Skeet API Server')
       .alias('s')
       .action(s)
-    program.command('setup').action(setupIam)
+    program.command('setup').action(Skeet.setup)
     program.command('run').action(run)
     program.command('deploy').action(deploy)
     program.command('db:migrate').action(Skeet.dbMigrate)
@@ -210,14 +186,8 @@ async function main() {
 
     program.command('git:init').action(Skeet.gitInit)
 
-    program.command('setup:network').action(async () => {
-      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-      await Skeet.runVpcNat(
-        skeetCloudConfig.api.projectId,
-        skeetCloudConfig.api.appName,
-        skeetCloudConfig.api.region
-      )
-    })
+    program.command('setup:iam').action(Skeet.setupIam)
+    program.command('setup:network').action(Skeet.setupNetwork)
 
     program
       .command('git:create')
