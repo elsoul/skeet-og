@@ -52,7 +52,7 @@ export const apiDeploy = async (
   cpu: string
 ) => {
   const cRegion = await getContainerRegion(region)
-  const imageName = appName + '-api'
+  const imageName = 'skeet-' + appName + '-api'
   const imageUrl = cRegion + '/' + projectId + '/' + imageName + ':latest'
   const connectorName = (await getNetworkConfig(projectId, appName))
     .connectorName

@@ -47,6 +47,7 @@ Dotenv.config()
 
 async function run() {
   try {
+    await Skeet.addEnvSync('.env.production')
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -182,6 +183,10 @@ async function main() {
 
     program.command('api:yarn:start').action(async () => {
       await Skeet.apiYarnStart()
+    })
+
+    program.command('git:env').action(async () => {
+      await Skeet.addEnvSync('./apps/api/.env.production')
     })
 
     program.command('git:init').action(Skeet.gitInit)
