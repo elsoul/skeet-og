@@ -47,7 +47,7 @@ Dotenv.config()
 
 async function run() {
   try {
-    console.log(await Skeet.getEnvString('.env.production'))
+    await Skeet.addJsonEnv()
   } catch (error) {
     console.log(`error: ${error}`)
   }

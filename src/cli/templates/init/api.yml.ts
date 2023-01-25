@@ -89,7 +89,7 @@ jobs:
           wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
           chmod +x cloud_sql_proxy
           mkdir /tmp/cloudsql
-          ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=\${{secrets.SKEET_GCP_PROJECT_ID}}:\${{secrets.SKEET_GCP_REGION}}:skeet-\${{ secrets.SKEET_APP_NAME }}-db &
+          ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=\${{ secrets.SKEET_GCP_PROJECT_ID }}:\${{ secrets.SKEET_GCP_REGION }}:skeet-\${{ secrets.SKEET_APP_NAME }}-db &
           sudo apt-get -yqq install libpq-dev
           cd apps/api
           yarn install
@@ -99,10 +99,10 @@ jobs:
         run: gcloud auth configure-docker --quiet
 
       - name: Build Docker container
-        run: docker build -f ./apps/api/Dockerfile ./apps/api -t \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{secrets.SKEET_APP_NAME}}-api
+        run: docker build -f ./apps/api/Dockerfile ./apps/api -t \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{ secrets.SKEET_APP_NAME }}-api
 
       - name: Push to Container Resistory
-        run: docker push \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{secrets.SKEET_APP_NAME}}-api
+        run: docker push \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{ secrets.SKEET_APP_NAME }}-api
 
       - name: Deploy to Cloud Run
         run: |

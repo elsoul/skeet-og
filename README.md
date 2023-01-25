@@ -123,6 +123,22 @@ $ skeet sql:create
 $ skeet git:env
 ```
 
+### Generate GitHub Actions
+
+```bash
+$ skeet setup:actions
+```
+
+### Commit and Push then CI/CD starts
+
+```bash
+$ git add .
+$ git commit -m 'first deploy'
+$ git push origin main
+```
+
+## Deploy with command
+
 ### Add your global IP to DB whiteList
 
 Get your global IP
@@ -163,7 +179,7 @@ $ skeet sql:ip
 ### DB migrate
 
 ```bash
-$ skeet db:init -e production
+$ skeet db:deploy -e production
 ```
 
 ### Deploy to Google Cloud Run
