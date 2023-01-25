@@ -12,6 +12,7 @@ export const setup = async () => {
     skeetCloudConfig.api.projectId,
     skeetCloudConfig.api.appName
   )
+  await Skeet.addJsonEnv()
   await Skeet.runAddAllRole(
     skeetCloudConfig.api.projectId,
     skeetCloudConfig.api.appName

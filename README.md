@@ -117,6 +117,12 @@ $ skeet setup
 $ skeet sql:create
 ```
 
+### Add Secret ENV to GitHub Secrets
+
+```bash
+$ skeet git:env
+```
+
 ### Add your global IP to DB whiteList
 
 Get your global IP

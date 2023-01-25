@@ -190,6 +190,14 @@ async function main() {
     })
 
     program.command('git:init').action(Skeet.gitInit)
+    program.command('git:env:json').action(Skeet.addJsonEnv)
+    program.command('export:iam').action(async () => {
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.createServiceAccountKey(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName
+      )
+    })
 
     program.command('setup:iam').action(Skeet.setupIam)
     program.command('setup:network').action(Skeet.setupNetwork)
