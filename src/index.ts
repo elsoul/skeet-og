@@ -196,6 +196,14 @@ async function main() {
     program.command('setup:actions').action(Skeet.setupActions)
 
     program
+      .command('run:list')
+      .description('Google Cloud Run List')
+      .action(async () => {
+        const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+        await Skeet.runList(skeetCloudConfig.api.projectId)
+      })
+
+    program
       .command('git:create')
       .description('Create GitHub Repository')
       .argument(

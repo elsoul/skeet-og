@@ -52,7 +52,6 @@ export const runSqlCreate = async (
 
       await patchSQL(projectId, appName, '', '', networkName)
       const databasePrivateIp = await getDatabaseIp(projectId, appName, true)
-      const filePath = './apps/api/.env.production'
       await generateEnvProduction(
         projectId,
         appName,
