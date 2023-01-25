@@ -54,7 +54,7 @@ export module Logger {
     const text = `
 $ cd ${appName}
 $ skeet s
-Go To : http://localhost:4200/graphql
+Go To : http://localhost:4000/graphql
 
 --- ✡ Try Your first Query ✡ ---
 mutation {
