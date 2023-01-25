@@ -116,7 +116,7 @@ jobs:
             --quiet \\
             --concurrency=80 \\
             --port=8080 \\
-            --vpc-connector="\${{ secrets.SKEET_APP_NAME }}-connector" \\
+            --vpc-connector="\${{ secrets.SKEET_APP_NAME }}-con" \\
             --set-env-vars=${envString}
 `
 

@@ -9,7 +9,7 @@ export const getNetworkConfig = async (projectId: string, appName: string) => {
     natName: 'skeet-' + appName + '-nat',
     routerName: 'skeet-' + appName + '-router',
     subnetName: 'skeet-' + appName + '-subnet',
-    connectorName: 'skeet-' + appName + '-connector',
+    connectorName: appName + '-con',
     ipName: 'skeet-' + appName + '-external-ip',
     ipRangeName: 'skeet-' + appName + '-ip-range',
   }
