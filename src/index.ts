@@ -47,13 +47,7 @@ Dotenv.config()
 
 async function run() {
   try {
-    await Skeet.generateEnvProduction(
-      'project',
-      'skeet',
-      'region',
-      'ip',
-      'pass'
-    )
+    console.log(await Skeet.getEnvString('.env.production'))
   } catch (error) {
     console.log(`error: ${error}`)
   }

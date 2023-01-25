@@ -93,8 +93,6 @@ export const generateEnvProduction = async (
     `SKEET_GCP_DB_PASSWORD=${encodedPassword}\n`,
     `SKEET_CONTAINER_REGION=${cRegion}\n`,
     `SKEET_GCP_DB_PRIVATE_IP=${databaseIp}\n`,
-    `NO_PEER_DEPENDENCY_CHECK=1\n`,
-    `SKEET_ENV=production`,
   ]
   envProduction.forEach((keyValue) => {
     fs.writeFileSync(filePath, keyValue, { flag: 'a' })
