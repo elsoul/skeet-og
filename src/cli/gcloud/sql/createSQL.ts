@@ -84,7 +84,7 @@ export const generateEnvProduction = async (
   encodedPassword: string
 ) => {
   const filePath = './apps/api/.env.production'
-  const cRegion = getContainerRegion(region)
+  const cRegion = await getContainerRegion(region)
   const envProduction = [
     `SKEET_APP_NAME=${appName}\n`,
     `SKEET_GCP_PROJECT_ID=${projectId}\n`,
