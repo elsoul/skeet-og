@@ -4,7 +4,7 @@ import percentEncode from '@stdlib/string-percent-encode'
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
 import { execSync } from 'child_process'
-import { getNetworkConfig } from '@/lib/getNetworkConfig'
+import { getNetworkConfig, getContainerRegion } from '@/lib/getNetworkConfig'
 import { patchSQL } from './patchSQL'
 
 export const runSqlCreate = async (
@@ -48,32 +48,58 @@ export const runSqlCreate = async (
       )
       const encodedPassword = percentEncode(password)
       const databaseIp = await getDatabaseIp(projectId, appName)
-      await generateEnvFile(appName, databaseIp, encodedPassword)
+      await generateEnvBuild(appName, databaseIp, encodedPassword)
 
       await patchSQL(projectId, appName, '', '', networkName)
       const databasePrivateIp = await getDatabaseIp(projectId, appName, true)
       const filePath = './apps/api/.env.production'
-      await generateEnvFile(
+      await generateEnvProduction(
+        projectId,
         appName,
+        region,
         databasePrivateIp,
-        encodedPassword,
-        filePath
+        encodedPassword
       )
     }
   })
 }
 
-const generateEnvFile = async (
+const generateEnvBuild = async (
   appName: string,
   databaseIp: string,
-  encodedPassword: string,
-  filePath: string = './apps/api/.env.build'
+  encodedPassword: string
 ) => {
+  const filePath = './apps/api/.env.build'
   const databaseUrl = `DATABASE_URL=postgresql://postgres:${encodedPassword}@${databaseIp}:5432/skeet-${appName}-production?schema=public\n`
   const nodeSetting = 'NO_PEER_DEPENDENCY_CHECK=1\nSKEET_ENV=production'
   const envFile = databaseUrl + nodeSetting
   fs.writeFileSync(filePath, envFile, { flag: 'w' })
-  Logger.success('successfully exported! - ./apps/api/.env.production')
+  Logger.success(`successfully exported! - ${filePath}`)
+}
+
+export const generateEnvProduction = async (
+  projectId: string,
+  appName: string,
+  region: string,
+  databaseIp: string,
+  encodedPassword: string
+) => {
+  const filePath = './apps/api/.env.production'
+  const cRegion = getContainerRegion(region)
+  const envProduction = [
+    `SKEET_APP_NAME=${appName}\n`,
+    `SKEET_GCP_PROJECT_ID=${projectId}\n`,
+    `SKEET_GCP_REGION=${region}\n`,
+    `SKEET_GCP_DB_PASSWORD=${encodedPassword}\n`,
+    `SKEET_CONTAINER_REGION=${cRegion}\n`,
+    `SKEET_GCP_DB_PRIVATE_IP=${databaseIp}\n`,
+    `NO_PEER_DEPENDENCY_CHECK=1\n`,
+    `SKEET_ENV=production`,
+  ]
+  envProduction.forEach((keyValue) => {
+    fs.writeFileSync(filePath, keyValue, { flag: 'a' })
+  })
+  Logger.success(`successfully exported! - ${filePath}`)
 }
 
 const getDatabaseIp = async (

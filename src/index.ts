@@ -47,7 +47,13 @@ Dotenv.config()
 
 async function run() {
   try {
-    await Skeet.addEnvSync('.env.production')
+    await Skeet.generateEnvProduction(
+      'project',
+      'skeet',
+      'region',
+      'ip',
+      'pass'
+    )
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -193,6 +199,7 @@ async function main() {
 
     program.command('setup:iam').action(Skeet.setupIam)
     program.command('setup:network').action(Skeet.setupNetwork)
+    program.command('setup:actions').action(Skeet.setupActions)
 
     program
       .command('git:create')

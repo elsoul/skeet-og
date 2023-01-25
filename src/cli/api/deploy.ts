@@ -1,5 +1,5 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
-import { getNetworkConfig } from '@/lib/getNetworkConfig'
+import { getNetworkConfig, getContainerRegion } from '@/lib/getNetworkConfig'
 
 export const runApiDeploy = async (
   projectId: string,
@@ -81,15 +81,4 @@ export const apiDeploy = async (
     connectorName,
   ]
   execSyncCmd(shCmd)
-}
-
-export const getContainerRegion = async (region: string) => {
-  switch (region) {
-    case region.match('asia')?.input:
-      return 'asia.gcr.io'
-    case region.match('eu')?.input:
-      return 'eu.gcr.io'
-    default:
-      return 'gcr.io'
-  }
 }

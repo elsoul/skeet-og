@@ -14,3 +14,14 @@ export const getNetworkConfig = async (projectId: string, appName: string) => {
     ipRangeName: appName + '-ip-range',
   }
 }
+
+export const getContainerRegion = async (region: string) => {
+  switch (region) {
+    case region.match('asia')?.input:
+      return 'asia.gcr.io'
+    case region.match('eu')?.input:
+      return 'eu.gcr.io'
+    default:
+      return 'gcr.io'
+  }
+}
