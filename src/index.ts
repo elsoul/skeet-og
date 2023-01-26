@@ -47,7 +47,9 @@ Dotenv.config()
 
 async function run() {
   try {
-    await Skeet.addJsonEnv()
+    const models = await Skeet.genModels()
+    console.log(models)
+    await Skeet.syncGenConfig(models)
   } catch (error) {
     console.log(`error: ${error}`)
   }

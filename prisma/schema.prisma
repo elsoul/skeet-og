@@ -24,6 +24,7 @@ model User {
   accountUsers AccountUsers[]
 }
 
+
 model Account {
   id               Int                @id @default(autoincrement())
   uid              String             @unique
