@@ -1,6 +1,7 @@
 export const KEYFILE_PATH = './keyfile.json'
 export const GRAPHQL_PATH = './apps/api/src/graphql'
 export const PRISMA_SCHEMA_PATH = './apps/api/prisma/schema.prisma'
+export const API_PATH = './apps/api'
 
 export type ModelSchema = {
   name: string

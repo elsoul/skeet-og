@@ -1,8 +1,8 @@
-import { Logger } from '../lib/logger'
+import { Logger } from '@/lib/logger'
 import fs from 'fs'
 import path from 'path'
-import { execSyncCmd } from '../lib/execSyncCmd'
-import * as fileDataOf from './templates/init'
+import { execSyncCmd } from '@/lib/execSyncCmd'
+import * as fileDataOf from '@/cli/templates/init'
 
 export const create = async (initAppName: string) => {
   await init(initAppName)
