@@ -1,13 +1,17 @@
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
 import { GRAPHQL_PATH, PRISMA_SCHEMA_PATH } from '@/lib/getNetworkConfig'
+import { graphqlModel } from '@/cli/templates/graphql'
 
 export type ModelSchema = {
   name: string
   type: string
 }
 
-export const genModel = async (modelName: string) => {}
+export const genModel = async (modelName: string) => {
+  const model = await graphqlModel(modelName)
+  fs.writeFileSync(model.filePath, model.body)
+}
 
 export const getNewModels = async () => {
   const apiModels = await getApiModels()
@@ -77,6 +81,7 @@ export const getModelCols = async (modelName: string) => {
     return modelSchema
   } catch (error) {
     let errorMsg = `error: can't find ${modelName}`
-    return Logger.errorString(errorMsg)
+    Logger.error(errorMsg)
+    return []
   }
 }
