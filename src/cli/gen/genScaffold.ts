@@ -32,6 +32,7 @@ export const genGraphqlIndex = async () => {
   })
   const filePath = GRAPHQL_PATH + '/index.ts'
   fs.writeFileSync(filePath, exportArray.join('\n'), { flag: 'w' })
+  Logger.success(`successfully created ✔ - ${filePath}`)
 }
 
 export const getNewModels = async () => {

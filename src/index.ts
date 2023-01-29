@@ -3,6 +3,7 @@ import { Command } from 'commander'
 import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
+import { toUpperCase } from './lib/strLib'
 
 export const importConfig = async () => {
   try {
@@ -194,9 +195,21 @@ async function main() {
       await Skeet.addEnvSync('./apps/api/.env.production')
     })
 
-    program.command('gen:scaffold').action(async () => {
-      await Skeet.genScaffoldAll()
-    })
+    program
+      .command('gen:scaffold')
+      .alias('g:scaffold')
+      .action(async () => {
+        await Skeet.genScaffoldAll()
+      })
+
+    program
+      .command('delete:scaffold')
+      .alias('d:scaffold')
+      .argument('<modelName>', 'Model Name - e.g. User')
+      .action(async (modelName: string) => {
+        const modelNameUpper = await toUpperCase(modelName)
+        await Skeet.deleteDir(modelNameUpper)
+      })
 
     program.command('git:init').action(Skeet.gitInit)
     program.command('git:env:json').action(Skeet.addJsonEnv)
