@@ -52,7 +52,8 @@ export const getModelCols = async (modelName: string) => {
         line !== '' &&
         !line.includes(' {') &&
         !line.includes('}') &&
-        !line.includes('[]')
+        !line.includes('[]') &&
+        !line.includes('atedAt')
       ) {
         schemaArray.push(line)
       }
