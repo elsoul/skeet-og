@@ -49,10 +49,7 @@ async function run() {
   try {
     // const models = await Skeet.genModels()
     // console.log(models)
-    let modelName = 'Account'
-    await Skeet.genDir(modelName)
-    let b = await Skeet.genMutation(modelName)
-    console.log(b)
+    await Skeet.genScaffoldAll()
     // await Skeet.genIndex(modelName)
     // await Skeet.genModel(modelName)
     // await Skeet.genQuery(modelName)
@@ -195,6 +192,10 @@ async function main() {
 
     program.command('git:env').action(async () => {
       await Skeet.addEnvSync('./apps/api/.env.production')
+    })
+
+    program.command('gen:scaffold').action(async () => {
+      await Skeet.genScaffoldAll()
     })
 
     program.command('git:init').action(Skeet.gitInit)

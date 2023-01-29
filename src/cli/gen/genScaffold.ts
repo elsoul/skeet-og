@@ -5,10 +5,33 @@ import {
   PRISMA_SCHEMA_PATH,
   ModelSchema,
 } from '@/lib/getNetworkConfig'
+import * as Skeet from '.'
 
-export const genScaffold = async () => {
+export const genScaffoldAll = async () => {
   const newModels = await getNewModels()
-  newModels.forEach((line) => {})
+  newModels.forEach(async (modelName) => {
+    await genScaffold(modelName)
+  })
+  await genGraphqlIndex()
+}
+
+export const genScaffold = async (modelName: string) => {
+  await Skeet.genDir(modelName)
+  await Skeet.genMutation(modelName)
+  await Skeet.genModel(modelName)
+  await Skeet.genQuery(modelName)
+  await Skeet.genIndex(modelName)
+}
+
+export const genGraphqlIndex = async () => {
+  const apiModels = await getApiModels()
+  let exportArray: Array<string> = []
+  apiModels.forEach((model) => {
+    const str = `export * from './${model}'`
+    exportArray.push(str)
+  })
+  const filePath = GRAPHQL_PATH + '/index.ts'
+  fs.writeFileSync(filePath, exportArray.join('\n'), { flag: 'w' })
 }
 
 export const getNewModels = async () => {

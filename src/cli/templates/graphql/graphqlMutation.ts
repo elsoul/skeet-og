@@ -9,7 +9,6 @@ export const graphqlMutation = async (modelName: string) => {
   const deleteModelArray = await deleteModelCodes(modelName)
   let mutationArray = createModelArray.concat(
     updateModelArray,
-    updateModelArray,
     deleteModelArray
   )
   const body = mutationArray.join('\n')
@@ -23,14 +22,14 @@ export const createModelCodes = async (modelName: string) => {
   const modelNameUpper = await toUpperCase(modelName)
   const modelNameLower = await toLowerCase(modelName)
   let codeArray = [
-    `import { extendType, nonNull, stringArg } from 'nexus'`,
+    `import { extendType, nonNull, stringArg, intArg } from 'nexus'`,
     `import { connectionFromArray, fromGlobalId } from 'graphql-relay'`,
     `import { ${modelNameUpper} } from 'nexus-prisma'\n`,
     `export const ${modelNameUpper}Mutation = objectType({`,
     `  name: 'Mutation',`,
     `  definition(t) {`,
-    `    t.field('createUser', {`,
-    `      type: User.$name`,
+    `    t.field('create${modelNameUpper}', {`,
+    `      type: ${modelNameUpper}.$name`,
     `      args: {`,
   ]
   let createInputArray = await createInputArgs(modelName)
@@ -61,7 +60,7 @@ export const updateModelCodes = async (modelName: string) => {
     `      type: ${modelNameUpper}.$name,`,
     `      args: {`,
   ]
-  let createInputArray = await createInputArgs(modelName + '?', true)
+  let createInputArray = await createInputArgs(modelName + '?', true, true)
   codeArray = codeArray.concat(createInputArray)
   const ArgsStrWithId = await createParamStr(modelName, true)
   const ArgsStr = await createParamStr(modelName)
@@ -114,12 +113,15 @@ export const deleteModelCodes = async (modelName: string) => {
 
 export const createInputArgs = async (
   modelName: string,
-  withId: boolean = false
+  withId: boolean = false,
+  isUpdate: boolean = false
 ) => {
   const modelCols = await getModelCols(modelName)
   let stringArray: Array<string> = []
   modelCols.forEach((model) => {
-    const inputMethod = typeToInputMethod(model.type)
+    const inputMethod = isUpdate
+      ? typeToInputMethodUpdate(model.type)
+      : typeToInputMethod(model.type)
     if (model.name === 'id') {
       if (withId) {
         const str = `        ${model.name}: ${inputMethod},`
@@ -159,6 +161,23 @@ export const typeToInputMethod = (type: string) => {
       return 'stringArg()'
     case 'Int':
       return 'nonNull(intArg())'
+    case 'Int?':
+      return 'intArg()'
+    case 'DateTime':
+      return 'stringArg()'
+    default:
+      return 'stringArg()'
+  }
+}
+
+export const typeToInputMethodUpdate = (type: string) => {
+  switch (type) {
+    case 'String':
+      return 'stringArg()'
+    case 'String?':
+      return 'stringArg()'
+    case 'Int':
+      return 'intArg()'
     case 'Int?':
       return 'intArg()'
     case 'DateTime':
