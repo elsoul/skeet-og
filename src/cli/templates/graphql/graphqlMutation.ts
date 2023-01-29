@@ -26,7 +26,7 @@ export const createModelCodes = async (modelName: string) => {
     `import { fromGlobalId } from 'graphql-relay'`,
     `import { ${modelNameUpper} } from 'nexus-prisma'\n`,
     `export const ${modelNameUpper}Mutation = extendType({`,
-    `  name: 'Mutation',`,
+    `  type: 'Mutation',`,
     `  definition(t) {`,
     `    t.field('create${modelNameUpper}', {`,
     `      type: ${modelNameUpper}.$name,`,
