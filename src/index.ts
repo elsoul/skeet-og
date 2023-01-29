@@ -49,7 +49,8 @@ async function run() {
   try {
     // const models = await Skeet.genModels()
     // console.log(models)
-    const res = await Skeet.getNewModels()
+    let modelName = 'Account'
+    const res = await Skeet.getModelCols(modelName)
     console.log(res)
   } catch (error) {
     console.log(`error: ${error}`)

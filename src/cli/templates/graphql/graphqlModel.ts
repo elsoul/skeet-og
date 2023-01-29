@@ -11,3 +11,16 @@ export * from './mutation'
     body,
   }
 }
+
+const modelCodes = async (modelName: string) => {
+  const modelCodeArray: Array<string> = [
+    `import { objectType } from 'nexus'`,
+    `import { ${modelName} } from 'nexus-prisma'\n`,
+    `export const ${modelName}Object = objectType({`,
+    `  name: ${modelName}.$name,`,
+    `  description: ${modelName}.$description,`,
+    `  definition(t) {`,
+  ]
+
+  return modelCodeArray
+}

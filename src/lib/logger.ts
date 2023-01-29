@@ -21,6 +21,10 @@ export module Logger {
     console.log(errorHex(text))
   }
 
+  export const errorString = async (text: string) => {
+    return errorHex(text)
+  }
+
   export const sync = async (text: string) => {
     console.log(syncHex(text))
   }
