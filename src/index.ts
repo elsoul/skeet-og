@@ -49,7 +49,8 @@ async function run() {
   try {
     // const models = await Skeet.genModels()
     // console.log(models)
-    await Skeet.addJsonEnv()
+    const res = await Skeet.getNewModels()
+    console.log(res)
   } catch (error) {
     console.log(`error: ${error}`)
   }

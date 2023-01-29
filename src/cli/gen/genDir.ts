@@ -1,6 +1,7 @@
 import fs from 'fs'
+import { GRAPHQL_PATH } from '@/lib/getNetworkConfig'
 
-export const genFiles = async (modelName: string) => {
-  const fileDir = './apps/api/src/graphql/' + modelName
+export const genDir = async (modelName: string) => {
+  const fileDir = GRAPHQL_PATH + '/' + modelName
   fs.mkdirSync(fileDir)
 }

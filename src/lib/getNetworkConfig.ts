@@ -1,4 +1,6 @@
 export const KEYFILE_PATH = './keyfile.json'
+export const GRAPHQL_PATH = './apps/api/src/graphql'
+export const PRISMA_SCHEMA_PATH = './apps/api/prisma/schema.prisma'
 
 export const getNetworkConfig = async (projectId: string, appName: string) => {
   return {
