@@ -22,10 +22,10 @@ export const createModelCodes = async (modelName: string) => {
   const modelNameUpper = await toUpperCase(modelName)
   const modelNameLower = await toLowerCase(modelName)
   let codeArray = [
-    `import { objectType, nonNull, stringArg, intArg } from 'nexus'`,
-    `import { connectionFromArray, fromGlobalId } from 'graphql-relay'`,
+    `import { extendType, nonNull, stringArg, intArg } from 'nexus'`,
+    `import { fromGlobalId } from 'graphql-relay'`,
     `import { ${modelNameUpper} } from 'nexus-prisma'\n`,
-    `export const ${modelNameUpper}Mutation = objectType({`,
+    `export const ${modelNameUpper}Mutation = extendType({`,
     `  name: 'Mutation',`,
     `  definition(t) {`,
     `    t.field('create${modelNameUpper}', {`,
@@ -59,8 +59,10 @@ export const updateModelCodes = async (modelName: string) => {
     `    t.field('update${modelNameUpper}', {`,
     `      type: ${modelNameUpper}.$name,`,
     `      args: {`,
+    `        id: nonNull(stringArg()),`,
   ]
   let createInputArray = await createInputArgs(modelName + '?', true, true)
+  createInputArray.shift()
   codeArray = codeArray.concat(createInputArray)
   const ArgsStrWithId = await createParamStr(modelName, true)
   const ArgsStr = await createParamStr(modelName)
