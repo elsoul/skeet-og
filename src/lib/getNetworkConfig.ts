@@ -1,3 +1,5 @@
+export const KEYFILE_PATH = './keyfile.json'
+
 export const getNetworkConfig = async (projectId: string, appName: string) => {
   return {
     projectId,

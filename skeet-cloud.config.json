@@ -7,7 +7,6 @@
     "memory": "1Gi",
     "db": {
       "databaseVersion": "POSTGRES_14",
-      "dbPassword": "password",
       "cpu": "1",
       "memory": "4096MB",
       "whiteList": "xx.x.xx.x"

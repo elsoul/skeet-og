@@ -1,5 +1,7 @@
 import * as Skeet from '@/cli'
 import { SkeetCloudConfig, importConfig } from '@/index'
+import { KEYFILE_PATH } from '@/lib/getNetworkConfig'
+import fs from 'fs'
 
 export const setup = async () => {
   const skeetCloudConfig: SkeetCloudConfig = await importConfig()
@@ -13,6 +15,8 @@ export const setup = async () => {
     skeetCloudConfig.api.appName
   )
   await Skeet.addJsonEnv()
+  await Skeet.dockerLogin()
+  fs.rmSync(KEYFILE_PATH)
   await Skeet.runAddAllRole(
     skeetCloudConfig.api.projectId,
     skeetCloudConfig.api.appName

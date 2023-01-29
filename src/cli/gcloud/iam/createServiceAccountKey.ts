@@ -1,4 +1,5 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
+import { KEYFILE_PATH } from '@/lib/getNetworkConfig'
 
 export const createServiceAccountKey = async (
   projectId: string,
@@ -10,7 +11,7 @@ export const createServiceAccountKey = async (
     'service-accounts',
     'keys',
     'create',
-    './keyfile.json',
+    KEYFILE_PATH,
     '--iam-account',
     `${appName}@${projectId}.iam.gserviceaccount.com`,
     '--project',
