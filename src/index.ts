@@ -59,8 +59,6 @@ async function run() {
   }
 }
 
-export const deploy = async () => {}
-
 export const sqlStop = async () => {
   const skeetCloudConfig: SkeetCloudConfig = await importConfig()
   await Skeet.patchSQL(
@@ -118,7 +116,6 @@ async function main() {
       .action(s)
     program.command('setup').action(Skeet.setup)
     program.command('run').action(run)
-    program.command('deploy').action(deploy)
     program.command('db:migrate').action(Skeet.dbMigrate)
     program.command('db:gen').action(Skeet.dbGen)
     program.command('db:init').action(Skeet.dbInit)
