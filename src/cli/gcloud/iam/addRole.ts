@@ -45,5 +45,4 @@ export const roleList = [
   'roles/appengine.appCreator',
   'roles/logging.admin',
   'roles/cloudtranslate.admin',
-  'roles/storage.buckets.get',
 ]
