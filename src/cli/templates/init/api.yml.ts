@@ -84,17 +84,6 @@ jobs:
           npx prisma migrate dev
           yarn test
 
-      - name: Prisma migrate
-        run: |
-          wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
-          chmod +x cloud_sql_proxy
-          mkdir /tmp/cloudsql
-          ./cloud_sql_proxy -dir=/tmp/cloudsql -instances=\${{ secrets.SKEET_GCP_PROJECT_ID }}:\${{ secrets.SKEET_GCP_REGION }}:skeet-\${{ secrets.SKEET_APP_NAME }}-db &
-          sudo apt-get -yqq install libpq-dev
-          cd apps/api
-          yarn install
-          DATABASE_URL=postgresql://postgres:\${{ secrets.SKEET_GCP_DB_PASSWORD }}@localhost:5432/\${{ secrets.SKEET_APP_NAME }}-production?host=/tmp/cloudsql/\${{ secrets.SKEET_GCP_PROJECT_ID }}:\${{ secrets.SKEET_GCP_REGION }}:skeet-\${{ secrets.SKEET_APP_NAME }}-db/ npx prisma migrate deploy
-
       - name: Configure Docker
         run: gcloud auth configure-docker --quiet
 
@@ -117,6 +106,7 @@ jobs:
             --concurrency=80 \\
             --port=8080 \\
             --vpc-connector="\${{ secrets.SKEET_APP_NAME }}-con" \\
+            --vpc-egress=all \\
             --set-env-vars=${envString}
 `
 
