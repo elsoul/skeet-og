@@ -69,7 +69,7 @@ const generateEnvBuild = async (
   encodedPassword: string
 ) => {
   const filePath = './apps/api/.env.build'
-  const databaseUrl = `DATABASE_URL=postgresql://postgres:${encodedPassword}@${databaseIp}:5432/skeet-${appName}-production?schema=public\n`
+  const databaseUrl = `DATABASE_URL=postgresql://postgres:skeet-${encodedPassword}@${databaseIp}:5432/skeet-${appName}-production?schema=public\n`
   const nodeSetting = 'NO_PEER_DEPENDENCY_CHECK=1\nSKEET_ENV=production'
   const envFile = databaseUrl + nodeSetting
   fs.writeFileSync(filePath, envFile, { flag: 'w' })
@@ -88,7 +88,7 @@ export const generateEnvProduction = async (
   const envProduction = [
     `SKEET_APP_NAME=${appName}\n`,
     `SKEET_GCP_PROJECT_ID=${projectId}\n`,
-    `SKEET_GCP_REGION=${region}\n`,
+    `SKEET_GCP_REGION='${region}'\n`,
     `SKEET_GCP_DB_PASSWORD=${encodedPassword}\n`,
     `SKEET_CONTAINER_REGION=${cRegion}\n`,
     `SKEET_GCP_DB_PRIVATE_IP=${databaseIp}\n`,

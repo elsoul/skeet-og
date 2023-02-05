@@ -6,7 +6,7 @@ export const getEnvString = async (filePath: string) => {
   const defaultArray = [
     'SKEET_ENV=production',
     'NO_PEER_DEPENDENCY_CHECK=1',
-    'DATABASE_URL=postgresql://postgres:${{ secrets.SKEET_GCP_DB_PASSWORD }}@${{ secrets.SKEET_GCP_DB_PRIVATE_IP }}:5432/${{ secrets.SKEET_APP_NAME }}-production?schema=public',
+    'DATABASE_URL=postgresql://postgres:skeet-${{ secrets.SKEET_GCP_DB_PASSWORD }}@${{ secrets.SKEET_GCP_DB_PRIVATE_IP }}:5432/${{ secrets.SKEET_APP_NAME }}-production?schema=public',
     'SKEET_SECRET_KEY_BASE=${{ secrets.SKEET_SECRET_KEY_BASE }}',
     'SKEET_GCP_PROJECT_ID=${{ secrets.SKEET_GCP_PROJECT_ID }}',
     'SKEET_FB_PROJECT_ID=${{ secrets.SKEET_FB_PROJECT_ID }}',
