@@ -1,6 +1,6 @@
 {
   "name": "skeet",
-  "version": "0.17.8",
+  "version": "0.17.9",
   "description": "Full-stack TypeScript Serverless Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/elsoul/skeet.git",

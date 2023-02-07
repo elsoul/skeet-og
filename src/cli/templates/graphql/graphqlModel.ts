@@ -1,5 +1,8 @@
-import { getModelCols } from '@/cli/gen'
-import { GRAPHQL_PATH, ModelSchema } from '@/lib/getNetworkConfig'
+import { getEnumCols, getModelCols } from '@/lib/getModelInfo'
+import { toUpperCase, toLowerCase } from '@/lib/strLib'
+import { GRAPHQL_PATH } from '@/lib/getNetworkConfig'
+import { ModelSchema } from '@/lib/getModelInfo'
+import e from 'express'
 
 export type ModelSchemaArray = Array<ModelSchema>
 
@@ -12,21 +15,83 @@ export const graphqlModel = async (modelName: string) => {
   }
 }
 
-export const modelCodes = async (modelName: string) => {
-  let modelCodeArray: Array<string> = [
+const graphqlEnum = async (param: string) => {
+  const lowerParam = await toLowerCase(param)
+  const upperParam = await toUpperCase(param)
+  const body = [
+    `const ${lowerParam}Enum = enumType({`,
+    `  name: ${upperParam},`,
+    `  members: Object.values(${upperParam}),`,
+    `})\n`,
+  ]
+  return body
+}
+
+export const enumImport = async (enumArray: Array<string>) => {
+  const upperEnumNames = []
+  for await (const e of enumArray) {
+    upperEnumNames.push(await toUpperCase(e))
+  }
+  const enumString = upperEnumNames.join(', ')
+  const body = [
+    `import { ${enumString} } from '@prisma/client'`,
+    `import { enumType, objectType } from 'nexus'\n`,
+  ]
+  return body
+}
+
+export const normalImport = async (modelName: string) => {
+  const body = [
     `import { objectType } from 'nexus'`,
     `import { ${modelName} } from 'nexus-prisma'\n`,
+  ]
+  return body
+}
+
+export const modelCodes = async (modelName: string) => {
+  const modelCols: ModelSchemaArray = await getModelCols(modelName)
+  const enumNames = await getEnumCols(modelCols)
+  let importArray = []
+  let modelCodeArray = [
     `export const ${modelName}Object = objectType({`,
     `  name: ${modelName}.$name,`,
     `  description: ${modelName}.$description,`,
     `  definition(t) {`,
     `    t.relayGlobalId('id', {})`,
   ]
-  const modelCols: ModelSchemaArray = await getModelCols(modelName)
-  modelCols.forEach((model) => {
-    const addLine = `    t.field(${modelName}.${model.name})`
-    modelCodeArray.push(addLine)
-  })
+  if (enumNames.length === 0) {
+    importArray = await normalImport(modelName)
+    for await (const importString of importArray.reverse()) {
+      modelCodeArray.unshift(importString)
+    }
+  } else {
+    importArray = await enumImport(enumNames)
+    let enumArray = []
+    for await (const enumName of enumNames) {
+      const body = await graphqlEnum(enumName)
+      for await (const line of body) {
+        enumArray.push(line)
+      }
+    }
+    for await (const importString of enumArray.reverse()) {
+      modelCodeArray.unshift(importString)
+    }
+    for await (const importString of importArray.reverse()) {
+      modelCodeArray.unshift(importString)
+    }
+  }
+
+  let enumParams = []
+  for await (const model of modelCols) {
+    if (model.type === 'Enum') {
+      const addLine = `    t.field(${modelName}.${model.name}.name, { type: ${model.name}Enum })`
+      modelCodeArray.push(addLine)
+      enumParams.push(model.name)
+    } else {
+      const addLine = `    t.field(${modelName}.${model.name})`
+      modelCodeArray.push(addLine)
+    }
+  }
   modelCodeArray.push('  },', '})')
 
   return modelCodeArray

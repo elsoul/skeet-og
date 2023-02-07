@@ -4,6 +4,7 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from './lib/strLib'
+import { getEnumCols, getModelCols } from '@/lib/getModelInfo'
 
 export const importConfig = async () => {
   try {
@@ -48,12 +49,9 @@ Dotenv.config()
 
 async function run() {
   try {
-    // const models = await Skeet.genModels()
-    // console.log(models)
-    await Skeet.genScaffoldAll()
-    // await Skeet.genIndex(modelName)
-    // await Skeet.genModel(modelName)
-    // await Skeet.genQuery(modelName)
+    const enumCols = await Skeet.modelCodes('User')
+    // console.log(await Skeet.enumImport(enumCols))
+    console.log(enumCols)
   } catch (error) {
     console.log(`error: ${error}`)
   }

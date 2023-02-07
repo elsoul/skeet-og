@@ -1,4 +1,4 @@
-import { getModelCols } from '@/cli/gen'
+import { getModelCols } from '@/lib/getModelInfo'
 import { GRAPHQL_PATH } from '@/lib/getNetworkConfig'
 import { toUpperCase, toLowerCase } from '@/lib/strLib'
 
@@ -35,12 +35,11 @@ export const createModelCodes = async (modelName: string) => {
   let createInputArray = await createInputArgs(modelName)
   codeArray = codeArray.concat(createInputArray)
   codeArray.push('      },')
-  const resolveArgsStr = await createParamStr(modelName)
-  codeArray.push(`      async resolve(_, { ${resolveArgsStr} }, ctx) {`)
+  codeArray.push(`      async resolve(_, args, ctx) {`)
   codeArray.push(
     '        try {',
     `          return await ctx.prisma.${modelNameLower}.create({`,
-    `            data: { ${resolveArgsStr} },`,
+    `            data: args,`,
     '          })',
     '        } catch (error) {',
     '          console.log(error)',
@@ -64,17 +63,18 @@ export const updateModelCodes = async (modelName: string) => {
   let createInputArray = await createInputArgs(modelName + '?', true, true)
   createInputArray.shift()
   codeArray = codeArray.concat(createInputArray)
-  const ArgsStrWithId = await createParamStr(modelName, true)
-  const ArgsStr = await createParamStr(modelName)
   codeArray.push(
     '      },',
-    `      async resolve(_, { ${ArgsStrWithId} }, ctx) {`,
+    `      async resolve(_, args, ctx) {`,
+    '        const id = Number(fromGlobalId(args.id).id)',
+    '        let data = JSON.parse(JSON.stringify(args))',
+    '        delete data.id',
     '        try {',
     `          return await ctx.prisma.${modelNameLower}.update({`,
     '            where: {',
-    '              id: Number(fromGlobalId(id).id),',
+    '              id',
     '            },',
-    `            data: { ${ArgsStr} },`,
+    `            data`,
     '          })',
     '        } catch (error) {',
     '          console.log(error)',

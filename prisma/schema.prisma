@@ -18,12 +18,17 @@ model User {
   email        String
   pubkey       String?
   iconUrl      String?
-  role         Int            @default(0)
+  job          Job
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   accountUsers AccountUsers[]
 }
 
+enum Job {
+  DEV
+  CLIENT
+  DEGEN
+}
 
 model Account {
   id               Int                @id @default(autoincrement())
