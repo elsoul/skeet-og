@@ -20,7 +20,7 @@ export const runApiDeploy = async (
 }
 
 export const apiBuild = async (appName: string) => {
-  const imageName = appName + '-api'
+  const imageName = 'skeet-' + appName + '-api'
   const shCmd = ['docker', 'build', './apps/api', '-t', imageName]
   execSyncCmd(shCmd)
 }
@@ -31,7 +31,7 @@ export const apiTag = async (
   region: string
 ) => {
   const cRegion = await getContainerRegion(region)
-  const imageName = appName + '-api'
+  const imageName = 'skeet-' + appName + '-api'
   const imageUrl = cRegion + '/' + projectId + '/' + imageName + ':latest'
   const shCmd = ['docker', 'tag', imageName, imageUrl]
   execSyncCmd(shCmd)
@@ -43,7 +43,7 @@ export const apiPush = async (
   region: string
 ) => {
   const cRegion = await getContainerRegion(region)
-  const imageName = appName + '-api'
+  const imageName = 'skeet-' + appName + '-api'
   const imageUrl = cRegion + '/' + projectId + '/' + imageName + ':latest'
   const shCmd = ['docker', 'push', imageUrl]
   execSyncCmd(shCmd)
