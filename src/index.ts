@@ -4,7 +4,6 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from './lib/strLib'
-import { getEnumCols, getModelCols } from '@/lib/getModelInfo'
 
 export const importConfig = async () => {
   try {
@@ -224,7 +223,13 @@ async function main() {
 
     program.command('setup:iam').action(Skeet.setupIam)
     program.command('setup:network').action(Skeet.setupNetwork)
-    program.command('setup:actions').action(Skeet.setupActions)
+    program.command('setup:actions').action(async () => {
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.setupActions(
+        skeetCloudConfig.api.memory,
+        skeetCloudConfig.api.cpu
+      )
+    })
 
     program
       .command('run:list')

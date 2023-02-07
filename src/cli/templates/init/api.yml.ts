@@ -1,28 +1,23 @@
 import fs from 'fs'
-import readline from 'readline'
+import { defaultEnvArray } from '@/lib/getNetworkConfig'
 
 export const getEnvString = async (filePath: string) => {
   const stream = fs.readFileSync(filePath)
-  const defaultArray = [
-    'SKEET_ENV=production',
-    'NO_PEER_DEPENDENCY_CHECK=1',
-    'DATABASE_URL=postgresql://postgres:skeet-${{ secrets.SKEET_GCP_DB_PASSWORD }}@${{ secrets.SKEET_GCP_DB_PRIVATE_IP }}:5432/${{ secrets.SKEET_APP_NAME }}-production?schema=public',
-    'SKEET_SECRET_KEY_BASE=${{ secrets.SKEET_SECRET_KEY_BASE }}',
-    'SKEET_GCP_PROJECT_ID=${{ secrets.SKEET_GCP_PROJECT_ID }}',
-    'SKEET_FB_PROJECT_ID=${{ secrets.SKEET_FB_PROJECT_ID }}',
-    'TZ=${{ secrets.TZ }}',
-  ]
   const envArray: Array<string> = String(stream).split('\n')
   const newEnv = envArray.filter((value) => {
     if (!value.match('SKEET_')) {
       return value
     }
   })
-  const returnArray = defaultArray.concat(newEnv)
+  const returnArray = defaultEnvArray.concat(newEnv)
   return returnArray.join(',')
 }
 
-export const apiYml = async (envString: string) => {
+export const apiYml = async (
+  envString: string,
+  memory: string,
+  cpu: string
+) => {
   fs.mkdirSync('.github/workflows', { recursive: true })
   const filePath = `.github/workflows/api.yml`
   const body = `name: Api
@@ -98,7 +93,8 @@ jobs:
           gcloud run deploy skeet-\${{ secrets.SKEET_APP_NAME }}-api \\
             --service-account=\${{ secrets.SKEET_APP_NAME }}@\${{ secrets.SKEET_GCP_PROJECT_ID }}.iam.gserviceaccount.com \\
             --image=\${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{ secrets.SKEET_APP_NAME }}-api \\
-            --memory=4Gi \\
+            --memory=${memory} \\
+            --cpu=${cpu} \\
             --region=\${{ secrets.SKEET_GCP_REGION }} \\
             --allow-unauthenticated \\
             --platform=managed \\

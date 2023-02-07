@@ -1,5 +1,10 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
-import { getNetworkConfig, getContainerRegion } from '@/lib/getNetworkConfig'
+import {
+  getNetworkConfig,
+  getContainerRegion,
+  API_ENV_PRODUCTION_PATH,
+} from '@/lib/getNetworkConfig'
+import { getEnvString } from '@/cli/templates/init'
 
 export const runApiDeploy = async (
   projectId: string,
@@ -51,34 +56,36 @@ export const apiDeploy = async (
   memory: string,
   cpu: string
 ) => {
+  const cloudRunName = `skeet-${appName}-api`
+  const serviceAccount = `${appName}@${projectId}.iam.gserviceaccount.com`
   const cRegion = await getContainerRegion(region)
-  const imageName = 'skeet-' + appName + '-api'
-  const imageUrl = cRegion + '/' + projectId + '/' + imageName + ':latest'
-  const connectorName = (await getNetworkConfig(projectId, appName))
-    .connectorName
+  const image = `${cRegion}/${projectId}/${cloudRunName}`
+  const { connectorName } = await getNetworkConfig(projectId, appName)
+  const envString = await getEnvString(API_ENV_PRODUCTION_PATH)
   const shCmd = [
     'gcloud',
     'run',
     'deploy',
-    imageName,
+    cloudRunName,
+    '--service-account',
+    serviceAccount,
     '--image',
-    imageUrl,
+    image,
     '--memory',
     memory,
     '--cpu',
     cpu,
-    '--quiet',
     '--region',
     region,
     '--allow-unauthenticated',
-    '--platform',
-    'managed',
-    '--port',
-    '8080',
-    '--project',
-    projectId,
+    '--platform=managed',
+    '--quiet',
     '--vpc-connector',
     connectorName,
+    '--project',
+    projectId,
+    '--set-env-vars',
+    envString,
   ]
-  execSyncCmd(shCmd)
+  await execSyncCmd(shCmd)
 }
