@@ -1,10 +1,8 @@
 import { execCmd } from '@/lib/execCmd'
+import { API_PATH } from '@/lib/getNetworkConfig'
 import path from 'path'
 
-export const dbInit = async () => {
-  const currentDirArray = process.cwd().split('/')
-  const currentDir = currentDirArray[currentDirArray.length - 1]
-  const apiDir = path.join(currentDir, '/apps/api')
-  const prismaMigrateCmd = ['npx', 'prisma', 'migrate', 'dev']
-  await execCmd(prismaMigrateCmd, apiDir)
+export const dbInit = async (name: string) => {
+  const prismaMigrateCmd = ['npx', 'prisma', 'migrate', 'dev', '--name', name]
+  await execCmd(prismaMigrateCmd, API_PATH)
 }

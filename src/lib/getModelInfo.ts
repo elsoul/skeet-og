@@ -16,14 +16,24 @@ export const prismaSchemaType = [
   'Boolean',
 ]
 
-export const isEnum = async (type: string) => {
+enum ColType {
+  Enum,
+  Relation,
+  Normal,
+}
+
+export const getColType = async (type: string) => {
   let param = prismaSchemaType.filter(
     (typeName) => type === typeName || type === typeName + '?'
   )
   if (param.length == 0) {
-    return true
+    if (type.includes('?')) {
+      return ColType.Relation
+    } else {
+      return ColType.Enum
+    }
   } else {
-    return false
+    return ColType.Normal
   }
 }
 
@@ -61,9 +71,12 @@ export const getModelCols = async (modelName: string) => {
     for await (const line of schemaArray) {
       let splitArray = line.split(' ')
       splitArray = splitArray.filter((item) => item !== '')
-      let isEnumResult = await isEnum(splitArray[1])
-      let type = isEnumResult ? 'Enum' : splitArray[1]
       if (splitArray[0] == 'id') continue
+
+      let getColTypeResult = await getColType(splitArray[1])
+      if (getColTypeResult === 1) continue
+      const type = getColTypeResult === 0 ? 'Enum' : splitArray[1]
+
       if (splitArray[2]) {
         if (splitArray[2].includes('@relation')) {
         } else {

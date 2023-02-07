@@ -115,8 +115,14 @@ async function main() {
     program.command('setup').action(Skeet.setup)
     program.command('run').action(run)
     program.command('db:migrate').action(Skeet.dbMigrate)
+    program.command('db:reset').action(Skeet.dbReset)
     program.command('db:gen').action(Skeet.dbGen)
-    program.command('db:init').action(Skeet.dbInit)
+    program
+      .command('db:init')
+      .argument('<migrationName>', 'Migration Name - e.g. addUserCol')
+      .action(async (migrationName: string = 'init') => {
+        await Skeet.dbInit(migrationName)
+      })
 
     program.command('sql:create').action(async () => {
       const skeetCloudConfig: SkeetCloudConfig = await importConfig()
