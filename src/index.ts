@@ -113,7 +113,13 @@ async function main() {
       .action(s)
     program.command('setup').action(Skeet.setup)
     program.command('run').action(run)
-    program.command('db:migrate').action(Skeet.dbMigrate)
+    program
+      .command('db:migrate')
+      .option('--production', 'Migrate Production Schema')
+      .action(async (options) => {
+        const production = options.production || false
+        await Skeet.dbMigrate(production)
+      })
     program.command('db:reset').action(Skeet.dbReset)
     program.command('db:gen').action(Skeet.dbGen)
     program
@@ -181,6 +187,10 @@ async function main() {
 
     program.command('api:yarn').action(async () => {
       await Skeet.apiYarn()
+    })
+
+    program.command('api:test').action(async () => {
+      await Skeet.apiTest()
     })
 
     program.command('api:yarn:build').action(async () => {

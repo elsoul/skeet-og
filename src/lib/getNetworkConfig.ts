@@ -28,7 +28,22 @@ export const getNetworkConfig = async (projectId: string, appName: string) => {
     connectorName: appName + '-con',
     ipName: 'skeet-' + appName + '-external-ip',
     ipRangeName: 'skeet-' + appName + '-ip-range',
+    serviceAccountName: `${appName}@${projectId}.iam.gserviceaccount.com`,
   }
+}
+
+export const getContainerImageUrl = async (
+  projectId: string,
+  appName: string,
+  region: string
+) => {
+  const cRegion = await getContainerRegion(region)
+  const imageName = 'skeet-' + appName + '-api'
+  return cRegion + '/' + projectId + '/' + imageName + ':latest'
+}
+
+export const getContainerImageName = async (appName: string) => {
+  return 'skeet-' + appName + '-api'
 }
 
 export const getContainerRegion = async (region: string) => {

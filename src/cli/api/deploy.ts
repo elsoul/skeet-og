@@ -3,6 +3,9 @@ import {
   getNetworkConfig,
   getContainerRegion,
   API_ENV_PRODUCTION_PATH,
+  API_PATH,
+  getContainerImageName,
+  getContainerImageUrl,
 } from '@/lib/getNetworkConfig'
 import { getEnvString } from '@/cli/templates/init'
 
@@ -20,8 +23,8 @@ export const runApiDeploy = async (
 }
 
 export const apiBuild = async (appName: string) => {
-  const imageName = 'skeet-' + appName + '-api'
-  const shCmd = ['docker', 'build', './apps/api', '-t', imageName]
+  const imageName = await getContainerImageName(appName)
+  const shCmd = ['docker', 'build', API_PATH, '-t', imageName]
   execSyncCmd(shCmd)
 }
 
@@ -30,9 +33,8 @@ export const apiTag = async (
   appName: string,
   region: string
 ) => {
-  const cRegion = await getContainerRegion(region)
-  const imageName = 'skeet-' + appName + '-api'
-  const imageUrl = cRegion + '/' + projectId + '/' + imageName + ':latest'
+  const imageName = await getContainerImageName(appName)
+  const imageUrl = await getContainerImageUrl(projectId, appName, region)
   const shCmd = ['docker', 'tag', imageName, imageUrl]
   execSyncCmd(shCmd)
 }
@@ -43,8 +45,8 @@ export const apiPush = async (
   region: string
 ) => {
   const cRegion = await getContainerRegion(region)
-  const imageName = 'skeet-' + appName + '-api'
-  const imageUrl = cRegion + '/' + projectId + '/' + imageName + ':latest'
+  const imageName = await getContainerImageName(appName)
+  const imageUrl = await getContainerImageUrl(projectId, appName, region)
   const shCmd = ['docker', 'push', imageUrl]
   execSyncCmd(shCmd)
 }
@@ -56,11 +58,12 @@ export const apiDeploy = async (
   memory: string,
   cpu: string
 ) => {
-  const cloudRunName = `skeet-${appName}-api`
-  const serviceAccount = `${appName}@${projectId}.iam.gserviceaccount.com`
-  const cRegion = await getContainerRegion(region)
-  const image = `${cRegion}/${projectId}/${cloudRunName}`
-  const { connectorName } = await getNetworkConfig(projectId, appName)
+  const cloudRunName = await getContainerImageName(appName)
+  const image = await getContainerImageUrl(projectId, appName, region)
+  const { connectorName, serviceAccountName } = await getNetworkConfig(
+    projectId,
+    appName
+  )
   const envString = await getEnvString(API_ENV_PRODUCTION_PATH)
   const shCmd = [
     'gcloud',
@@ -68,7 +71,7 @@ export const apiDeploy = async (
     'deploy',
     cloudRunName,
     '--service-account',
-    serviceAccount,
+    serviceAccountName,
     '--image',
     image,
     '--memory',
