@@ -15,19 +15,20 @@ export const defaultEnvArray = [
 ]
 
 export const getNetworkConfig = async (projectId: string, appName: string) => {
+  const skeetHeader = 'skeet-' + appName
   return {
     projectId,
     appName,
-    instanceName: 'skeet-' + appName + '-db',
-    networkName: 'skeet-' + appName + '-network',
-    firewallTcpName: 'skeet-' + appName + '-fw-tcp',
-    firewallSshName: 'skeet-' + appName + '-fw-ssh',
-    natName: 'skeet-' + appName + '-nat',
-    routerName: 'skeet-' + appName + '-router',
-    subnetName: 'skeet-' + appName + '-subnet',
+    instanceName: skeetHeader + '-db',
+    networkName: skeetHeader + '-network',
+    firewallTcpName: skeetHeader + '-fw-tcp',
+    firewallSshName: skeetHeader + '-fw-ssh',
+    natName: skeetHeader + '-nat',
+    routerName: skeetHeader + '-router',
+    subnetName: skeetHeader + '-subnet',
     connectorName: appName + '-con',
-    ipName: 'skeet-' + appName + '-external-ip',
-    ipRangeName: 'skeet-' + appName + '-ip-range',
+    ipName: skeetHeader + '-external-ip',
+    ipRangeName: skeetHeader + '-ip-range',
     serviceAccountName: `${appName}@${projectId}.iam.gserviceaccount.com`,
   }
 }
