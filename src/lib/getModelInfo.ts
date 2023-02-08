@@ -74,8 +74,8 @@ export const getModelCols = async (modelName: string) => {
       if (splitArray[0] == 'id') continue
 
       let getColTypeResult = await getColType(splitArray[1])
-      if (getColTypeResult === 1) continue
-      const type = getColTypeResult === 0 ? 'Enum' : splitArray[1]
+      if (getColTypeResult === ColType.Relation) continue
+      const type = getColTypeResult === ColType.Enum ? 'Enum' : splitArray[1]
 
       if (splitArray[2]) {
         if (splitArray[2].includes('@relation')) {

@@ -1,13 +1,11 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import {
   getNetworkConfig,
-  getContainerRegion,
-  API_ENV_PRODUCTION_PATH,
   API_PATH,
   getContainerImageName,
   getContainerImageUrl,
 } from '@/lib/getNetworkConfig'
-import { getEnvString } from '@/cli/templates/init'
+import { getBuidEnvString } from '@/lib/getNetworkConfig'
 
 export const runApiDeploy = async (
   projectId: string,
@@ -44,8 +42,6 @@ export const apiPush = async (
   appName: string,
   region: string
 ) => {
-  const cRegion = await getContainerRegion(region)
-  const imageName = await getContainerImageName(appName)
   const imageUrl = await getContainerImageUrl(projectId, appName, region)
   const shCmd = ['docker', 'push', imageUrl]
   execSyncCmd(shCmd)
@@ -64,7 +60,7 @@ export const apiDeploy = async (
     projectId,
     appName
   )
-  const envString = await getEnvString(API_ENV_PRODUCTION_PATH)
+  const envString = await getBuidEnvString()
   const shCmd = [
     'gcloud',
     'run',

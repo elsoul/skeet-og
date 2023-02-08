@@ -3,7 +3,8 @@ import { Command } from 'commander'
 import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
-import { toUpperCase } from './lib/strLib'
+import { toUpperCase } from '@/lib/strLib'
+import { genSecret } from '@/lib/getNetworkConfig'
 
 export const importConfig = async () => {
   try {
@@ -48,7 +49,7 @@ Dotenv.config()
 
 async function run() {
   try {
-    const enumCols = await Skeet.modelCodes('User')
+    const enumCols = await genSecret('g')
     // console.log(await Skeet.enumImport(enumCols))
     console.log(enumCols)
   } catch (error) {

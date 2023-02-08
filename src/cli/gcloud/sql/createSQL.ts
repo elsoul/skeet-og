@@ -4,7 +4,13 @@ import percentEncode from '@stdlib/string-percent-encode'
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
 import { execSync } from 'child_process'
-import { getNetworkConfig, getContainerRegion } from '@/lib/getNetworkConfig'
+import {
+  getNetworkConfig,
+  getContainerRegion,
+  API_ENV_PRODUCTION_PATH,
+  API_ENV_BUILD_PATH,
+  genSecret,
+} from '@/lib/getNetworkConfig'
 import { patchSQL } from './patchSQL'
 
 export const runSqlCreate = async (
@@ -68,7 +74,7 @@ const generateEnvBuild = async (
   databaseIp: string,
   encodedPassword: string
 ) => {
-  const filePath = './apps/api/.env.build'
+  const filePath = API_ENV_BUILD_PATH
   const databaseUrl = `DATABASE_URL=postgresql://postgres:skeet-${encodedPassword}@${databaseIp}:5432/skeet-${appName}-production?schema=public\n`
   const nodeSetting = 'NO_PEER_DEPENDENCY_CHECK=1\nSKEET_ENV=production'
   const envFile = databaseUrl + nodeSetting
@@ -83,15 +89,18 @@ export const generateEnvProduction = async (
   databaseIp: string,
   encodedPassword: string
 ) => {
-  const filePath = './apps/api/.env.production'
+  const filePath = API_ENV_PRODUCTION_PATH
   const cRegion = await getContainerRegion(region)
+  const secretKey = await genSecret(appName)
   const envProduction = [
     `SKEET_APP_NAME=${appName}\n`,
     `SKEET_GCP_PROJECT_ID=${projectId}\n`,
+    `SKEET_GCP_FB_PROJECT_ID=${projectId}\n`,
     `SKEET_GCP_REGION='${region}'\n`,
     `SKEET_GCP_DB_PASSWORD=${encodedPassword}\n`,
     `SKEET_CONTAINER_REGION=${cRegion}\n`,
     `SKEET_GCP_DB_PRIVATE_IP=${databaseIp}\n`,
+    `SKEET_SECRET_KEY_BASE=${secretKey}`,
   ]
   envProduction.forEach((keyValue) => {
     fs.writeFileSync(filePath, keyValue, { flag: 'a' })

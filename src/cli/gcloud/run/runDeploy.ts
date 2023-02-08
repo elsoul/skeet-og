@@ -1,5 +1,5 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
-import { getEnvString } from '@/cli/templates/init'
+import { getEnvString } from '@/lib/getNetworkConfig'
 import {
   getContainerRegion,
   getNetworkConfig,

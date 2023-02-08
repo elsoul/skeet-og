@@ -1,17 +1,4 @@
 import fs from 'fs'
-import { defaultEnvArray } from '@/lib/getNetworkConfig'
-
-export const getEnvString = async (filePath: string) => {
-  const stream = fs.readFileSync(filePath)
-  const envArray: Array<string> = String(stream).split('\n')
-  const newEnv = envArray.filter((value) => {
-    if (!value.match('SKEET_')) {
-      return value
-    }
-  })
-  const returnArray = defaultEnvArray.concat(newEnv)
-  return returnArray.join(',')
-}
 
 export const apiYml = async (
   envString: string,
