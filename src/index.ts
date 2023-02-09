@@ -114,6 +114,12 @@ async function main() {
       .alias('s')
       .action(s)
     program.command('setup').action(Skeet.setup)
+    program
+      .command('add:worker')
+      .argument('<workerName>', 'Worker Name - e.g. TwitterApi')
+      .action(async (workerName: string) => {
+        await Skeet.addWorker(workerName)
+      })
     program.command('run').action(run)
     program
       .command('db:migrate')
