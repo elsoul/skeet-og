@@ -16,7 +16,7 @@ export const prismaSchemaType = [
   'Boolean',
 ]
 
-enum ColType {
+export enum ColType {
   Enum,
   Relation,
   Normal,

@@ -1,4 +1,4 @@
-import { getModelCols } from '@/lib/getModelInfo'
+import { getModelCols, getColType, ColType } from '@/lib/getModelInfo'
 import { GRAPHQL_PATH } from '@/lib/getNetworkConfig'
 import { toUpperCase, toLowerCase } from '@/lib/strLib'
 
@@ -121,10 +121,11 @@ export const createInputArgs = async (
   const modelCols = await getModelCols(modelName)
   let stringArray: Array<string> = []
   for await (const model of modelCols) {
+    const valueType = await getColType(model.type)
     if (
-      model.type.includes('?') ||
       model.type.includes('[]') ||
-      model.name.includes('atedAt')
+      model.name.includes('atedAt') ||
+      valueType === ColType.Relation
     )
       continue
     const inputMethod = isUpdate
