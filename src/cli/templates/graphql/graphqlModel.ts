@@ -2,8 +2,6 @@ import { getEnumCols, getModelCols } from '@/lib/getModelInfo'
 import { toUpperCase, toLowerCase } from '@/lib/strLib'
 import { GRAPHQL_PATH } from '@/lib/getNetworkConfig'
 import { ModelSchema } from '@/lib/getModelInfo'
-import e from 'express'
-
 export type ModelSchemaArray = Array<ModelSchema>
 
 export const graphqlModel = async (modelName: string) => {
@@ -32,8 +30,8 @@ export const enumImport = async (
   enumArray: Array<string>
 ) => {
   const upperEnumNames = []
-  for await (const e of enumArray) {
-    upperEnumNames.push(await toUpperCase(e))
+  for await (const enumName of enumArray) {
+    upperEnumNames.push(await toUpperCase(enumName))
   }
   const enumString = upperEnumNames.join(', ')
   const body = [
@@ -96,11 +94,7 @@ export const modelCodes = async (modelName: string) => {
       modelCodeArray.push(addLine)
     }
   }
-  const timestamp = ['createdAt', 'updatedAt']
-  for await (const line of timestamp) {
-    const addLine = `    t.field(${modelName}.${line})`
-    modelCodeArray.push(addLine)
-  }
+
   modelCodeArray.push('  },', '})')
 
   return modelCodeArray

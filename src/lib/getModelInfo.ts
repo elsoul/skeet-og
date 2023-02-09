@@ -27,7 +27,7 @@ export const getColType = async (type: string) => {
     (typeName) => type === typeName || type === typeName + '?'
   )
   if (param.length == 0) {
-    if (type.includes('?')) {
+    if (type.includes('?') || type.includes('[]')) {
       return ColType.Relation
     } else {
       return ColType.Enum
@@ -55,13 +55,7 @@ export const getModelCols = async (modelName: string) => {
     let modelCols = splitSchema[0].split('\n')
     let schemaArray: Array<string> = []
     for await (const line of modelCols) {
-      if (
-        line !== '' &&
-        !line.includes(' {') &&
-        !line.includes('}') &&
-        !line.includes('[]') &&
-        !line.includes('atedAt')
-      ) {
+      if (line !== '' && !line.includes(' {') && !line.includes('}')) {
         schemaArray.push(line)
       } else if (line === '}') {
         break
@@ -74,7 +68,6 @@ export const getModelCols = async (modelName: string) => {
       if (splitArray[0] == 'id') continue
 
       let getColTypeResult = await getColType(splitArray[1])
-      if (getColTypeResult === ColType.Relation) continue
       const type = getColTypeResult === ColType.Enum ? 'Enum' : splitArray[1]
 
       if (splitArray[2]) {

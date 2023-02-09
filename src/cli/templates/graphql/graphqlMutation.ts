@@ -120,20 +120,20 @@ export const createInputArgs = async (
 ) => {
   const modelCols = await getModelCols(modelName)
   let stringArray: Array<string> = []
-  modelCols.forEach((model) => {
+  for await (const model of modelCols) {
+    if (
+      model.type.includes('?') ||
+      model.type.includes('[]') ||
+      model.name.includes('atedAt')
+    )
+      continue
     const inputMethod = isUpdate
       ? typeToInputMethodUpdate(model.type)
-      : typeToInputMethod(model.type)
-    if (model.name === 'id') {
-      if (withId) {
-        const str = `        ${model.name}: ${inputMethod},`
-        stringArray.push(str)
-      }
-    } else {
-      const str = `        ${model.name}: ${inputMethod},`
-      stringArray.push(str)
-    }
-  })
+      : typeToInputMethodCreate(model.type)
+    if (model.name === 'id' && withId) continue
+    const str = `        ${model.name}: ${inputMethod},`
+    stringArray.push(str)
+  }
   return stringArray
 }
 
@@ -155,7 +155,7 @@ export const createParamStr = async (
   return modelArray.join(', ')
 }
 
-export const typeToInputMethod = (type: string) => {
+export const typeToInputMethodCreate = (type: string) => {
   switch (type) {
     case 'String':
       return 'nonNull(stringArg())'

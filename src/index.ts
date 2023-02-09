@@ -5,6 +5,7 @@ import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
 import { genSecret } from '@/lib/getNetworkConfig'
+import { getModelCols } from './lib/getModelInfo'
 
 export const importConfig = async () => {
   try {
@@ -49,7 +50,7 @@ Dotenv.config()
 
 async function run() {
   try {
-    const enumCols = await genSecret('g')
+    const enumCols = await Skeet.createInputArgs('User')
     // console.log(await Skeet.enumImport(enumCols))
     console.log(enumCols)
   } catch (error) {
@@ -125,9 +126,11 @@ async function main() {
     program.command('db:gen').action(Skeet.dbGen)
     program
       .command('db:init')
+      .option('--production', 'Migrate Production Schema')
       .argument('<migrationName>', 'Migration Name - e.g. addUserCol')
-      .action(async (migrationName: string = 'init') => {
-        await Skeet.dbInit(migrationName)
+      .action(async (migrationName: string = 'init', options) => {
+        const env = options.production || false
+        await Skeet.dbInit(migrationName, env)
       })
 
     program.command('sql:create').action(async () => {
