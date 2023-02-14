@@ -6,10 +6,11 @@ import * as Skeet from '.'
 
 export const genScaffoldAll = async () => {
   const newModels = await getNewModels()
-  newModels.forEach(async (modelName) => {
+  for await (const modelName of newModels) {
     await genScaffold(modelName)
-  })
+  }
   await genGraphqlIndex()
+  await genCrudManagerIndex()
 }
 
 export const genScaffold = async (modelName: string) => {
@@ -21,13 +22,25 @@ export const genScaffold = async (modelName: string) => {
 }
 
 export const genGraphqlIndex = async () => {
+  let exportArray = [
+    `export * from './cronJob'`,
+    `export * from './taskManager'`,
+    `export * from './crudManager'`,
+  ]
+
+  const filePath = GRAPHQL_PATH + '/index.ts'
+  fs.writeFileSync(filePath, exportArray.join('\n'), { flag: 'w' })
+  Logger.success(`successfully created ✔ - ${filePath}`)
+}
+
+export const genCrudManagerIndex = async () => {
   const apiModels = await getApiModels()
   let exportArray: Array<string> = []
-  apiModels.forEach((model) => {
+  for await (const model of apiModels) {
     const str = `export * from './${model}'`
     exportArray.push(str)
-  })
-  const filePath = GRAPHQL_PATH + '/index.ts'
+  }
+  const filePath = GRAPHQL_PATH + '/crudManager/index.ts'
   fs.writeFileSync(filePath, exportArray.join('\n'), { flag: 'w' })
   Logger.success(`successfully created ✔ - ${filePath}`)
 }
@@ -41,7 +54,7 @@ export const getNewModels = async () => {
 
 export const getApiModels = async () => {
   const apiModels = fs
-    .readdirSync(GRAPHQL_PATH, { withFileTypes: true })
+    .readdirSync(GRAPHQL_PATH + '/crudManager/', { withFileTypes: true })
     .filter((item) => item.isDirectory())
     .map((item) => item.name)
 

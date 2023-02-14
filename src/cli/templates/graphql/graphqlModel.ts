@@ -5,7 +5,7 @@ import { ModelSchema } from '@/lib/getModelInfo'
 export type ModelSchemaArray = Array<ModelSchema>
 
 export const graphqlModel = async (modelName: string) => {
-  const filePath = GRAPHQL_PATH + '/' + modelName + '/model.ts'
+  const filePath = GRAPHQL_PATH + '/crudManager/' + modelName + '/model.ts'
   const body = (await modelCodes(modelName)).join('\n')
   return {
     filePath,
