@@ -120,3 +120,14 @@ export const getContainerRegion = async (region: string) => {
       return 'gcr.io'
   }
 }
+
+export const regionToTimezone = async (region: string) => {
+  switch (true) {
+    case region.includes('asia'):
+      return 'Asia/Tokyo'
+    case region.includes('europe'):
+      return 'Europe/Amsterdam'
+    default:
+      return 'America/Los_Angeles'
+  }
+}

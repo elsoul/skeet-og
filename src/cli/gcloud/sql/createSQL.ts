@@ -10,6 +10,7 @@ import {
   API_ENV_PRODUCTION_PATH,
   API_ENV_BUILD_PATH,
   genSecret,
+  regionToTimezone,
 } from '@/lib/getNetworkConfig'
 import { patchSQL } from './patchSQL'
 
@@ -92,6 +93,7 @@ export const generateEnvProduction = async (
   const filePath = API_ENV_PRODUCTION_PATH
   const cRegion = await getContainerRegion(region)
   const secretKey = await genSecret(appName)
+  const timeZone = await regionToTimezone(region)
   const envProduction = [
     `SKEET_APP_NAME=${appName}\n`,
     `SKEET_GCP_PROJECT_ID=${projectId}\n`,
@@ -100,7 +102,8 @@ export const generateEnvProduction = async (
     `SKEET_GCP_DB_PASSWORD=${encodedPassword}\n`,
     `SKEET_CONTAINER_REGION=${cRegion}\n`,
     `SKEET_GCP_DB_PRIVATE_IP=${databaseIp}\n`,
-    `SKEET_SECRET_KEY_BASE=${secretKey}`,
+    `SKEET_SECRET_KEY_BASE=${secretKey}\n`,
+    `TZ=${timeZone}`,
   ]
   envProduction.forEach((keyValue) => {
     fs.writeFileSync(filePath, keyValue, { flag: 'a' })
