@@ -3,7 +3,7 @@ import { GRAPHQL_PATH } from '@/lib/getNetworkConfig'
 import { toUpperCase, toLowerCase } from '@/lib/strLib'
 
 export const graphqlMutation = async (modelName: string) => {
-  const filePath = GRAPHQL_PATH + '/crudManager/' + modelName + '/mutation.ts'
+  const filePath = GRAPHQL_PATH + '/modelManager/' + modelName + '/mutation.ts'
   const createModelArray = await createModelCodes(modelName)
   const updateModelArray = await updateModelCodes(modelName)
   const deleteModelArray = await deleteModelCodes(modelName)

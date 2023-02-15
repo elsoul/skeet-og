@@ -1,7 +1,6 @@
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
 import { GRAPHQL_PATH, PRISMA_SCHEMA_PATH } from '@/lib/getNetworkConfig'
-import { ModelSchema } from '@/lib/getModelInfo'
 import * as Skeet from '.'
 
 export const genScaffoldAll = async () => {
@@ -10,7 +9,7 @@ export const genScaffoldAll = async () => {
     await genScaffold(modelName)
   }
   await genGraphqlIndex()
-  await genCrudManagerIndex()
+  await genmodelManagerIndex()
 }
 
 export const genScaffold = async (modelName: string) => {
@@ -23,9 +22,8 @@ export const genScaffold = async (modelName: string) => {
 
 export const genGraphqlIndex = async () => {
   let exportArray = [
-    `export * from './cronJob'`,
     `export * from './taskManager'`,
-    `export * from './crudManager'`,
+    `export * from './modelManager'`,
   ]
 
   const filePath = GRAPHQL_PATH + '/index.ts'
@@ -33,14 +31,14 @@ export const genGraphqlIndex = async () => {
   Logger.success(`successfully created ✔ - ${filePath}`)
 }
 
-export const genCrudManagerIndex = async () => {
+export const genmodelManagerIndex = async () => {
   const apiModels = await getApiModels()
   let exportArray: Array<string> = []
   for await (const model of apiModels) {
     const str = `export * from './${model}'`
     exportArray.push(str)
   }
-  const filePath = GRAPHQL_PATH + '/crudManager/index.ts'
+  const filePath = GRAPHQL_PATH + '/modelManager/index.ts'
   fs.writeFileSync(filePath, exportArray.join('\n'), { flag: 'w' })
   Logger.success(`successfully created ✔ - ${filePath}`)
 }
@@ -54,7 +52,7 @@ export const getNewModels = async () => {
 
 export const getApiModels = async () => {
   const apiModels = fs
-    .readdirSync(GRAPHQL_PATH + '/crudManager/', { withFileTypes: true })
+    .readdirSync(GRAPHQL_PATH + '/modelManager/', { withFileTypes: true })
     .filter((item) => item.isDirectory())
     .map((item) => item.name)
 

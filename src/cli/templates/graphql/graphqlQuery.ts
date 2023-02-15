@@ -2,7 +2,7 @@ import { GRAPHQL_PATH } from '@/lib/getNetworkConfig'
 import { toUpperCase, toLowerCase } from '@/lib/strLib'
 
 export const graphqlQuery = async (modelName: string) => {
-  const filePath = GRAPHQL_PATH + '/crudManager/' + modelName + '/query.ts'
+  const filePath = GRAPHQL_PATH + '/modelManager/' + modelName + '/query.ts'
   const body = (await queryCodes(modelName)).join('\n')
   return {
     filePath,
