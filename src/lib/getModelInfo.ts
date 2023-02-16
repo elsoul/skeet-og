@@ -66,6 +66,7 @@ export const getModelCols = async (modelName: string) => {
       let splitArray = line.split(' ')
       splitArray = splitArray.filter((item) => item !== '')
       if (splitArray[0] == 'id') continue
+      if (splitArray[0].includes('@@')) continue
 
       let getColTypeResult = await getColType(splitArray[1])
       const type = getColTypeResult === ColType.Enum ? 'Enum' : splitArray[1]
