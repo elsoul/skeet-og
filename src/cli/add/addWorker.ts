@@ -9,5 +9,7 @@ export const addWorker = async (workerName: string) => {
   })
   const gitCloneCmd = ['gh', 'repo', 'clone', 'elsoul/skeet-worker', workerDir]
   await execSyncCmd(gitCloneCmd)
+  const rmDefaultGit = ['rm', '-rf', '.git']
+  await execSyncCmd(rmDefaultGit, workerDir)
   Logger.success(`successfully create ${workerName}!`)
 }

@@ -6,6 +6,7 @@ import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
 import { genSecret } from '@/lib/getNetworkConfig'
 import { getModelCols } from './lib/getModelInfo'
+import { syncType } from './cli/sync/syncType'
 
 export const importConfig = async () => {
   try {
@@ -50,9 +51,9 @@ Dotenv.config()
 
 async function run() {
   try {
-    const enumCols = await Skeet.createInputArgs('User')
+    await syncType()
     // console.log(await Skeet.enumImport(enumCols))
-    console.log(enumCols)
+    // console.log(enumCols)
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -138,6 +139,8 @@ async function main() {
         const env = options.production || false
         await Skeet.dbInit(migrationName, env)
       })
+
+    program.command('sync:type').action(Skeet.syncType)
 
     program.command('sql:create').action(async () => {
       const skeetCloudConfig: SkeetCloudConfig = await importConfig()
