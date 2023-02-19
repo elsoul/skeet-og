@@ -22,8 +22,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
-
-    services:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2

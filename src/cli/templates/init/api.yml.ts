@@ -84,7 +84,6 @@ jobs:
             --image=\${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{ secrets.SKEET_APP_NAME }}-api \\
             --memory=${memory} \\
             --cpu=${cpu} \\
-            --session-affinity \\
             --max-instances=${maxInstances} \\
             --min-instances=${minInstances} \\
             --region=\${{ secrets.SKEET_GCP_REGION }} \\
