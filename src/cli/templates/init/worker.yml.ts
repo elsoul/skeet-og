@@ -1,6 +1,7 @@
 import fs from 'fs'
 
-export const apiYml = async (
+export const workerYml = async (
+  workerName: string,
   envString: string,
   memory: string,
   cpu: string,
@@ -8,39 +9,28 @@ export const apiYml = async (
   minInstances: string
 ) => {
   fs.mkdirSync('.github/workflows', { recursive: true })
-  const filePath = `.github/workflows/api.yml`
-  const body = `name: Api
+  const filePath = `.github/workflows/worker-${workerName}.yml`
+  const body = `name: ${workerName}Worker
 on:
   push:
     branches:
       - main
     paths:
-      - 'apps/api/**'
-      - '.github/workflows/api.yml'
+      - 'apps/workers/${workerName}/**'
+      - '.github/workflows/worker-${workerName}.yml'
 
 jobs:
   build:
     runs-on: ubuntu-22.04
 
     services:
-      db:
-        image: postgres:14
-        ports: ['5432:5432']
-        env:
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.13.0'
+          node-version: '18.14.0'
 
       - name: Checkout the repository
         uses: actions/checkout@v2
@@ -55,36 +45,30 @@ jobs:
 
       - name: Build and test
         env:
-          PGHOST: 127.0.0.1
-          PGUSER: postgres
-          RACK_ENV: test
-          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/skeet-api-test?schema=public
+          NODE_ENV: test
         run: |
           sudo apt-get -yqq install libpq-dev
-          cd apps/api
+          cd apps/workers/${workerName}
           rm -f .env
           yarn install --jobs 4 --retry 3
-          npx prisma generate
-          npx prisma migrate dev
           yarn test
 
       - name: Configure Docker
         run: gcloud auth configure-docker --quiet
 
       - name: Build Docker container
-        run: docker build -f ./apps/api/Dockerfile ./apps/api -t \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{ secrets.SKEET_APP_NAME }}-api
+        run: docker build -f ./apps/workers/${workerName}/Dockerfile ./apps/workers/${workerName} -t \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-\${{ secrets.SKEET_APP_NAME }}
 
       - name: Push to Container Resistory
-        run: docker push \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{ secrets.SKEET_APP_NAME }}-api
+        run: docker push \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-\${{ secrets.SKEET_APP_NAME }}
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy skeet-\${{ secrets.SKEET_APP_NAME }}-api \\
+          gcloud run deploy skeet-worker-\${{ secrets.SKEET_APP_NAME }} \\
             --service-account=\${{ secrets.SKEET_APP_NAME }}@\${{ secrets.SKEET_GCP_PROJECT_ID }}.iam.gserviceaccount.com \\
-            --image=\${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{ secrets.SKEET_APP_NAME }}-api \\
+            --image=\${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-\${{ secrets.SKEET_APP_NAME }} \\
             --memory=${memory} \\
             --cpu=${cpu} \\
-            --session-affinity \\
             --max-instances=${maxInstances} \\
             --min-instances=${minInstances} \\
             --region=\${{ secrets.SKEET_GCP_REGION }} \\

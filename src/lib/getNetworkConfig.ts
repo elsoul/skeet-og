@@ -15,7 +15,6 @@ export const genSecret = async (name: string) => {
 }
 
 export const defaultProductionEnvArray = [
-  'SKEET_ENV=production',
   'NO_PEER_DEPENDENCY_CHECK=1',
   'DATABASE_URL=postgresql://postgres:${{ secrets.SKEET_GCP_DB_PASSWORD }}@${{ secrets.SKEET_GCP_DB_PRIVATE_IP }}:5432/skeet-${{ secrets.SKEET_APP_NAME }}-production?schema=public',
   'SKEET_SECRET_KEY_BASE=${{ secrets.SKEET_SECRET_KEY_BASE }}',
@@ -32,7 +31,6 @@ export const getBuidEnvArray = async (
   tz: string
 ) => {
   return [
-    'SKEET_ENV=production',
     'NO_PEER_DEPENDENCY_CHECK=1',
     `SKEET_SECRET_KEY_BASE=${secretKey}`,
     `SKEET_GCP_PROJECT_ID=${projectId}`,
@@ -45,11 +43,17 @@ export const getBuidEnvArray = async (
 export const getEnvString = async (filePath: string) => {
   const stream = fs.readFileSync(filePath)
   const envArray: Array<string> = String(stream).split('\n')
-  const newEnv = envArray.filter((value) => {
-    if (!value.match('SKEET_')) {
-      return value
+  let newEnv: Array<string> = []
+  for await (const envLine of envArray) {
+    let keyAndValue = envLine.match(/([A-Z_]+)="?([^"]*)"?/)
+    if (keyAndValue) {
+      if (keyAndValue[1].match('SKEET_')) continue
+      if (keyAndValue[1] === 'TZ') continue
+      const envString =
+        `${keyAndValue[1]}=$` + '{{ ' + `secrets.${keyAndValue[1]}` + ' }}'
+      newEnv.push(envString)
     }
-  })
+  }
   const returnArray = defaultProductionEnvArray.concat(newEnv)
   return returnArray.join(',')
 }

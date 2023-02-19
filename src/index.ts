@@ -21,6 +21,7 @@ export const importConfig = async () => {
 
 export type SkeetCloudConfig = {
   api: GCPConfig
+  workers?: Array<WorkerConfig>
 }
 
 export type DbConfig = {
@@ -35,9 +36,20 @@ export type GCPConfig = {
   appName: string
   projectId: string
   region: string
+  cloudRun: CloudRunConfig
+  db: DbConfig
+}
+
+export type WorkerConfig = {
+  workerName: string
+  cloudRun: CloudRunConfig
+}
+
+export type CloudRunConfig = {
   cpu: string
   memory: string
-  db: DbConfig
+  minInstances: number
+  maxInstances: number
 }
 
 const program = new Command()
@@ -51,8 +63,6 @@ Dotenv.config()
 
 async function run() {
   try {
-    await syncType()
-    // console.log(await Skeet.enumImport(enumCols))
     // console.log(enumCols)
   } catch (error) {
     console.log(`error: ${error}`)
@@ -193,8 +203,8 @@ async function main() {
         skeetCloudConfig.api.projectId,
         skeetCloudConfig.api.appName,
         skeetCloudConfig.api.region,
-        skeetCloudConfig.api.memory,
-        skeetCloudConfig.api.cpu
+        skeetCloudConfig.api.cloudRun.memory,
+        skeetCloudConfig.api.cloudRun.cpu
       )
     })
 
@@ -247,11 +257,7 @@ async function main() {
     program.command('setup:iam').action(Skeet.setupIam)
     program.command('setup:network').action(Skeet.setupNetwork)
     program.command('setup:actions').action(async () => {
-      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-      await Skeet.setupActions(
-        skeetCloudConfig.api.memory,
-        skeetCloudConfig.api.cpu
-      )
+      await Skeet.setupActions()
     })
 
     program

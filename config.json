@@ -1,0 +1,30 @@
+{
+  "api": {
+    "appName": "skeet-framework",
+    "projectId": "skeet-framework",
+    "region": "europe-west4",
+    "cloudRun": {
+      "cpu": "1",
+      "maxInstances": 100,
+      "minInstances": 0,
+      "memory": "1Gi"
+    },
+    "db": {
+      "databaseVersion": "POSTGRES_14",
+      "cpu": "1",
+      "memory": "4096MB",
+      "whiteList": "xx.x.xx.x"
+    }
+  },
+  "workers": [
+    {
+      "workerName": "twitter",
+      "cloudRun": {
+        "cpu": "1",
+        "maxInstances": 100,
+        "minInstances": 0,
+        "memory": "1Gi"
+      }
+    }
+  ]
+}
