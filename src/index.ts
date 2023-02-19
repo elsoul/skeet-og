@@ -4,7 +4,7 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
-import { genSecret } from '@/lib/getNetworkConfig'
+import { API_ENV_PRODUCTION_PATH, genSecret } from '@/lib/getNetworkConfig'
 import { getModelCols } from './lib/getModelInfo'
 import { syncType } from './cli/sync/syncType'
 
@@ -106,10 +106,6 @@ export const s = async () => {
   await Skeet.runServer()
 }
 
-export const test = async () => {
-  await Skeet.test()
-}
-
 async function main() {
   try {
     program
@@ -124,80 +120,65 @@ async function main() {
       .description('Run Skeet API Server')
       .alias('s')
       .action(s)
-    program.command('setup').action(Skeet.setup)
-    program
-      .command('add:worker')
+
+    const add = program.command('add')
+    add
+      .command('worker')
       .argument('<workerName>', 'Worker Name - e.g. TwitterApi')
       .action(async (workerName: string) => {
         await Skeet.addWorker(workerName)
       })
-    program.command('run').action(run)
-    program
-      .command('db:migrate')
-      .option('--production', 'Migrate Production Schema')
-      .action(async (options) => {
-        const production = options.production || false
-        await Skeet.dbMigrate(production)
-      })
-    program.command('db:reset').action(Skeet.dbReset)
-    program.command('db:gen').action(Skeet.dbGen)
-    program
-      .command('db:init')
-      .option('--production', 'Migrate Production Schema')
-      .argument('<migrationName>', 'Migration Name - e.g. addUserCol')
-      .action(async (migrationName: string = 'init', options) => {
-        const env = options.production || false
-        await Skeet.dbInit(migrationName, env)
-      })
 
-    program.command('sync:type').action(Skeet.syncType)
-
-    program.command('sql:create').action(async () => {
-      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-      await Skeet.runSqlCreate(
-        skeetCloudConfig.api.projectId,
-        skeetCloudConfig.api.appName,
-        skeetCloudConfig.api.region,
-        skeetCloudConfig.api.db.databaseVersion,
-        skeetCloudConfig.api.db.cpu,
-        skeetCloudConfig.api.db.memory
-      )
+    const gen = program.command('g').alias('generate')
+    gen.command('scaffold').action(async () => {
+      await Skeet.genScaffoldAll()
     })
 
-    program.command('sql:user').action(async () => {
+    gen.command('iam').action(async () => {
       const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-      await Skeet.runSqlUserCreate(
+      await Skeet.createServiceAccountKey(
         skeetCloudConfig.api.projectId,
         skeetCloudConfig.api.appName
       )
     })
 
-    program.command('sql:stop').action(sqlStop)
-    program.command('sql:start').action(sqlStart)
-    program.command('sql:list').action(sqlList)
-    program.command('sql:ip').action(sqlIp)
+    const d = program.command('d').alias('delete')
+    d.command('scaffold')
+      .argument('<modelName>', 'Model Name - e.g. User')
+      .action(async (modelName: string) => {
+        const modelNameUpper = await toUpperCase(modelName)
+        await Skeet.deleteDir(modelNameUpper)
+      })
 
-    program.command('api:build').action(async () => {
+    const run = program.command('run')
+    run
+      .command('list')
+      .description('Google Cloud Run List')
+      .action(async () => {
+        const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+        await Skeet.runList(skeetCloudConfig.api.projectId)
+      })
+
+    const api = program.command('api')
+    api.command('build').action(async () => {
       const skeetCloudConfig: SkeetCloudConfig = await importConfig()
       await Skeet.apiBuild(skeetCloudConfig.api.appName)
     })
-    program.command('api:tag').action(async () => {
+
+    api.command('push').action(async () => {
       const skeetCloudConfig: SkeetCloudConfig = await importConfig()
       await Skeet.apiTag(
         skeetCloudConfig.api.projectId,
         skeetCloudConfig.api.appName,
         skeetCloudConfig.api.region
       )
-    })
-    program.command('api:push').action(async () => {
-      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
       await Skeet.apiPush(
         skeetCloudConfig.api.projectId,
         skeetCloudConfig.api.appName,
         skeetCloudConfig.api.region
       )
     })
-    program.command('api:deploy').action(async () => {
+    api.command('deploy').action(async () => {
       const skeetCloudConfig: SkeetCloudConfig = await importConfig()
       await Skeet.runApiDeploy(
         skeetCloudConfig.api.projectId,
@@ -207,69 +188,22 @@ async function main() {
         skeetCloudConfig.api.cloudRun.cpu
       )
     })
-
-    program.command('api:yarn').action(async () => {
-      await Skeet.apiYarn()
-    })
-
-    program.command('api:test').action(async () => {
+    api.command('test').action(async () => {
       await Skeet.apiTest()
     })
-
-    program.command('api:yarn:build').action(async () => {
+    api.command('yarn').action(async () => {
+      await Skeet.apiYarn()
+    })
+    api.command('yarn:build').action(async () => {
       await Skeet.apiYarnBuild()
     })
-
-    program.command('api:yarn:start').action(async () => {
+    api.command('yarn:start').action(async () => {
       await Skeet.apiYarnStart()
     })
 
-    program.command('git:env').action(async () => {
-      await Skeet.addEnvSync('./apps/api/.env.production')
-    })
-
-    program
-      .command('gen:scaffold')
-      .alias('g:scaffold')
-      .action(async () => {
-        await Skeet.genScaffoldAll()
-      })
-
-    program
-      .command('delete:scaffold')
-      .alias('d:scaffold')
-      .argument('<modelName>', 'Model Name - e.g. User')
-      .action(async (modelName: string) => {
-        const modelNameUpper = await toUpperCase(modelName)
-        await Skeet.deleteDir(modelNameUpper)
-      })
-
-    program.command('git:init').action(Skeet.gitInit)
-    program.command('git:env:json').action(Skeet.addJsonEnv)
-    program.command('export:iam').action(async () => {
-      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-      await Skeet.createServiceAccountKey(
-        skeetCloudConfig.api.projectId,
-        skeetCloudConfig.api.appName
-      )
-    })
-
-    program.command('setup:iam').action(Skeet.setupIam)
-    program.command('setup:network').action(Skeet.setupNetwork)
-    program.command('setup:actions').action(async () => {
-      await Skeet.setupActions()
-    })
-
-    program
-      .command('run:list')
-      .description('Google Cloud Run List')
-      .action(async () => {
-        const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-        await Skeet.runList(skeetCloudConfig.api.projectId)
-      })
-
-    program
-      .command('git:create')
+    const git = program.command('git')
+    git
+      .command('create')
       .description('Create GitHub Repository')
       .argument(
         '<repoPath>',
@@ -282,8 +216,57 @@ async function main() {
         const repoName = repoPath || ''
         await Skeet.createGitRepo(repoName, openSource)
       })
+    git.command('init').action(Skeet.gitInit)
+    git.command('git:env').action(async () => {
+      await Skeet.addEnvSync(API_ENV_PRODUCTION_PATH)
+    })
+    git.command('env:json').action(Skeet.addJsonEnv)
 
-    program.command('test').action(test)
+    const db = program.command('db')
+    db.command('generate').action(Skeet.dbGen)
+    db.command('migrate')
+      .option('--production', 'Migrate Production Schema')
+      .argument('<migrationName>', 'Migration Name - e.g. addUserCol')
+      .action(async (migrationName: string = 'init', options) => {
+        const env = options.production || false
+        await Skeet.dbInit(migrationName, env)
+      })
+    db.command('deploy')
+      .option('--production', 'Migrate Production Schema')
+      .action(async (options) => {
+        const production = options.production || false
+        await Skeet.dbMigrate(production)
+      })
+    db.command('reset').action(Skeet.dbReset)
+
+    const sql = program.command('sql')
+    sql.command('create').action(async () => {
+      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+      await Skeet.runSqlCreate(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName,
+        skeetCloudConfig.api.region,
+        skeetCloudConfig.api.db.databaseVersion,
+        skeetCloudConfig.api.db.cpu,
+        skeetCloudConfig.api.db.memory
+      )
+    })
+    sql.command('start').action(sqlStart)
+    sql.command('stop').action(sqlStop)
+    sql.command('list').action(sqlList)
+    sql.command('ip').action(sqlIp)
+
+    const setup = program.command('setup')
+    setup.command('init').action(Skeet.setup)
+    setup.command('iam').action(Skeet.setupIam)
+    setup.command('network').action(Skeet.setupNetwork)
+    setup.command('actions').action(async () => {
+      await Skeet.setupActions()
+    })
+
+    const sync = program.command('sync')
+    sync.command('type').action(Skeet.syncType)
+
     await program.parseAsync(process.argv)
   } catch (error) {
     console.log(error)
