@@ -37,7 +37,7 @@ export const getWorkerTypeFilePaths = async (workerName: string) => {
 export const copyWorkerTypesToApi = async (workerTypeFilePath: string) => {
   const workerName = workerTypeFilePath.split('/')[3]
   const workerTypeFileName = workerTypeFilePath.split('/')[7]
-  const workerTypeDir = `${API_TYPE_PATH}/${workerName}`
+  const workerTypeDir = `${API_TYPE_PATH}/workers/${workerName}`
 
   if (!fs.existsSync(workerTypeDir))
     fs.mkdirSync(workerTypeDir, { recursive: true })
