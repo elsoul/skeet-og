@@ -43,8 +43,17 @@ export const setupActions = async () => {
 export const getWorkerConfig = async (workerName: string) => {
   try {
     const skeetConfig: SkeetCloudConfig = await importConfig()
+    const workerConf = {
+      workerName,
+      cloudRun: {
+        cpu: '1',
+        memory: '1Gi',
+        maxInstances: 100,
+        minInstances: 0,
+      },
+    }
     if (!skeetConfig.workers || skeetConfig.workers.length === 0)
-      throw new Error('empty!')
+      return workerConf
     const workerConfig = skeetConfig.workers.find(
       (item) => item.workerName === workerName
     )

@@ -40,7 +40,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.13.0'
+          node-version: '18.14.0'
 
       - name: Checkout the repository
         uses: actions/checkout@v2

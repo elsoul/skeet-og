@@ -6,9 +6,14 @@ import { setupActions } from '../setup'
 
 export const addWorker = async (workerName: string) => {
   const workerDir = './apps/workers/' + workerName
-  fs.mkdir(workerDir, { recursive: true }, (err) => {
-    if (err) throw err
-  })
+  if (fs.existsSync(workerDir)) {
+    await Logger.error(`Already exist workerName: ${workerName}!`)
+    return ''
+  } else {
+    fs.mkdir(workerDir, { recursive: true }, (err) => {
+      if (err) throw err
+    })
+  }
   const gitCloneCmd = ['gh', 'repo', 'clone', 'elsoul/skeet-worker', workerDir]
   await execSyncCmd(gitCloneCmd)
   const rmDefaultGit = ['rm', '-rf', '.git']
