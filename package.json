@@ -1,6 +1,6 @@
 {
   "name": "skeet",
-  "version": "0.23.3",
+  "version": "0.23.4",
   "description": "Full-stack TypeScript Serverless Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/elsoul/skeet.git",
@@ -29,7 +29,6 @@
     "@types/express": "4.17.14",
     "@types/node": "18.11.9",
     "@types/prompt": "1.1.4",
-    "@types/read": "^0.0.29",
     "eslint": "8.27.0",
     "eslint-config-prettier": "8.5.0",
     "nodemon": "2.0.20",
