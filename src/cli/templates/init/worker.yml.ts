@@ -64,7 +64,7 @@ jobs:
         run: |
           gcloud run deploy skeet-worker-${workerName} \\
             --service-account=\${{ secrets.SKEET_APP_NAME }}@\${{ secrets.SKEET_GCP_PROJECT_ID }}.iam.gserviceaccount.com \\
-            --image=\${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-\${{ secrets.SKEET_APP_NAME }} \\
+            --image=\${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-${workerName} \\
             --memory=${memory} \\
             --cpu=${cpu} \\
             --max-instances=${maxInstances} \\
