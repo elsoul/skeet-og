@@ -10,7 +10,11 @@ export const packageJson = async (appName: string) => {
     license: 'Apache-2.0',
     private: true,
     scripts: {
-      dev: 'yarn --cwd ./apps/api dev',
+      skeet: 'run-p skeet:*',
+      'skeet:api': 'yarn --cwd ./apps/api dev',
+    },
+    devDependencies: {
+      'npm-run-all': '4.1.5',
     },
   }
   return {
