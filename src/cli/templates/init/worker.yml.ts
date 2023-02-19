@@ -55,14 +55,14 @@ jobs:
         run: gcloud auth configure-docker --quiet
 
       - name: Build Docker container
-        run: docker build -f ./apps/workers/${workerName}/Dockerfile ./apps/workers/${workerName} -t \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-\${{ secrets.SKEET_APP_NAME }}
+        run: docker build -f ./apps/workers/${workerName}/Dockerfile ./apps/workers/${workerName} -t \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-${workerName}
 
       - name: Push to Container Resistory
-        run: docker push \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-\${{ secrets.SKEET_APP_NAME }}
+        run: docker push \${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-${workerName}
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy skeet-worker-\${{ secrets.SKEET_APP_NAME }} \\
+          gcloud run deploy skeet-worker-${workerName} \\
             --service-account=\${{ secrets.SKEET_APP_NAME }}@\${{ secrets.SKEET_GCP_PROJECT_ID }}.iam.gserviceaccount.com \\
             --image=\${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-worker-\${{ secrets.SKEET_APP_NAME }} \\
             --memory=${memory} \\
