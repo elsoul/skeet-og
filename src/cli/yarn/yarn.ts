@@ -71,15 +71,11 @@ export const yarnCmdRun = async (
   let shCmd: Array<string> = []
   switch (yarnCmd) {
     case 'add':
-      if (packageName !== '') {
-        await Logger.error('You need to define package name!')
-        process.exit(1)
-      }
       shCmd = await getYarnShCmd(servieName, yarnCmd, packageName, isDev)
     default:
       shCmd = await getYarnShCmd(servieName, yarnCmd)
   }
-
+  console.log(shCmd)
   execSyncCmd(shCmd)
 }
 
