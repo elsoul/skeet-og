@@ -140,7 +140,15 @@ export const cloudRunBuild = async (
   const buildPath =
     workerName === '' ? API_PATH : `${WORKER_PATH}/${workerName}`
   const imageName = await getContainerImageName(appName)
-  const shCmd = ['docker', 'build', '-f', buildPath, '-t', imageName]
+  const shCmd = [
+    'docker',
+    'build',
+    '-f',
+    `${buildPath}/Dockerfile`,
+    buildPath,
+    '-t',
+    imageName,
+  ]
   execSyncCmd(shCmd)
 }
 
