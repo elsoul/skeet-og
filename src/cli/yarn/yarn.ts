@@ -76,7 +76,6 @@ export const yarnCmdRun = async (
       shCmd = await getYarnShCmd(servieName, yarnCmd)
       break
   }
-  console.log(shCmd)
   execSyncCmd(shCmd)
 }
 
