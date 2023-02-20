@@ -3,7 +3,6 @@ import inquirer from 'inquirer'
 import { API_PATH, WORKER_PATH } from '@/lib/getNetworkConfig'
 import { getWorkers } from '../sync'
 import { importConfig } from '@/index'
-import { Logger } from '@/lib/logger'
 
 export type YarnService = {
   yarn: Array<string>
@@ -72,8 +71,10 @@ export const yarnCmdRun = async (
   switch (yarnCmd) {
     case 'add':
       shCmd = await getYarnShCmd(servieName, yarnCmd, packageName, isDev)
+      break
     default:
       shCmd = await getYarnShCmd(servieName, yarnCmd)
+      break
   }
   console.log(shCmd)
   execSyncCmd(shCmd)

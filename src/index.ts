@@ -111,12 +111,7 @@ async function main() {
           await Logger.error('You need to define package name!')
           process.exit(1)
         }
-        await Skeet.yarn(
-          options.service,
-          yarnCmd,
-          options.package,
-          options.isDev
-        )
+        await Skeet.yarn(options.service, yarnCmd, options.p, options.isDev)
       })
 
     const add = program.command('add').description('Add Comannd')
