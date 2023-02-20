@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { graphqlQuery } from '@/cli/templates/graphql'
+import { graphqlQuery } from '@/templates/graphql'
 import { Logger } from '@/lib/logger'
 
 export const genQuery = async (modelName: string) => {

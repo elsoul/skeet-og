@@ -2,7 +2,8 @@ import { Logger } from '@/lib/logger'
 import fs from 'fs'
 import path from 'path'
 import { execSyncCmd } from '@/lib/execSyncCmd'
-import * as fileDataOf from '@/cli/templates/init'
+import * as fileDataOf from '@/templates/init'
+import { psql } from '@/cli/docker/psql'
 
 export const create = async (initAppName: string) => {
   await init(initAppName)
@@ -17,9 +18,7 @@ export const init = async (appName: string) => {
   const rmDefaultGit = ['rm', '-rf', '.git']
   await execSyncCmd(rmDefaultGit, appDir)
   await generateInitFiles(appName)
-  const createNetworkCmd = ['docker', 'network', 'create', 'skeet-network']
-  await execSyncCmd(createNetworkCmd)
-  await runPsql()
+  await psql()
   await new Promise((r) => setTimeout(r, 2000))
   await initDbMigrate(appDir)
   await Logger.skeetAA()
@@ -78,33 +77,8 @@ export const generateInitFiles = async (appName: string) => {
   await execSyncCmd(rmDefaultEnv, apiDir)
   const apiEnv = await fileDataOf.apiEnv(appName)
   fs.writeFileSync(apiEnv.filePath, apiEnv.body)
-}
-
-export const runPsql = async () => {
-  const runPsqlCmd = [
-    'docker',
-    'run',
-    '--restart',
-    'always',
-    '-d',
-    '--name',
-    'skeet-psql',
-    '--network',
-    'skeet-network',
-    '-p',
-    '5432:5432',
-    '-v',
-    'postres-tmp:/home/postgresql/data',
-    '-e',
-    'POSTGRES_USER=postgres',
-    '-e',
-    'POSTGRES_PASSWORD=postgres',
-    '-e',
-    'POSTGRES_DB=skeet-api-dev',
-    'postgres:14-alpine',
-  ]
-  await execSyncCmd(runPsqlCmd)
-  console.log('docker psql container is up!')
+  const gitattributes = await fileDataOf.gitattributes(appName)
+  fs.writeFileSync(gitattributes.filePath, gitattributes.body)
 }
 
 export const initDbMigrate = async (apiDir: string) => {

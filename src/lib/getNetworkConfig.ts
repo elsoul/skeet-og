@@ -105,15 +105,26 @@ export const getNetworkConfig = async (projectId: string, appName: string) => {
 export const getContainerImageUrl = async (
   projectId: string,
   appName: string,
-  region: string
+  region: string,
+  workerName: string = ''
 ) => {
   const cRegion = await getContainerRegion(region)
-  const imageName = 'skeet-' + appName + '-api'
+  const imageName =
+    workerName !== ''
+      ? 'skeet-' + appName + '-worker-' + workerName
+      : 'skeet-' + appName + '-api'
   return cRegion + '/' + projectId + '/' + imageName + ':latest'
 }
 
-export const getContainerImageName = async (appName: string) => {
-  return 'skeet-' + appName + '-api'
+export const getContainerImageName = async (
+  appName: string,
+  workerName: string = ''
+) => {
+  const imageName =
+    workerName !== ''
+      ? 'skeet-' + appName + '-worker-' + workerName
+      : 'skeet-' + appName + '-api'
+  return imageName
 }
 
 export const getContainerRegion = async (region: string) => {

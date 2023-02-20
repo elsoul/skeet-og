@@ -41,3 +41,10 @@ export const updateSkeetCloudConfig = async (workerName: string) => {
   )
   Logger.success('Successfully Updated skeet-cloud.config.json!')
 }
+
+export const getPackageJson = async () => {
+  const packageJson = fs.readFileSync('./package.json')
+  const json = JSON.parse(String(packageJson))
+  json.scripts['skeet:twitter'] = 'yarn --cwd ./apps/workers/twitter dev'
+  console.log(json.scripts)
+}

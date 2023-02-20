@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { graphqlMutation } from '@/cli/templates/graphql'
+import { graphqlMutation } from '@/templates/graphql'
 import { Logger } from '@/lib/logger'
 
 export const genMutation = async (modelName: string) => {

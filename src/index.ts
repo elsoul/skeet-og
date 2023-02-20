@@ -5,6 +5,8 @@ import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
 import { API_ENV_PRODUCTION_PATH } from '@/lib/getNetworkConfig'
+import { hasSkeetNetwork } from './cli/docker/psql'
+import { Logger } from './lib/logger'
 
 export const importConfig = async () => {
   try {
@@ -59,9 +61,9 @@ program
 
 Dotenv.config()
 
-async function run() {
+async function test() {
   try {
-    // console.log(enumCols)
+    await Skeet.getPackageJson()
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -69,6 +71,8 @@ async function run() {
 
 async function main() {
   try {
+    program.command('test').action(test)
+
     program
       .command('create')
       .description('Create Skeet App')
@@ -81,6 +85,39 @@ async function main() {
       .description('Run Skeet Server')
       .alias('s')
       .action(Skeet.server)
+
+    program
+      .command('deploy')
+      .description('Deploy to Google Cloud Run')
+      .action(Skeet.deploy)
+
+    program
+      .command('yarn')
+      .argument(
+        '<yarnCmd>',
+        Object.entries(Skeet.YarnCmd)
+          .map(([_, value]) => value)
+          .join(',')
+      )
+      .option('--service <serviceName>', 'Skeet Service Name', '')
+      .option('-p, --p <packageName>', 'npm package name', '')
+      .option('-D, --dev', 'Dependency environment', false)
+      .action(async (yarnCmd: Skeet.YarnCmd, options) => {
+        if (!Object.values(Skeet.YarnCmd)?.includes(yarnCmd)) {
+          await Logger.error('Invalid Yarn command')
+          process.exit(1)
+        }
+        if (yarnCmd === 'add' && options.p === '') {
+          await Logger.error('You need to define package name!')
+          process.exit(1)
+        }
+        await Skeet.yarn(
+          options.service,
+          yarnCmd,
+          options.package,
+          options.isDev
+        )
+      })
 
     const add = program.command('add').description('Add Comannd')
     add
@@ -122,48 +159,6 @@ async function main() {
         const skeetCloudConfig: SkeetCloudConfig = await importConfig()
         await Skeet.runList(skeetCloudConfig.api.projectId)
       })
-
-    const api = program.command('api').description('Skeet API Command')
-    api.command('build').action(async () => {
-      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-      await Skeet.apiBuild(skeetCloudConfig.api.appName)
-    })
-
-    api.command('push').action(async () => {
-      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-      await Skeet.apiTag(
-        skeetCloudConfig.api.projectId,
-        skeetCloudConfig.api.appName,
-        skeetCloudConfig.api.region
-      )
-      await Skeet.apiPush(
-        skeetCloudConfig.api.projectId,
-        skeetCloudConfig.api.appName,
-        skeetCloudConfig.api.region
-      )
-    })
-    api.command('deploy').action(async () => {
-      const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-      await Skeet.runApiDeploy(
-        skeetCloudConfig.api.projectId,
-        skeetCloudConfig.api.appName,
-        skeetCloudConfig.api.region,
-        skeetCloudConfig.api.cloudRun.memory,
-        skeetCloudConfig.api.cloudRun.cpu
-      )
-    })
-    api.command('test').action(async () => {
-      await Skeet.apiTest()
-    })
-    api.command('yarn').action(async () => {
-      await Skeet.apiYarn()
-    })
-    api.command('yarn:build').action(async () => {
-      await Skeet.apiYarnBuild()
-    })
-    api.command('yarn:start').action(async () => {
-      await Skeet.apiYarnStart()
-    })
 
     const git = program.command('git').description('GitHub Command')
     git
@@ -230,6 +225,9 @@ async function main() {
 
     const sync = program.command('sync').description('Sync Command')
     sync.command('type').action(Skeet.syncType)
+
+    const docker = program.command('docker').description('Docker Command')
+    docker.command('psql').action(Skeet.psql)
 
     await program.parseAsync(process.argv)
   } catch (error) {

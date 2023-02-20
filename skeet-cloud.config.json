@@ -16,15 +16,5 @@
       "whiteList": "xx.x.xx.x"
     }
   },
-  "workers": [
-    {
-      "workerName": "twitter",
-      "cloudRun": {
-        "cpu": "1",
-        "maxInstances": 100,
-        "minInstances": 0,
-        "memory": "1Gi"
-      }
-    }
-  ]
+  "workers": []
 }
