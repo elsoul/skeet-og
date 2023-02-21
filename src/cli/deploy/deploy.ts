@@ -140,6 +140,7 @@ export const cloudRunDeploy = async (
     '--set-env-vars',
     envString,
   ]
+  console.log(shCmd)
   await execSyncCmd(shCmd)
 }
 
