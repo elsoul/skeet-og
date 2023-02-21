@@ -111,7 +111,6 @@ export const cloudRunDeploy = async (
     appName
   )
   const envString = await getBuidEnvString()
-  console.log(envString)
   const shCmd = [
     'gcloud',
     'run',
