@@ -40,7 +40,7 @@ export const getBuidEnvArray = async (
   ]
 }
 
-export const getEnvString = async (filePath: string) => {
+export const getActionsEnvString = async (filePath: string) => {
   const stream = fs.readFileSync(filePath)
   const envArray: Array<string> = String(stream).split('\n')
   let newEnv: Array<string> = []

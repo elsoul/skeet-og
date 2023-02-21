@@ -1,13 +1,16 @@
 import * as Skeet from '@/cli'
 import { SkeetCloudConfig, WorkerConfig, importConfig } from '@/index'
-import { API_ENV_PRODUCTION_PATH, getEnvString } from '@/lib/getNetworkConfig'
+import {
+  API_ENV_PRODUCTION_PATH,
+  getActionsEnvString,
+} from '@/lib/getNetworkConfig'
 import { Logger } from '@/lib/logger'
 import fs from 'fs'
 
 export const setupActions = async () => {
   try {
     const skeetConfig: SkeetCloudConfig = await importConfig()
-    const envString = await getEnvString(API_ENV_PRODUCTION_PATH)
+    const envString = await getActionsEnvString(API_ENV_PRODUCTION_PATH)
     const result = await Skeet.apiYml(
       envString,
       skeetConfig.api.cloudRun.memory,

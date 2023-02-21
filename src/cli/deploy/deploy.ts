@@ -38,6 +38,11 @@ export const deploy = async () => {
       for await (const service of answers.deploying) {
         if (service === 'api') {
           await cloudRunBuild(skeetConfig.api.appName)
+          await cloudRunTag(
+            skeetConfig.api.projectId,
+            skeetConfig.api.appName,
+            skeetConfig.api.region
+          )
           await cloudRunPush(
             skeetConfig.api.projectId,
             skeetConfig.api.appName,
@@ -54,6 +59,11 @@ export const deploy = async () => {
           )
         } else {
           await cloudRunBuild(skeetConfig.api.appName, service)
+          await cloudRunTag(
+            skeetConfig.api.projectId,
+            skeetConfig.api.appName,
+            skeetConfig.api.region
+          )
           await cloudRunPush(
             skeetConfig.api.projectId,
             skeetConfig.api.appName,
@@ -101,6 +111,7 @@ export const cloudRunDeploy = async (
     appName
   )
   const envString = await getBuidEnvString()
+  console.log(envString)
   const shCmd = [
     'gcloud',
     'run',
@@ -163,5 +174,16 @@ export const cloudRunPush = async (
       ? await getContainerImageUrl(projectId, appName, region)
       : await getContainerImageUrl(projectId, appName, region, workerName)
   const shCmd = ['docker', 'push', imageUrl]
+  execSyncCmd(shCmd)
+}
+
+export const cloudRunTag = async (
+  projectId: string,
+  appName: string,
+  region: string
+) => {
+  const imageName = await getContainerImageName(appName)
+  const imageUrl = await getContainerImageUrl(projectId, appName, region)
+  const shCmd = ['docker', 'tag', imageName, imageUrl]
   execSyncCmd(shCmd)
 }

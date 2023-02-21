@@ -5,7 +5,6 @@ import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
 import { API_ENV_PRODUCTION_PATH } from '@/lib/getNetworkConfig'
-import { hasSkeetNetwork } from './cli/docker/psql'
 import { Logger } from './lib/logger'
 
 export const importConfig = async () => {
@@ -162,7 +161,7 @@ async function main() {
       .argument(
         '<repoPath>',
         `example: 
-            $ skeet git:create elsoul/skeet`
+            $ skeet git create elsoul/skeet`
       )
       .option('--public', 'Create Public Repository for OpenSouce Buidlers 🛠️')
       .action(async (repoPath, options) => {
@@ -171,10 +170,10 @@ async function main() {
         await Skeet.createGitRepo(repoName, openSource)
       })
     git.command('init').action(Skeet.gitInit)
-    git.command('git:env').action(async () => {
+    git.command('env').action(async () => {
       await Skeet.addEnvSync(API_ENV_PRODUCTION_PATH)
     })
-    git.command('env:json').action(Skeet.addJsonEnv)
+    git.command('json').action(Skeet.addJsonEnv)
 
     const db = program.command('db').description('DB Command')
     db.command('generate').action(Skeet.dbGen)
