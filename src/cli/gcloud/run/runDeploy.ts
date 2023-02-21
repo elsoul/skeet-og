@@ -1,9 +1,8 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
-import { getEnvString } from '@/lib/getNetworkConfig'
 import {
   getContainerRegion,
   getNetworkConfig,
-  API_ENV_PRODUCTION_PATH,
+  getBuidEnvString,
 } from '@/lib/getNetworkConfig'
 
 export const runDeploy = async (
@@ -17,7 +16,7 @@ export const runDeploy = async (
   const cRegion = await getContainerRegion(region)
   const image = `${cRegion}/${projectId}/${cloudRunName}`
   const { connectorName } = await getNetworkConfig(projectId, appName)
-  const envString = await getEnvString(API_ENV_PRODUCTION_PATH)
+  const envString = await getBuidEnvString()
   const shCmd = [
     'gcloud',
     'run',
