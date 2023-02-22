@@ -154,6 +154,8 @@ export const cloudRunBuild = async (
   const shCmd = [
     'docker',
     'build',
+    '--platform',
+    'linux/amd64',
     '-f',
     `${buildPath}/Dockerfile`,
     buildPath,
