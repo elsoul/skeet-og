@@ -107,6 +107,7 @@ export const getNetworkConfig = async (projectId: string, appName: string) => {
     sslName: `${appName}-ssl`,
     proxyName: `${appName}-px`,
     forwardingRuleName: `${appName}-fr`,
+    zoneName: `${appName}-zone`,
   }
 }
 
