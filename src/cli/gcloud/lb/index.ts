@@ -1,1 +1,7 @@
 export * from './createBackend'
+export * from './createFr'
+export * from './addBackend'
+export * from './createLb'
+export * from './createNeg'
+export * from './createProxy'
+export * from './createSsl'

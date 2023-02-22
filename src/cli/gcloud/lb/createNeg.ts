@@ -1,21 +1,24 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
-export const createExternalIp = async (
+export const createNeg = async (
   projectId: string,
   appName: string,
   region: string
 ) => {
-  const ipName = (await getNetworkConfig(projectId, appName)).ipName
-
+  const appConf = await getNetworkConfig(projectId, appName)
   const shCmd = [
     'gcloud',
     'compute',
-    'addresses',
+    'network-endpoint-groups',
     'create',
-    ipName,
+    appConf.networkEndpointGroupName,
     '--region',
     region,
+    '--network-endpoint-type',
+    'serverless',
+    '--cloud-run-service',
+    appConf.cloudRunName,
     '--project',
     projectId,
   ]

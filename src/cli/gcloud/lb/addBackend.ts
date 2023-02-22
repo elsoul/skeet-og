@@ -1,18 +1,22 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
-export const createBackend = async (projectId: string, appName: string) => {
+export const addBackend = async (
+  projectId: string,
+  appName: string,
+  region: string
+) => {
   const appConf = await getNetworkConfig(projectId, appName)
   const shCmd = [
     'gcloud',
     'compute',
     'backend-services',
-    'create',
+    'add-backend',
     appConf.backendServiceName,
-    '--load-balancing-scheme',
-    'EXTERNAL',
-    'serverless',
-    '--global',
+    '--network-endpoint-group',
+    appConf.networkEndpointGroupName,
+    '--network-endpoint-group-region',
+    region,
     '--project',
     projectId,
   ]

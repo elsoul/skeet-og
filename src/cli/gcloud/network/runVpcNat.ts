@@ -1,6 +1,6 @@
 import { getNetworkConfig } from '@/lib/getNetworkConfig'
 import { createConnector } from './createConnector'
-import { createExternalIp } from './createExternalIp'
+import { createFixIp } from './createFixIp'
 import { createFirewallSsh } from './createFirewallSsh'
 import { createFirewallTcp } from './createFirewallTcp'
 import { createNat } from './createNat'
@@ -21,7 +21,8 @@ export const runVpcNat = async (
   await createSubnet(projectId, appName, region)
   await createConnector(projectId, appName, region)
   await createRouter(projectId, appName, region)
-  await createExternalIp(projectId, appName, region)
+  const { ipName } = await getNetworkConfig(projectId, appName)
+  await createFixIp(projectId, region, ipName)
   await createNat(projectId, appName, region)
   await createIpRange(projectId, appName)
   await connectVpc(projectId, appName)

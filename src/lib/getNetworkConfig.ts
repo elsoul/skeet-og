@@ -88,6 +88,7 @@ export const getNetworkConfig = async (projectId: string, appName: string) => {
   return {
     projectId,
     appName,
+    cloudRunName: `skeet-${appName}-api`,
     instanceName: skeetHeader + '-db',
     networkName: skeetHeader + '-network',
     firewallTcpName: skeetHeader + '-fw-tcp',
@@ -97,8 +98,15 @@ export const getNetworkConfig = async (projectId: string, appName: string) => {
     subnetName: skeetHeader + '-subnet',
     connectorName: appName + '-con',
     ipName: skeetHeader + '-external-ip',
+    loadBalancerIpName: skeetHeader + '-lb-ip',
     ipRangeName: skeetHeader + '-ip-range',
     serviceAccountName: `${appName}@${projectId}.iam.gserviceaccount.com`,
+    networkEndpointGroupName: `${appName}-neg`,
+    backendServiceName: `${appName}-bs`,
+    loadBalancerName: `${appName}-lb`,
+    sslName: `${appName}-ssl`,
+    proxyName: `${appName}-px`,
+    forwardingRuleName: `${appName}-fr`,
   }
 }
 

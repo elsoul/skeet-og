@@ -216,6 +216,12 @@ async function main() {
     setup.command('actions').action(async () => {
       await Skeet.setupActions()
     })
+    setup
+      .command('lb')
+      .argument('<domainName>', 'Domain Name - e.g. epics.dev')
+      .action(async (domainName: string) => {
+        await Skeet.setupLoadBalancer(domainName)
+      })
 
     const sync = program.command('sync').description('Sync Command')
     sync.command('type').action(Skeet.syncType)
