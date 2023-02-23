@@ -30,7 +30,7 @@ Dotenv.config()
 
 async function test() {
   try {
-    await Skeet.addWorkerEnv('twitter')
+    await Skeet.setupActions()
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -205,7 +205,9 @@ async function main() {
     const sync = program.command('sync').description('Sync Command')
     sync.command('type').action(Skeet.syncType)
     sync.command('gcloud').action(Skeet.syncGcloud)
-    sync.command('actions').action(Skeet.setupActions)
+    sync.command('actions').action(async () => {
+      await Skeet.setupActions()
+    })
 
     const docker = program.command('docker').description('Docker Command')
     docker.command('psql').action(Skeet.psql)

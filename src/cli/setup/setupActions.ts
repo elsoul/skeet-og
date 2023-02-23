@@ -41,8 +41,10 @@ export const setupActions = async () => {
         await Logger.success(`Successfully updated ${result.filePath}!`)
       }
     }
+    return true
   } catch (error) {
     console.log(`setupActions: ${error}`)
+    throw new Error(`error:${error}`)
   }
 }
 

@@ -38,6 +38,16 @@
         "minInstances": 0,
         "memory": 1
       }
+    },
+    {
+      "workerName": "sol",
+      "cloudRun": {
+        "cpu": 1,
+        "maxConcurrency": 80,
+        "maxInstances": 100,
+        "minInstances": 0,
+        "memory": 1
+      }
     }
   ],
   "taskQueues": []

@@ -73,9 +73,9 @@ jobs:
             --image=${{ secrets.SKEET_CONTAINER_REGION }}/${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-${{ secrets.SKEET_APP_NAME }}-api \
             --memory=1 \
             --cpu=1 \
-            --concurrency=100 \
-            --max-instances=0 \
-            --min-instances=undefined \
+            --concurrency=undefined \
+            --max-instances=100 \
+            --min-instances=0 \
             --region=${{ secrets.SKEET_GCP_REGION }} \
             --allow-unauthenticated \
             --platform=managed \
