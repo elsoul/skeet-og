@@ -189,12 +189,9 @@ async function main() {
     sql.command('ip').action(Skeet.sqlIp)
 
     const setup = program.command('setup').description('Setup Command')
-    setup.command('init').action(Skeet.setup)
+    setup.command('gcp').action(Skeet.setupGcp)
     setup.command('iam').action(Skeet.setupIam)
     setup.command('network').action(Skeet.setupNetwork)
-    setup.command('actions').action(async () => {
-      await Skeet.setupActions()
-    })
     setup
       .command('lb')
       .argument('<domainName>', 'Domain Name - e.g. epics.dev')
@@ -207,6 +204,9 @@ async function main() {
     sync.command('gcloud').action(Skeet.syncGcloud)
     sync.command('actions').action(async () => {
       await Skeet.setupActions()
+    })
+    sync.command('env').action(async () => {
+      await Skeet.addEnvSync(API_ENV_PRODUCTION_PATH)
     })
 
     const docker = program.command('docker').description('Docker Command')

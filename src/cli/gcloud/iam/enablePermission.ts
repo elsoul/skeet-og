@@ -44,4 +44,5 @@ export const serviceList = [
   'firestore.googleapis.com',
   'cloudfunctions.googleapis.com',
   'cloudbuild.googleapis.com',
+  'cloudtasks.googleapis.com',
 ]

@@ -4,7 +4,7 @@ import { KEYFILE_PATH } from '@/lib/getNetworkConfig'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import fs from 'fs'
 
-export const setup = async () => {
+export const setupGcp = async () => {
   const skeetCloudConfig: SkeetCloudConfig = await importConfig()
   await Skeet.runEnableAllPermission(skeetCloudConfig.api.projectId)
   await Skeet.createServiceAccount(

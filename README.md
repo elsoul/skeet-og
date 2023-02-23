@@ -18,6 +18,8 @@ Powered by TypeScript GraphQL, Prisma, Jest, Prettier, and Google Cloud.
 - [Yarn](https://yarnpkg.com/)
 - [Google SDK](https://cloud.google.com/sdk/docs)
 - [Docker](https://www.docker.com/)
+- [GitHub CLI](https://cli.github.com/)
+- [Git Crypt](https://github.com/AGWA/git-crypt)
 
 ## Usage
 
@@ -40,7 +42,7 @@ $ skeet create ${appName}
 ⚡⚡⚡ Buidl GraphQL API for Relay Fast ⚡⚡⚡
 $ cd skeet-app
 $ skeet s
-Go To : http://localhost:4200/graphql
+Go To : http://localhost:4000/graphql
 
 --- ✡ Try Your first Query ✡ ---
 mutation {
@@ -63,13 +65,7 @@ $ skeet s
 
 Now you can access;
 
-`http://localhost:4200/graphql`
-
-## Test
-
-```bash
-$ skeet test
-```
+`http://localhost:4000/graphql`
 
 ## Build & Run
 
@@ -83,7 +79,8 @@ $ skeet start
 ### Git Init
 
 ```bash
-$ skeet git:init
+$ skeet git init
+$ git crypt init
 ```
 
 ### Make a first commit
@@ -96,37 +93,37 @@ $ git commit -m "first commit"
 ### Create/Push GitHub Repo
 
 ```bash
-$ skeet git:create elsoul/skeet
+$ skeet git create elsoul/skeet
 ```
 
 If you want to go with OpenSource;
 
 ```bash
-$ skeet git:create elsoul/skeet --public
+$ skeet git create elsoul/skeet --public
 ```
 
 ### Setup Google Cloud IAM
 
 ```bash
-$ skeet setup
+$ skeet setup gcp
 ```
 
 ### Create Google CloudSQL
 
 ```bash
-$ skeet sql:create
+$ skeet sql create
 ```
 
 ### Add Secret ENV to GitHub Secrets
 
 ```bash
-$ skeet git:env
+$ skeet sync env
 ```
 
 ### Generate GitHub Actions
 
 ```bash
-$ skeet setup:actions
+$ skeet sync actions
 ```
 
 ### Commit and Push then CI/CD starts
@@ -156,14 +153,22 @@ Add it to `./skeet-cloud.config.json`
     "appName": "skeet-framework",
     "projectId": "skeet-framework",
     "region": "europe-west4",
-    "cpu": "1",
-    "memory": "1Gi",
+    "cloudRun": {
+      "cpu": 1,
+      "maxConcurrency": 80,
+      "maxInstances": 100,
+      "minInstances": 0,
+      "memory": "4Gi"
+    },
     "db": {
       "databaseVersion": "POSTGRES_14",
-      "cpu": "1",
-      "memory": "4096MB",
+      "cpu": 1,
+      "memory": "3840MiB",
+      "storageSize": 10,
       "whiteList": "xx.xx.x.x" or "xx.xx.x.x,yy.yy.y.y"
-    }
+    },
+    "workers": [],
+    "taskQueues": []
   }
 }
 ```
@@ -173,19 +178,19 @@ Add it to `./skeet-cloud.config.json`
 Patch CloudSQL settings
 
 ```bash
-$ skeet sql:ip
+$ skeet sql ip
 ```
 
 ### DB migrate
 
 ```bash
-$ skeet db:deploy -e production
+$ skeet db deploy -e production
 ```
 
 ### Deploy to Google Cloud Run
 
 ```bash
-$ skeet api:deploy
+$ skeet deploy
 ```
 
 ## Contributing

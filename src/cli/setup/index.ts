@@ -1,5 +1,5 @@
 export * from './setupIam'
 export * from './setupNetwork'
-export * from './setup'
+export * from './setupGcp'
 export * from './setupActions'
 export * from './setupLoadBalancer'
