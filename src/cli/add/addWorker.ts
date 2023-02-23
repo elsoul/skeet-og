@@ -7,7 +7,6 @@ import { setupActions } from '../setup'
 import {
   SKEET_CONFIG_PATH,
   ROUTE_PACKAGE_JSON_PATH,
-  WORKER_PATH,
   getWorkerEnvPath,
 } from '@/lib/getNetworkConfig'
 
@@ -42,7 +41,7 @@ export const updateSkeetCloudConfig = async (workerName: string) => {
         maxConcurrency: 80,
         maxInstances: 100,
         minInstances: 0,
-        memory: 1,
+        memory: '1Gi',
       },
     })
   fs.writeFileSync(SKEET_CONFIG_PATH, JSON.stringify(skeetConfig, null, 2))
@@ -65,7 +64,6 @@ export const addWorkerToPackageJson = async (workerName: string) => {
 export const addWorkerEnv = async (workerName: string) => {
   try {
     const workerEnvPath = await getWorkerEnvPath(workerName)
-    const workerEnv = String(fs.readFileSync(workerEnvPath))
     const { workers } = await importConfig()
     const port = workers ? 3000 + workers.length : 3000
     fs.writeFileSync(workerEnvPath, `\nPORT=${String(port)}`, { flag: 'a' })

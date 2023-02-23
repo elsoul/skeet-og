@@ -55,7 +55,7 @@ export const getWorkerConfig = async (workerName: string) => {
       workerName,
       cloudRun: {
         cpu: 1,
-        memory: 1,
+        memory: '1Gi',
         maxConcurrency: 80,
         maxInstances: 100,
         minInstances: 0,
