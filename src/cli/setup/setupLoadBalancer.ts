@@ -1,4 +1,5 @@
 import * as Skeet from '@/cli'
+import { getIp } from '@/cli'
 import { SkeetCloudConfig, importConfig } from '@/index'
 import { getNetworkConfig } from '@/lib/getNetworkConfig'
 import { Logger } from '@/lib/logger'
@@ -46,7 +47,29 @@ export const setupLoadBalancer = async (domain: string) => {
       skeetCloudConfig.api.projectId,
       skeetCloudConfig.api.appName
     )
-    await Logger.success(`Successfully created Load Balancer!`)
+    await Skeet.createZone(
+      skeetCloudConfig.api.projectId,
+      skeetCloudConfig.api.appName,
+      networkConf.zoneName
+    )
+    const ip = await getIp(
+      skeetCloudConfig.api.projectId,
+      networkConf.loadBalancerIpName
+    )
+    await Skeet.createRecord(
+      skeetCloudConfig.api.projectId,
+      networkConf.zoneName,
+      domain,
+      ip
+    )
+    await Skeet.getZone(
+      skeetCloudConfig.api.projectId,
+      skeetCloudConfig.api.appName
+    )
+    await Logger.success(`Successfully created Load Balancer!\n`)
+    await Logger.sync(
+      `Copy nameServers addresses above and paste them to your DNS settings`
+    )
   } catch (error) {
     await Logger.error(`setupLoadBalancer error: ${JSON.stringify(error)}`)
     process.exit(1)

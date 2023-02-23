@@ -1,18 +1,30 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import { getNetworkConfig } from '@/lib/getNetworkConfig'
 
-export const createRecord = async (projectId: string, appName: string) => {
-  const appConf = await getNetworkConfig(projectId, appName)
+export const createRecord = async (
+  projectId: string,
+  zone: string,
+  domain: string,
+  loadBalancerIp: string,
+  isUpdate: boolean = false,
+  recordType: string = 'A',
+  ttl: string = '30'
+) => {
+  const method = isUpdate ? 'update' : 'create'
   const shCmd = [
     'gcloud',
-    'compute',
-    'target-https-proxies',
-    'create',
-    appConf.proxyName,
-    '--ssl-certificates',
-    appConf.sslName,
-    '--url-map',
-    appConf.loadBalancerName,
+    'dns',
+    'record-sets',
+    method,
+    domain,
+    '--rrdatas',
+    loadBalancerIp,
+    '--ttl',
+    ttl,
+    '--type',
+    recordType,
+    '--zone',
+    zone,
     '--project',
     projectId,
   ]

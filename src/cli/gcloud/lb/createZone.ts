@@ -15,17 +15,24 @@ export const createZone = async (
     appConf.zoneName,
     '--dns-name',
     domain,
-    '--networks',
-    'VPC_NETWORK_LIST',
-    appConf.loadBalancerName,
+    '--visibility',
+    'public',
     '--project',
     projectId,
   ]
   await execSyncCmd(shCmd)
 }
-;('gcloud dns managed-zones create NAME \
---description=DESCRIPTION \
---dns-name=DNS_SUFFIX \
---networks=VPC_NETWORK_LIST \
---labels=LABELS \
---visibility=private')
+
+export const getZone = async (projectId: string, appName: string) => {
+  const appConf = await getNetworkConfig(projectId, appName)
+  const shCmd = [
+    'gcloud',
+    'dns',
+    'managed-zones',
+    'describe',
+    appConf.zoneName,
+    '--project',
+    projectId,
+  ]
+  await execSyncCmd(shCmd)
+}

@@ -62,7 +62,7 @@ Dotenv.config()
 
 async function test() {
   try {
-    await Skeet.getPackageJson()
+    await Skeet.getZone('figaro-lab', 'figaro-one')
   } catch (error) {
     console.log(`error: ${error}`)
   }
