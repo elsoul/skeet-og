@@ -1,6 +1,7 @@
 import * as Skeet from '@/cli'
-import { SkeetCloudConfig, importConfig } from '@/index'
+import { importConfig } from '@/index'
 import { KEYFILE_PATH } from '@/lib/getNetworkConfig'
+import { SkeetCloudConfig } from '@/types/skeetTypes'
 import fs from 'fs'
 
 export const setup = async () => {

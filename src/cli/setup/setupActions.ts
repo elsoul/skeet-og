@@ -1,5 +1,6 @@
 import * as Skeet from '@/cli'
-import { SkeetCloudConfig, WorkerConfig, importConfig } from '@/index'
+import { importConfig } from '@/index'
+import { SkeetCloudConfig, WorkerConfig } from '@/types/skeetTypes'
 import {
   API_ENV_PRODUCTION_PATH,
   getActionsEnvString,
@@ -13,8 +14,9 @@ export const setupActions = async () => {
     const envString = await getActionsEnvString(API_ENV_PRODUCTION_PATH)
     const result = await Skeet.apiYml(
       envString,
-      skeetConfig.api.cloudRun.memory,
-      skeetConfig.api.cloudRun.cpu,
+      String(skeetConfig.api.cloudRun.memory),
+      String(skeetConfig.api.cloudRun.cpu),
+      String(skeetConfig.api.cloudRun.maxConcurrency),
       String(skeetConfig.api.cloudRun.maxInstances),
       String(skeetConfig.api.cloudRun.minInstances)
     )
@@ -29,8 +31,9 @@ export const setupActions = async () => {
         const result = await Skeet.workerYml(
           workerName,
           envString,
-          workerConf.cloudRun.memory,
-          workerConf.cloudRun.cpu,
+          String(workerConf.cloudRun.memory),
+          String(workerConf.cloudRun.cpu),
+          String(workerConf.cloudRun.maxConcurrency),
           String(workerConf.cloudRun.maxInstances),
           String(workerConf.cloudRun.minInstances)
         )
@@ -49,8 +52,9 @@ export const getWorkerConfig = async (workerName: string) => {
     const workerConf = {
       workerName,
       cloudRun: {
-        cpu: '1',
-        memory: '1Gi',
+        cpu: 1,
+        memory: 1,
+        maxConcurrency: 80,
         maxInstances: 100,
         minInstances: 0,
       },

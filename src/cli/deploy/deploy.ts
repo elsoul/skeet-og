@@ -52,8 +52,8 @@ export const deploy = async () => {
             skeetConfig.api.projectId,
             skeetConfig.api.appName,
             skeetConfig.api.region,
-            skeetConfig.api.cloudRun.memory,
-            skeetConfig.api.cloudRun.cpu,
+            String(skeetConfig.api.cloudRun.memory),
+            String(skeetConfig.api.cloudRun.cpu),
             String(skeetConfig.api.cloudRun.maxInstances),
             String(skeetConfig.api.cloudRun.minInstances)
           )
@@ -75,8 +75,8 @@ export const deploy = async () => {
             skeetConfig.api.projectId,
             skeetConfig.api.appName,
             skeetConfig.api.region,
-            workerConf.cloudRun.memory,
-            workerConf.cloudRun.cpu,
+            String(workerConf.cloudRun.memory),
+            String(workerConf.cloudRun.cpu),
             String(workerConf.cloudRun.maxInstances),
             String(workerConf.cloudRun.minInstances),
             service

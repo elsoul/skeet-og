@@ -1,5 +1,6 @@
 import * as Skeet from '@/cli'
-import { SkeetCloudConfig, importConfig } from '@/index'
+import { importConfig } from '@/index'
+import { SkeetCloudConfig } from '@/types/skeetTypes'
 
 export const setupNetwork = async () => {
   const skeetCloudConfig: SkeetCloudConfig = await importConfig()

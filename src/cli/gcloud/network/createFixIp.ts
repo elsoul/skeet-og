@@ -1,5 +1,4 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
-import { getNetworkConfig } from '@/lib/getNetworkConfig'
 import { execSync } from 'child_process'
 
 export const createFixIp = async (

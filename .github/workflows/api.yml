@@ -71,16 +71,16 @@ jobs:
           gcloud run deploy skeet-${{ secrets.SKEET_APP_NAME }}-api \
             --service-account=${{ secrets.SKEET_APP_NAME }}@${{ secrets.SKEET_GCP_PROJECT_ID }}.iam.gserviceaccount.com \
             --image=${{ secrets.SKEET_CONTAINER_REGION }}/${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-${{ secrets.SKEET_APP_NAME }}-api \
-            --memory=1Gi \
+            --memory=1 \
             --cpu=1 \
-            --max-instances=100 \
-            --min-instances=0 \
+            --concurrency=100 \
+            --max-instances=0 \
+            --min-instances=undefined \
             --region=${{ secrets.SKEET_GCP_REGION }} \
             --allow-unauthenticated \
             --platform=managed \
             --quiet \
-            --concurrency=80 \
             --port=8080 \
             --vpc-connector="${{ secrets.SKEET_APP_NAME }}-con" \
             --vpc-egress=all \
-            --set-env-vars=NO_PEER_DEPENDENCY_CHECK=1,DATABASE_URL=postgresql://postgres:${{ secrets.SKEET_GCP_DB_PASSWORD }}@${{ secrets.SKEET_GCP_DB_PRIVATE_IP }}:5432/skeet-${{ secrets.SKEET_APP_NAME }}-production?schema=public,SKEET_SECRET_KEY_BASE=${{ secrets.SKEET_SECRET_KEY_BASE }},SKEET_GCP_PROJECT_ID=${{ secrets.SKEET_GCP_PROJECT_ID }},SKEET_FB_PROJECT_ID=${{ secrets.SKEET_FB_PROJECT_ID }},TZ=${{ secrets.TZ }},A=${{ secrets.A }},B=${{ secrets.B }}
+            --set-env-vars=NO_PEER_DEPENDENCY_CHECK=1,DATABASE_URL=postgresql://postgres:${{ secrets.SKEET_GCP_DB_PASSWORD }}@${{ secrets.SKEET_GCP_DB_PRIVATE_IP }}:5432/skeet-${{ secrets.SKEET_APP_NAME }}-production?schema=public,SKEET_SECRET_KEY_BASE=${{ secrets.SKEET_SECRET_KEY_BASE }},SKEET_GCP_PROJECT_ID=${{ secrets.SKEET_GCP_PROJECT_ID }},SKEET_FB_PROJECT_ID=${{ secrets.SKEET_FB_PROJECT_ID }},TZ=${{ secrets.TZ }},JWT_SALT=${{ secrets.JWT_SALT }},BASE_URL=${{ secrets.BASE_URL }}

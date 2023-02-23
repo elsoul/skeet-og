@@ -9,6 +9,12 @@ export const API_TYPE_PATH = API_PATH + '/src/types'
 export const API_ENV_PRODUCTION_PATH = './apps/api/.env.production'
 export const API_ENV_BUILD_PATH = './apps/api/.env.build'
 export const WORKER_PATH = './apps/workers'
+export const SKEET_CONFIG_PATH = './skeet-cloud.config.json'
+export const ROUTE_PACKAGE_JSON_PATH = './package.json'
+
+export const getWorkerEnvPath = async (workerName: string) => {
+  return `${WORKER_PATH}/${workerName}/.env`
+}
 
 export const genSecret = async (name: string) => {
   return createHash('sha256').update(name).digest('hex')

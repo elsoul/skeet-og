@@ -3,6 +3,7 @@ import { execSyncCmd } from '@/lib/execSyncCmd'
 import { TaskQueue } from '@/types/skeetTypes'
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
+import { SKEET_CONFIG_PATH } from '@/lib/getNetworkConfig'
 
 export const addTaskQueue = async (
   projectId: string,
@@ -47,17 +48,14 @@ export const addTaskQueue = async (
     projectId,
   ]
   await execSyncCmd(shCmd)
-  await addTaskQueueToConf(taskQueue)
+  if (!isUpdate) await addTaskQueueToConf(taskQueue)
+  Logger.success('Successfully Updated skeet-cloud.config.json!')
 }
 
 export const addTaskQueueToConf = async (taskQueue: TaskQueue) => {
   const skeetConfig = await importConfig()
   if (skeetConfig.taskQueues) {
     skeetConfig.taskQueues.push(taskQueue)
-    fs.writeFileSync(
-      './skeet-cloud.config.json',
-      JSON.stringify(skeetConfig, null, 2)
-    )
-    Logger.success('Successfully Updated skeet-cloud.config.json!')
+    fs.writeFileSync(SKEET_CONFIG_PATH, JSON.stringify(skeetConfig, null, 2))
   }
 }

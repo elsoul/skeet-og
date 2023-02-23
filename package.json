@@ -16,7 +16,9 @@
     "build": "yarn update:version && npx ts-node build.ts && npx ts-node add-line.ts",
     "publish": "npm publish",
     "dev": "nodemon",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "skeet:twitter": "yarn --cwd ./apps/workers/twitter dev",
+    "skeet:sol": "yarn --cwd ./apps/workers/sol dev"
   },
   "dependencies": {
     "@stdlib/string-percent-encode": "0.0.9",

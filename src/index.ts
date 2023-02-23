@@ -30,7 +30,7 @@ Dotenv.config()
 
 async function test() {
   try {
-    await Skeet.getZone('figaro-lab', 'figaro-one')
+    await Skeet.addWorkerEnv('twitter')
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -179,8 +179,8 @@ async function main() {
         skeetCloudConfig.api.appName,
         skeetCloudConfig.api.region,
         skeetCloudConfig.api.db.databaseVersion,
-        skeetCloudConfig.api.db.cpu,
-        skeetCloudConfig.api.db.memory
+        String(skeetCloudConfig.api.db.cpu),
+        String(skeetCloudConfig.api.db.memory)
       )
     })
     sql.command('start').action(Skeet.sqlStart)
@@ -204,6 +204,8 @@ async function main() {
 
     const sync = program.command('sync').description('Sync Command')
     sync.command('type').action(Skeet.syncType)
+    sync.command('gcloud').action(Skeet.syncGcloud)
+    sync.command('actions').action(Skeet.setupActions)
 
     const docker = program.command('docker').description('Docker Command')
     docker.command('psql').action(Skeet.psql)

@@ -6,9 +6,9 @@ export type SkeetCloudConfig = {
 
 export type DbConfig = {
   databaseVersion: string
-  cpu: string
-  memory: string
-  storageSize: string
+  cpu: number
+  memory: number
+  storageSize: number
   whiteList?: string
 }
 
@@ -26,8 +26,8 @@ export type WorkerConfig = {
 }
 
 export type CloudRunConfig = {
-  cpu: string
-  memory: string
+  cpu: number
+  memory: number
   maxConcurrency: number
   minInstances: number
   maxInstances: number

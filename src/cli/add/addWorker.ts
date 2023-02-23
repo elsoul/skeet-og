@@ -4,6 +4,12 @@ import { execSyncCmd } from '@/lib/execSyncCmd'
 import { importConfig } from '@/index'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import { setupActions } from '../setup'
+import {
+  SKEET_CONFIG_PATH,
+  ROUTE_PACKAGE_JSON_PATH,
+  WORKER_PATH,
+  getWorkerEnvPath,
+} from '@/lib/getNetworkConfig'
 
 export const addWorker = async (workerName: string) => {
   const workerDir = './apps/workers/' + workerName
@@ -19,7 +25,9 @@ export const addWorker = async (workerName: string) => {
   await execSyncCmd(gitCloneCmd)
   const rmDefaultGit = ['rm', '-rf', '.git']
   await execSyncCmd(rmDefaultGit, workerDir)
+  await addWorkerEnv(workerName)
   await updateSkeetCloudConfig(workerName)
+  await addWorkerToPackageJson(workerName)
   await setupActions()
   Logger.success(`Successfully created ${workerName}!`)
 }
@@ -30,23 +38,39 @@ export const updateSkeetCloudConfig = async (workerName: string) => {
     skeetConfig.workers.push({
       workerName,
       cloudRun: {
-        cpu: '1',
+        cpu: 1,
         maxConcurrency: 80,
         maxInstances: 100,
         minInstances: 0,
-        memory: '1Gi',
+        memory: 1,
       },
     })
-  fs.writeFileSync(
-    './skeet-cloud.config.json',
-    JSON.stringify(skeetConfig, null, 2)
-  )
+  fs.writeFileSync(SKEET_CONFIG_PATH, JSON.stringify(skeetConfig, null, 2))
   Logger.success('Successfully Updated skeet-cloud.config.json!')
 }
 
-export const getPackageJson = async () => {
+export const addWorkerToPackageJson = async (workerName: string) => {
   const packageJson = fs.readFileSync('./package.json')
-  const json = JSON.parse(String(packageJson))
-  json.scripts['skeet:twitter'] = 'yarn --cwd ./apps/workers/twitter dev'
-  console.log(json.scripts)
+  const newPackageJson = JSON.parse(String(packageJson))
+  newPackageJson.scripts[
+    `skeet:${workerName}`
+  ] = `yarn --cwd ./apps/workers/${workerName} dev`
+  fs.writeFileSync(
+    ROUTE_PACKAGE_JSON_PATH,
+    JSON.stringify(newPackageJson, null, 2)
+  )
+  Logger.success('Successfully Updated ./package.json!')
+}
+
+export const addWorkerEnv = async (workerName: string) => {
+  try {
+    const workerEnvPath = await getWorkerEnvPath(workerName)
+    const workerEnv = String(fs.readFileSync(workerEnvPath))
+    const { workers } = await importConfig()
+    const port = workers ? 3000 + workers.length : 3000
+    fs.writeFileSync(workerEnvPath, `\nPORT=${String(port)}`, { flag: 'a' })
+  } catch (error) {
+    console.log(error)
+    throw new Error(JSON.stringify(String(error)))
+  }
 }

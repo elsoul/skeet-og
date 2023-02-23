@@ -1,6 +1,7 @@
 import { exec } from 'node:child_process'
 import { getContainerRegion } from '@/lib/getNetworkConfig'
-import { SkeetCloudConfig, importConfig } from '@/index'
+import { importConfig } from '@/index'
+import { SkeetCloudConfig } from '@/types/skeetTypes'
 
 export const dockerLogin = async () => {
   const skeetCloudConfig: SkeetCloudConfig = await importConfig()
