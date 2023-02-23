@@ -42,7 +42,7 @@ export const setupActions = async () => {
       }
     }
   } catch (error) {
-    console.log(`error: ${error}`)
+    console.log(`setupActions: ${error}`)
   }
 }
 

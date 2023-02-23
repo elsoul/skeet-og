@@ -30,8 +30,6 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# local env files
-.env*.local
 
 # vercel
 .vercel
@@ -40,10 +38,7 @@ yarn-error.log*
 *.tsbuildinfo
 
 # Gcloud key
-gcloud-key.json
-
-# env
-.env
+keyfile.json
 
 #firebase
 .firebase
