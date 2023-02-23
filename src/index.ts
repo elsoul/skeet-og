@@ -6,6 +6,7 @@ import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
 import { API_ENV_PRODUCTION_PATH } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
+import { SkeetCloudConfig } from '@/types/skeetTypes'
 
 export const importConfig = async () => {
   try {
@@ -16,39 +17,6 @@ export const importConfig = async () => {
     console.log(error)
     process.exit(1)
   }
-}
-
-export type SkeetCloudConfig = {
-  api: GCPConfig
-  workers?: Array<WorkerConfig>
-}
-
-export type DbConfig = {
-  databaseVersion: string
-  dbPassword: string
-  cpu: string
-  memory: string
-  whiteList?: string
-}
-
-export type GCPConfig = {
-  appName: string
-  projectId: string
-  region: string
-  cloudRun: CloudRunConfig
-  db: DbConfig
-}
-
-export type WorkerConfig = {
-  workerName: string
-  cloudRun: CloudRunConfig
-}
-
-export type CloudRunConfig = {
-  cpu: string
-  memory: string
-  minInstances: number
-  maxInstances: number
 }
 
 const program = new Command()
@@ -100,7 +68,7 @@ async function main() {
       )
       .option('--service <serviceName>', 'Skeet Service Name', '')
       .option('-p, --p <packageName>', 'npm package name', '')
-      .option('-D, --dev', 'Dependency environment', false)
+      .option('-d, -D', 'Dependency environment', false)
       .action(async (yarnCmd: Skeet.YarnCmd, options) => {
         if (!Object.values(Skeet.YarnCmd)?.includes(yarnCmd)) {
           await Logger.error('Invalid Yarn command')
@@ -110,7 +78,7 @@ async function main() {
           await Logger.error('You need to define package name!')
           process.exit(1)
         }
-        await Skeet.yarn(options.service, yarnCmd, options.p, options.isDev)
+        await Skeet.yarn(options.service, yarnCmd, options.p, options.d)
       })
 
     const add = program.command('add').description('Add Comannd')
@@ -119,6 +87,17 @@ async function main() {
       .argument('<workerName>', 'Worker Name - e.g. TwitterApi')
       .action(async (workerName: string) => {
         await Skeet.addWorker(workerName)
+      })
+    add
+      .command('taskQueue')
+      .argument('<queueName>', 'CloudTask Queue Name')
+      .action(async (queueName: string) => {
+        const skeetConfig = await importConfig()
+        await Skeet.addTaskQueue(
+          skeetConfig.api.projectId,
+          queueName,
+          skeetConfig.api.region
+        )
       })
 
     const gen = program

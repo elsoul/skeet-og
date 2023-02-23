@@ -1,6 +1,7 @@
 import * as Skeet from '@/cli'
 import { getIp } from '@/cli'
-import { SkeetCloudConfig, importConfig } from '@/index'
+import { importConfig } from '@/index'
+import { SkeetCloudConfig } from '@/types/skeetTypes'
 import { getNetworkConfig } from '@/lib/getNetworkConfig'
 import { Logger } from '@/lib/logger'
 

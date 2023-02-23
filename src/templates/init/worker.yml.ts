@@ -5,6 +5,7 @@ export const workerYml = async (
   envString: string,
   memory: string,
   cpu: string,
+  maxConcurrency: string,
   maxInstances: string,
   minInstances: string
 ) => {
@@ -67,13 +68,12 @@ jobs:
             --image=\${{ secrets.SKEET_CONTAINER_REGION }}/\${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-\${{ secrets.SKEET_APP_NAME }}-worker-${workerName} \\
             --memory=${memory} \\
             --cpu=${cpu} \\
+            --concurrency=${maxConcurrency} \\
             --max-instances=${maxInstances} \\
             --min-instances=${minInstances} \\
             --region=\${{ secrets.SKEET_GCP_REGION }} \\
-            --allow-unauthenticated \\
             --platform=managed \\
             --quiet \\
-            --concurrency=80 \\
             --port=8080 \\
             --vpc-connector="\${{ secrets.SKEET_APP_NAME }}-con" \\
             --vpc-egress=all \\

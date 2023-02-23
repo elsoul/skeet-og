@@ -1,7 +1,8 @@
 import { Logger } from '@/lib/logger'
 import fs from 'fs'
 import { execSyncCmd } from '@/lib/execSyncCmd'
-import { SkeetCloudConfig, importConfig } from '@/index'
+import { importConfig } from '@/index'
+import { SkeetCloudConfig } from '@/types/skeetTypes'
 import { setupActions } from '../setup'
 
 export const addWorker = async (workerName: string) => {
@@ -30,6 +31,7 @@ export const updateSkeetCloudConfig = async (workerName: string) => {
       workerName,
       cloudRun: {
         cpu: '1',
+        maxConcurrency: 80,
         maxInstances: 100,
         minInstances: 0,
         memory: '1Gi',
