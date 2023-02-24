@@ -10,7 +10,7 @@ export const createBackend = async (projectId: string, appName: string) => {
     'create',
     appConf.backendServiceName,
     '--load-balancing-scheme',
-    '--load-balancing-scheme=EXTERNAL_MANAGED',
+    'EXTERNAL_MANAGED',
     '--global',
     '--project',
     projectId,
