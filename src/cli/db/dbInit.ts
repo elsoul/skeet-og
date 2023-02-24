@@ -7,7 +7,7 @@ export const dbInit = async (name: string, production: boolean = false) => {
     ? [
         'dotenv',
         '-f',
-        '.env.build',
+        `${API_PATH}/.env.build`,
         'npx',
         'prisma',
         'migrate',

@@ -102,7 +102,8 @@ export const generateEnvProduction = async (
     `SKEET_GCP_DB_PASSWORD=${encodedPassword}\n`,
     `SKEET_CONTAINER_REGION=${cRegion}\n`,
     `SKEET_GCP_DB_PRIVATE_IP=${databaseIp}\n`,
-    `SKEET_SECRET_KEY_BASE=${secretKey}\n`,
+    `SKEET_JWT_SALT=${secretKey}\n`,
+    `SKEET_BASE_URL=https://${appName}.com\n`,
     `TZ=${timeZone}`,
   ]
   envProduction.forEach((keyValue) => {
@@ -120,7 +121,7 @@ const getDatabaseIp = async (
     const ipCol = privateIp === true ? '$6' : '$5'
     const cmd = `gcloud sql instances list --project=${projectId} | grep ${appName} | awk '{print ${ipCol}}'`
     const res = execSync(cmd)
-    const databaseIp = String(res).replace(/r?n/g, '')
+    const databaseIp = String(res).replace(/\r?\n/g, '')
     return databaseIp
   } catch (error) {
     return `error: ${error}`

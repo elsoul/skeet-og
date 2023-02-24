@@ -80,7 +80,6 @@ $ skeet start
 
 ```bash
 $ skeet git init
-$ git crypt init
 ```
 
 ### Make a first commit
@@ -138,42 +137,12 @@ $ git push origin main
 
 ### Add your global IP to DB whiteList
 
-Get your global IP
+Add your global IP to DB white list
+This command will automatically add your IP in ./skeet-cloud.config.json
 
 ```bash
-$ curl inet-ip.info
-xx.xx.x.x
+$ skeet add ip
 ```
-
-Add it to `./skeet-cloud.config.json`
-
-```json
-{
-  "api": {
-    "appName": "skeet-framework",
-    "projectId": "skeet-framework",
-    "region": "europe-west4",
-    "cloudRun": {
-      "cpu": 1,
-      "maxConcurrency": 80,
-      "maxInstances": 100,
-      "minInstances": 0,
-      "memory": "4Gi"
-    },
-    "db": {
-      "databaseVersion": "POSTGRES_14",
-      "cpu": 1,
-      "memory": "3840MiB",
-      "storageSize": 10,
-      "whiteList": "xx.xx.x.x" or "xx.xx.x.x,yy.yy.y.y"
-    },
-    "workers": [],
-    "taskQueues": []
-  }
-}
-```
-
-- csv string for multiple IPs
 
 Patch CloudSQL settings
 
@@ -184,7 +153,7 @@ $ skeet sql ip
 ### DB migrate
 
 ```bash
-$ skeet db deploy -e production
+$ skeet db deploy --production
 ```
 
 ### Deploy to Google Cloud Run

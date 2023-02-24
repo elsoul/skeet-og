@@ -3,7 +3,15 @@ import { API_PATH } from '@/lib/getNetworkConfig'
 
 export const dbMigrate = async (production: boolean = false) => {
   const prismaMigrateCmd = production
-    ? ['dotenv', '-f', '.env.build', 'npx', 'prisma', 'migrate', 'deploy']
+    ? [
+        'dotenv',
+        '-f',
+        `${API_PATH}/.env.build`,
+        'npx',
+        'prisma',
+        'migrate',
+        'deploy',
+      ]
     : ['npx', 'prisma', 'migrate', 'deploy']
   await execCmd(prismaMigrateCmd, API_PATH)
 }

@@ -15,7 +15,7 @@
       "cpu": 1,
       "memory": 4,
       "maxStorage": 10,
-      "whiteList": "xx.x.xx.x"
+      "whiteList": ""
     }
   },
   "workers": [
