@@ -8,45 +8,25 @@
       "maxConcurrent": 80,
       "maxInstances": 100,
       "minInstances": 0,
-      "memory": 1
+      "memory": "4Gi"
     },
     "db": {
       "databaseVersion": "POSTGRES_14",
       "cpu": 1,
-      "memory": 4,
+      "memory": "4Gi",
       "maxStorage": 10,
       "whiteList": ""
     }
   },
   "workers": [
     {
-      "workerName": "twitter",
-      "cloudRun": {
-        "cpu": 1,
-        "maxConcurrency": 80,
-        "maxInstances": 100,
-        "minInstances": 0,
-        "memory": 1
-      }
-    },
-    {
       "workerName": "sol",
       "cloudRun": {
         "cpu": 1,
         "maxConcurrency": 80,
         "maxInstances": 100,
         "minInstances": 0,
-        "memory": 1
-      }
-    },
-    {
-      "workerName": "sol",
-      "cloudRun": {
-        "cpu": 1,
-        "maxConcurrency": 80,
-        "maxInstances": 100,
-        "minInstances": 0,
-        "memory": 1
+        "memory": "4Gi"
       }
     }
   ],

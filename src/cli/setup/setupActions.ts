@@ -14,7 +14,7 @@ export const setupActions = async () => {
     const envString = await getActionsEnvString(API_ENV_PRODUCTION_PATH)
     const result = await Skeet.apiYml(
       envString,
-      String(skeetConfig.api.cloudRun.memory),
+      skeetConfig.api.cloudRun.memory,
       String(skeetConfig.api.cloudRun.cpu),
       String(skeetConfig.api.cloudRun.maxConcurrency),
       String(skeetConfig.api.cloudRun.maxInstances),
@@ -31,7 +31,7 @@ export const setupActions = async () => {
         const result = await Skeet.workerYml(
           workerName,
           envString,
-          String(workerConf.cloudRun.memory),
+          workerConf.cloudRun.memory,
           String(workerConf.cloudRun.cpu),
           String(workerConf.cloudRun.maxConcurrency),
           String(workerConf.cloudRun.maxInstances),
@@ -69,6 +69,6 @@ export const getWorkerConfig = async (workerName: string) => {
     if (!workerConfig) throw new Error('empty!')
     return workerConfig
   } catch (error) {
-    throw new Error(`error:${error}`)
+    throw new Error(`setupActions:${error}`)
   }
 }

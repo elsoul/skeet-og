@@ -181,7 +181,7 @@ async function main() {
         skeetCloudConfig.api.region,
         skeetCloudConfig.api.db.databaseVersion,
         String(skeetCloudConfig.api.db.cpu),
-        String(skeetCloudConfig.api.db.memory)
+        skeetCloudConfig.api.db.memory
       )
     })
     sql.command('start').action(Skeet.sqlStart)

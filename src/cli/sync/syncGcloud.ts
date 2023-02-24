@@ -26,7 +26,7 @@ export const syncSql = async () => {
     '--cpu',
     String(skeetConfig.api.db.cpu),
     '--memory',
-    String(skeetConfig.api.db.memory),
+    skeetConfig.api.db.memory,
     '--project',
     skeetConfig.api.projectId,
   ]

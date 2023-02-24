@@ -11,6 +11,7 @@ export const create = async (initAppName: string) => {
 
 export const init = async (appName: string) => {
   const appDir = await createApiDir(appName)
+  await createWorkerDir(appName)
   const gitCloneCmd = ['gh', 'repo', 'clone', 'elsoul/skeet-api', appDir]
   await execSyncCmd(gitCloneCmd)
   const yarnApiCmd = ['yarn']
@@ -39,7 +40,20 @@ export const createApiDir = async (appName: string) => {
     })
     return apiDir
   } catch (error) {
-    return `error: ${error}`
+    return `createApiDir: ${error}`
+  }
+}
+export const createWorkerDir = async (appName: string) => {
+  try {
+    const workerDir = path.join(appName, '/apps/workers')
+    fs.mkdir(workerDir, { recursive: true }, (err) => {
+      if (err) throw err
+    })
+    fs.writeFileSync(workerDir + '/.keep', '')
+
+    return workerDir
+  } catch (error) {
+    return `createWorkerDir: ${error}`
   }
 }
 

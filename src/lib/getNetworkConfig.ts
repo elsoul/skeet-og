@@ -23,7 +23,8 @@ export const genSecret = async (name: string) => {
 export const defaultProductionEnvArray = [
   'NO_PEER_DEPENDENCY_CHECK=1',
   'DATABASE_URL=postgresql://postgres:${{ secrets.SKEET_GCP_DB_PASSWORD }}@${{ secrets.SKEET_GCP_DB_PRIVATE_IP }}:5432/skeet-${{ secrets.SKEET_APP_NAME }}-production?schema=public',
-  'SKEET_SECRET_KEY_BASE=${{ secrets.SKEET_SECRET_KEY_BASE }}',
+  'SKEET_JWT_SALT=${{ secrets.SKEET_JWT_SALT }}',
+  'SKEET_BASE_URL=${{ secrets.SKEET_BASE_URL }}',
   'SKEET_GCP_PROJECT_ID=${{ secrets.SKEET_GCP_PROJECT_ID }}',
   'SKEET_FB_PROJECT_ID=${{ secrets.SKEET_FB_PROJECT_ID }}',
   'TZ=${{ secrets.TZ }}',

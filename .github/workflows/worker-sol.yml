@@ -1,28 +1,15 @@
-name: Api
+name: solWorker
 on:
   push:
     branches:
       - main
     paths:
-      - 'apps/api/**'
-      - '.github/workflows/api.yml'
+      - 'apps/workers/sol/**'
+      - '.github/workflows/worker-sol.yml'
 
 jobs:
   build:
     runs-on: ubuntu-22.04
-
-    services:
-      db:
-        image: postgres:14
-        ports: ['5432:5432']
-        env:
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -44,40 +31,34 @@ jobs:
 
       - name: Build and test
         env:
-          PGHOST: 127.0.0.1
-          PGUSER: postgres
-          RACK_ENV: test
-          DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/skeet-api-test?schema=public
+          NODE_ENV: test
         run: |
           sudo apt-get -yqq install libpq-dev
-          cd apps/api
+          cd apps/workers/sol
           rm -f .env
           yarn install --jobs 4 --retry 3
-          npx prisma generate
-          npx prisma migrate dev
           yarn test
 
       - name: Configure Docker
         run: gcloud auth configure-docker --quiet
 
       - name: Build Docker container
-        run: docker build -f ./apps/api/Dockerfile ./apps/api -t ${{ secrets.SKEET_CONTAINER_REGION }}/${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-${{ secrets.SKEET_APP_NAME }}-api
+        run: docker build -f ./apps/workers/sol/Dockerfile ./apps/workers/sol -t ${{ secrets.SKEET_CONTAINER_REGION }}/${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-${{ secrets.SKEET_APP_NAME }}-worker-sol
 
       - name: Push to Container Resistory
-        run: docker push ${{ secrets.SKEET_CONTAINER_REGION }}/${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-${{ secrets.SKEET_APP_NAME }}-api
+        run: docker push ${{ secrets.SKEET_CONTAINER_REGION }}/${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-${{ secrets.SKEET_APP_NAME }}-worker-sol
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy skeet-${{ secrets.SKEET_APP_NAME }}-api \
+          gcloud run deploy skeet-${{ secrets.SKEET_APP_NAME }}-worker-sol \
             --service-account=${{ secrets.SKEET_APP_NAME }}@${{ secrets.SKEET_GCP_PROJECT_ID }}.iam.gserviceaccount.com \
-            --image=${{ secrets.SKEET_CONTAINER_REGION }}/${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-${{ secrets.SKEET_APP_NAME }}-api \
+            --image=${{ secrets.SKEET_CONTAINER_REGION }}/${{ secrets.SKEET_GCP_PROJECT_ID }}/skeet-${{ secrets.SKEET_APP_NAME }}-worker-sol \
             --memory=4Gi \
             --cpu=1 \
-            --concurrency=undefined \
+            --concurrency=80 \
             --max-instances=100 \
             --min-instances=0 \
             --region=${{ secrets.SKEET_GCP_REGION }} \
-            --allow-unauthenticated \
             --platform=managed \
             --quiet \
             --port=8080 \
