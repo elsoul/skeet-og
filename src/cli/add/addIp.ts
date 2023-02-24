@@ -35,8 +35,9 @@ export const sendGet = async (url: string) => {
 
 export const addHomeIpToSkeetConfig = async (ip: string) => {
   let skeetConfig: SkeetCloudConfig = await importConfig()
-  if (skeetConfig.api.db.whiteList)
-    skeetConfig.api.db.whiteList = skeetConfig.api.db.whiteList + `,${ip}`
+  const whiteList = skeetConfig.api.db.whiteList || ''
+  skeetConfig.api.db.whiteList =
+    whiteList === '' ? whiteList + `${ip}` : whiteList + `,${ip}`
 
   fs.writeFileSync(SKEET_CONFIG_PATH, JSON.stringify(skeetConfig, null, 2))
 }
