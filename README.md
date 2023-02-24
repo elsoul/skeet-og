@@ -69,7 +69,6 @@ Now you can access;
 
 `http://localhost:4000/graphql`
 
-
 ## Zero to Deploy
 
 ### Git Init
@@ -164,4 +163,4 @@ The package is available as open source under the terms of the [Apache-2.0 Licen
 
 ## Code of Conduct
 
-Everyone interacting in the SKEET project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/elsoul/skeet-api/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the SKEET project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/elsoul/skeet/blob/master/CODE_OF_CONDUCT.md).
