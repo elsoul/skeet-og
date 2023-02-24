@@ -4,6 +4,7 @@ import path from 'path'
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import * as fileDataOf from '@/templates/init'
 import { psql } from '@/cli/docker/psql'
+import { sleep } from '@/utils/time'
 
 export const create = async (initAppName: string) => {
   await init(initAppName)
@@ -16,13 +17,13 @@ export const init = async (appName: string) => {
   await execSyncCmd(gitCloneCmd)
   const yarnApiCmd = ['yarn']
   await execSyncCmd(yarnApiCmd, appDir)
-  const yarnCmd = ['yarn']
-  await execSyncCmd(yarnCmd, `./${appName}`)
   const rmDefaultGit = ['rm', '-rf', '.git']
   await execSyncCmd(rmDefaultGit, appDir)
   await generateInitFiles(appName)
   await psql()
-  await new Promise((r) => setTimeout(r, 2000))
+  await sleep(2000)
+  const yarnCmd = ['yarn']
+  await execSyncCmd(yarnCmd, `./${appName}`)
   await initDbMigrate(appDir)
   await Logger.skeetAA()
   await Logger.welcomText(appName)
