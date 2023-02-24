@@ -5,7 +5,7 @@
     "region": "europe-west4",
     "cloudRun": {
       "cpu": 1,
-      "maxConcurrent": 80,
+      "maxConcurrency": 80,
       "maxInstances": 100,
       "minInstances": 0,
       "memory": "4Gi"
