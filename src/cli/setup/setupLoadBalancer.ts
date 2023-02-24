@@ -29,7 +29,8 @@ export const setupLoadBalancer = async (domain: string) => {
     )
     await Skeet.addBackend(
       skeetCloudConfig.api.projectId,
-      skeetCloudConfig.api.appName
+      skeetCloudConfig.api.appName,
+      skeetCloudConfig.api.region
     )
     await Skeet.createLb(
       skeetCloudConfig.api.projectId,
