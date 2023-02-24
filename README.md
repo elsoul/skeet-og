@@ -69,12 +69,6 @@ Now you can access;
 
 `http://localhost:4000/graphql`
 
-## Build & Run
-
-```bash
-$ skeet build
-$ skeet start
-```
 
 ## Zero to Deploy
 
