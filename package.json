@@ -11,7 +11,7 @@
     "skeet": "./dist/index.js"
   },
   "scripts": {
-    "test": "jest --detectOpenHandles --maxWorkers=1",
+    "test": "jest --coverage=false --detectOpenHandles --maxWorkers=1",
     "update:packages": "ncu -u && yarn",
     "update:version": "ts-node -r tsconfig-paths/register release.ts",
     "build": "yarn update:version && npx ts-node build.ts && npx ts-node add-line.ts",
