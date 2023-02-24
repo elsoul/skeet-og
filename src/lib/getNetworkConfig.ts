@@ -54,7 +54,12 @@ export const getActionsEnvString = async (filePath: string) => {
   for await (const envLine of envArray) {
     let keyAndValue = envLine.match(/([A-Z_]+)="?([^"]*)"?/)
     if (keyAndValue) {
-      if (keyAndValue[1].match('SKEET_')) continue
+      if (
+        keyAndValue[1].match('SKEET_') &&
+        !keyAndValue[1].match('SKEET_JWT') &&
+        !keyAndValue[1].match('SKEET_BASE')
+      )
+        continue
       if (keyAndValue[1] === 'TZ') continue
       const envString =
         `${keyAndValue[1]}=$` + '{{ ' + `secrets.${keyAndValue[1]}` + ' }}'
