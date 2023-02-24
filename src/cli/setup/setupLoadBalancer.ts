@@ -29,8 +29,7 @@ export const setupLoadBalancer = async (domain: string) => {
     )
     await Skeet.addBackend(
       skeetCloudConfig.api.projectId,
-      skeetCloudConfig.api.appName,
-      skeetCloudConfig.api.region
+      skeetCloudConfig.api.appName
     )
     await Skeet.createLb(
       skeetCloudConfig.api.projectId,
@@ -52,7 +51,7 @@ export const setupLoadBalancer = async (domain: string) => {
     await Skeet.createZone(
       skeetCloudConfig.api.projectId,
       skeetCloudConfig.api.appName,
-      networkConf.zoneName
+      domain
     )
     const ip = await getIp(
       skeetCloudConfig.api.projectId,
