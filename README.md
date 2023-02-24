@@ -1,6 +1,5 @@
 ![Skeet Framework Logo](https://user-images.githubusercontent.com/20677823/221215449-93a7b5a8-5f33-4da8-9dd4-d0713db0a280.png)
 
-
 <p align="center">
   <a href="https://twitter.com/intent/follow?screen_name=ELSOUL_LABO2">
     <img src="https://img.shields.io/twitter/follow/ELSOUL_LABO2.svg?label=Follow%20@ELSOUL_LABO2" alt="Follow @ELSOUL_LABO2" />
@@ -56,29 +55,9 @@ $ npm i -g skeet
 
 ```bash
 $ skeet create ${appName}
-   _____ __ __ __________________
-  / ___// //_// ____/ ____/_  __/
-  \__ \/ ,<  / __/ / __/   / /
- ___/ / /| |/ /___/ /___  / /
-/____/_/ |_/_____/_____/ /_/    🛠️🛠️
-
-⚡⚡⚡ Buidl GraphQL API for Relay Fast ⚡⚡⚡
-$ cd skeet-app
-$ skeet s
-Go To : http://localhost:4000/graphql
-
---- ✡ Try Your first Query ✡ ---
-mutation {
-  createUser(
-    name: "EpicsDAO"
-  ) {
-    id
-    rawId
-    name
-  }
-}
---------------------------------
 ```
+
+![Skeet Create](https://storage.googleapis.com/skeet-assets/animation/skeet-create-compressed.gif)
 
 ## Run local
 
