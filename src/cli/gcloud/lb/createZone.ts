@@ -17,6 +17,8 @@ export const createZone = async (
     domain,
     '--visibility',
     'public',
+    '--description',
+    `Skeet ${domain} config`,
     '--project',
     projectId,
   ]

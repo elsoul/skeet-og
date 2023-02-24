@@ -4,16 +4,17 @@ import { execSync } from 'child_process'
 export const createFixIp = async (
   projectId: string,
   region: string,
-  ipName: string
+  ipName: string,
+  isGlobal: boolean = false
 ) => {
+  const ipRegion = isGlobal ? '--global' : `--region=${region}`
   const shCmd = [
     'gcloud',
     'compute',
     'addresses',
     'create',
     ipName,
-    '--region',
-    region,
+    ipRegion,
     '--project',
     projectId,
   ]

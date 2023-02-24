@@ -15,7 +15,8 @@ export const setupLoadBalancer = async (domain: string) => {
     await Skeet.createFixIp(
       skeetCloudConfig.api.projectId,
       skeetCloudConfig.api.region,
-      networkConf.loadBalancerIpName
+      networkConf.loadBalancerIpName,
+      true
     )
     await Skeet.createNeg(
       skeetCloudConfig.api.projectId,
