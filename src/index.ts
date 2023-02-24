@@ -148,9 +148,9 @@ async function main() {
         const repoName = repoPath || ''
         await Skeet.createGitRepo(repoName, openSource)
       })
-    git.command('init').action(Skeet.gitInit)
-    git.command('env').action(async () => {
-      await Skeet.addEnvSync(API_ENV_PRODUCTION_PATH)
+    git.command('init').action(async () => {
+      Skeet.gitInit()
+      Skeet.gitCryptInit()
     })
     git.command('json').action(Skeet.addJsonEnv)
 

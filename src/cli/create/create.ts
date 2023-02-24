@@ -13,8 +13,10 @@ export const init = async (appName: string) => {
   const appDir = await createApiDir(appName)
   const gitCloneCmd = ['gh', 'repo', 'clone', 'elsoul/skeet-api', appDir]
   await execSyncCmd(gitCloneCmd)
+  const yarnApiCmd = ['yarn']
+  await execSyncCmd(yarnApiCmd, appDir)
   const yarnCmd = ['yarn']
-  await execSyncCmd(yarnCmd, appDir)
+  await execSyncCmd(yarnCmd, `./${appName}`)
   const rmDefaultGit = ['rm', '-rf', '.git']
   await execSyncCmd(rmDefaultGit, appDir)
   await generateInitFiles(appName)
