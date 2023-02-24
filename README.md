@@ -146,12 +146,6 @@ This command will automatically add your IP in ./skeet-cloud.config.json
 $ skeet add ip
 ```
 
-Patch CloudSQL settings
-
-```bash
-$ skeet sql ip
-```
-
 ### DB migrate
 
 ```bash
@@ -163,6 +157,8 @@ $ skeet db deploy --production
 ```bash
 $ skeet deploy
 ```
+
+![Skeet Deploy](https://storage.googleapis.com/skeet-assets/animation/skeet-deploy-compressed.gif)
 
 ## Contributing
 

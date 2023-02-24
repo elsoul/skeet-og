@@ -99,7 +99,10 @@ async function main() {
           skeetConfig.api.region
         )
       })
-    add.command('ip').action(Skeet.addIp)
+    add.command('ip').action(async () => {
+      Skeet.addIp()
+      Skeet.sqlIp()
+    })
 
     const gen = program
       .command('g')
