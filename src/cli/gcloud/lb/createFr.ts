@@ -18,7 +18,7 @@ export const createFr = async (projectId: string, appName: string) => {
     '--target-https-proxy',
     appConf.proxyName,
     '--global',
-    '--port',
+    '--ports',
     '443',
     '--project',
     projectId,
