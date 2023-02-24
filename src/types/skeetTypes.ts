@@ -37,8 +37,8 @@ export type TaskQueue = {
   queueName: string
   location: string
   maxAttempts: number
-  maxInterval: number
-  minInterval: number
+  maxInterval: string
+  minInterval: string
   maxConcurrent: number
   maxRate: number
 }

@@ -12,8 +12,8 @@ export const addTaskQueue = async (
   maxAttempts: number = 10,
   maxConcurrent: number = 1,
   maxRate: number = 1,
-  maxInterval: number = 10,
-  minInterval: number = 1,
+  maxInterval: string = '10s',
+  minInterval: string = '1s',
   isUpdate: boolean = false
 ) => {
   const method = isUpdate ? 'update' : 'create'
@@ -41,9 +41,9 @@ export const addTaskQueue = async (
     '--max-dispatches-per-second',
     String(taskQueue.maxRate),
     '--max-backoff',
-    String(taskQueue.maxInterval),
+    taskQueue.maxInterval,
     '--min-backoff',
-    String(taskQueue.minInterval),
+    taskQueue.minInterval,
     '--project',
     projectId,
   ]
