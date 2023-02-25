@@ -211,6 +211,7 @@ async function main() {
     })
     sync.command('env').action(async () => {
       await Skeet.addEnvSync(API_ENV_PRODUCTION_PATH)
+      await Skeet.setupActions()
     })
 
     const docker = program.command('docker').description('Docker Command')

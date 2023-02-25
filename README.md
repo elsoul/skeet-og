@@ -114,12 +114,6 @@ $ skeet sql create
 $ skeet sync env
 ```
 
-### Generate GitHub Actions
-
-```bash
-$ skeet sync actions
-```
-
 ### Commit and Push then CI/CD starts
 
 ```bash

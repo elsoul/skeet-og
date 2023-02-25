@@ -8,6 +8,7 @@ import {
   SKEET_CONFIG_PATH,
   ROUTE_PACKAGE_JSON_PATH,
   getWorkerEnvPath,
+  WORKER_REPO_URL,
 } from '@/lib/getNetworkConfig'
 
 export const addWorker = async (workerName: string) => {
@@ -20,7 +21,7 @@ export const addWorker = async (workerName: string) => {
       if (err) throw err
     })
   }
-  const gitCloneCmd = ['gh', 'repo', 'clone', 'elsoul/skeet-worker', workerDir]
+  const gitCloneCmd = ['git', 'clone', WORKER_REPO_URL, workerDir]
   await execSyncCmd(gitCloneCmd)
   const rmDefaultGit = ['rm', '-rf', '.git']
   await execSyncCmd(rmDefaultGit, workerDir)

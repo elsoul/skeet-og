@@ -5,6 +5,7 @@ import { execSyncCmd } from '@/lib/execSyncCmd'
 import * as fileDataOf from '@/templates/init'
 import { psql } from '@/cli/docker/psql'
 import { sleep } from '@/utils/time'
+import { API_REPO_URL } from '@/lib/getNetworkConfig'
 
 export const create = async (initAppName: string) => {
   await init(initAppName)
@@ -13,7 +14,7 @@ export const create = async (initAppName: string) => {
 export const init = async (appName: string) => {
   const appDir = await createApiDir(appName)
   await createWorkerDir(appName)
-  const gitCloneCmd = ['gh', 'repo', 'clone', 'elsoul/skeet-api', appDir]
+  const gitCloneCmd = ['git', 'clone', API_REPO_URL, appDir]
   await execSyncCmd(gitCloneCmd)
   const yarnApiCmd = ['yarn']
   await execSyncCmd(yarnApiCmd, appDir)
