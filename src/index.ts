@@ -30,7 +30,7 @@ Dotenv.config()
 
 async function test() {
   try {
-    await Skeet.setupActions()
+    console.log(process.env.A)
   } catch (error) {
     console.log(`error: ${error}`)
   }

@@ -5,7 +5,7 @@ export const dbMigrate = async (production: boolean = false) => {
   const prismaMigrateCmd = production
     ? [
         'dotenv',
-        '-f',
+        '-e',
         `${API_PATH}/.env.build`,
         'npx',
         'prisma',
