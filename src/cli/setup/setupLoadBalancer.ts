@@ -1,5 +1,5 @@
 import * as Skeet from '@/cli'
-import { getIp } from '@/cli'
+import { getIp, setGcloudProject } from '@/cli'
 import { importConfig } from '@/index'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import { getNetworkConfig } from '@/lib/getNetworkConfig'
@@ -8,6 +8,7 @@ import { Logger } from '@/lib/logger'
 export const setupLoadBalancer = async (domain: string) => {
   try {
     const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+    await setGcloudProject(skeetCloudConfig.api.projectId)
     const networkConf = await getNetworkConfig(
       skeetCloudConfig.api.projectId,
       skeetCloudConfig.api.appName

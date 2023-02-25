@@ -1,9 +1,11 @@
 import * as Skeet from '@/cli'
+import { setGcloudProject } from '@/cli'
 import { importConfig } from '@/index'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 
 export const setupIam = async () => {
   const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+  await setGcloudProject(skeetCloudConfig.api.projectId)
   await Skeet.runEnableAllPermission(skeetCloudConfig.api.projectId)
   await Skeet.createServiceAccount(
     skeetCloudConfig.api.projectId,

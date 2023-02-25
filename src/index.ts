@@ -30,7 +30,6 @@ Dotenv.config()
 
 async function test() {
   try {
-    console.log(process.env.A)
   } catch (error) {
     console.log(`error: ${error}`)
   }

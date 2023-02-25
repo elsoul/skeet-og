@@ -1,6 +1,6 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import inquirer from 'inquirer'
-import { getWorkerConfig, getWorkers } from '@/cli'
+import { getWorkerConfig, getWorkers, setGcloudProject } from '@/cli'
 import {
   getNetworkConfig,
   getContainerImageName,
@@ -35,6 +35,7 @@ export const deploy = async () => {
     ])
     .then(async (answers) => {
       const skeetConfig = await importConfig()
+      await setGcloudProject(skeetConfig.api.projectId)
       for await (const service of answers.deploying) {
         if (service === 'api') {
           await cloudRunBuild(skeetConfig.api.appName)
@@ -52,7 +53,7 @@ export const deploy = async () => {
             skeetConfig.api.projectId,
             skeetConfig.api.appName,
             skeetConfig.api.region,
-            String(skeetConfig.api.cloudRun.memory),
+            skeetConfig.api.cloudRun.memory,
             String(skeetConfig.api.cloudRun.cpu),
             String(skeetConfig.api.cloudRun.maxInstances),
             String(skeetConfig.api.cloudRun.minInstances)
@@ -75,7 +76,7 @@ export const deploy = async () => {
             skeetConfig.api.projectId,
             skeetConfig.api.appName,
             skeetConfig.api.region,
-            String(workerConf.cloudRun.memory),
+            workerConf.cloudRun.memory,
             String(workerConf.cloudRun.cpu),
             String(workerConf.cloudRun.maxInstances),
             String(workerConf.cloudRun.minInstances),
