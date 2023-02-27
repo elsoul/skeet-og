@@ -1,11 +1,12 @@
 import { execCmd } from '@/lib/execCmd'
 import { API_ENV_BUILD_PATH } from '@/lib/getNetworkConfig'
-export const dbMigrate = async (production: boolean = false) => {
+
+export const dbSeed = async (production: boolean = false) => {
   let shCmd = []
   if (production) {
-    shCmd = ['dotenv', '-e', API_ENV_BUILD_PATH, 'yarn', 'db:deploy']
+    shCmd = ['dotenv', '-e', API_ENV_BUILD_PATH, 'yarn', 'db:seed']
   } else {
-    shCmd = ['yarn', 'db:deploy']
+    shCmd = ['yarn', 'db:seed']
   }
   await execCmd(shCmd)
 }

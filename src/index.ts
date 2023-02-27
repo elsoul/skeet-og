@@ -172,6 +172,12 @@ async function main() {
         const production = options.production || false
         await Skeet.dbMigrate(production)
       })
+    db.command('seed')
+      .option('--production', 'Migrate Production Schema')
+      .action(async (options) => {
+        const production = options.production || false
+        await Skeet.dbSeed(production)
+      })
     db.command('reset').action(Skeet.dbReset)
 
     const sql = program.command('sql').description('CloudSQL Comannd')

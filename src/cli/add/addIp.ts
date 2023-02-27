@@ -9,7 +9,6 @@ export const addIp = async () => {
   const homeIp = await getHomeIp()
   await addHomeIpToSkeetConfig(homeIp)
   Logger.success(`Successfully added ${homeIp} to DB white list!\n`)
-  Logger.sync(`run 'skeet sql ip' to apply!`)
 }
 
 export const getHomeIp = async () => {

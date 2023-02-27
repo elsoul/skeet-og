@@ -12,6 +12,8 @@ export const packageJson = async (appName: string) => {
     scripts: {
       skeet: 'run-p skeet:*',
       'skeet:api': 'yarn --cwd ./apps/api dev',
+      'db:deploy': 'yarn --cwd ./apps/api db:deploy',
+      'db:seed': 'yarn --cwd ./apps/api db:seed',
     },
     devDependencies: {
       'prettier-plugin-prisma': '4.9.0',
