@@ -3,6 +3,7 @@ import { setGcloudProject } from '@/cli'
 import { importConfig } from '@/index'
 import { KEYFILE_PATH } from '@/lib/getNetworkConfig'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
+import { sleep } from '@/utils/time'
 import fs from 'fs'
 
 export const setupGcp = async () => {
@@ -17,7 +18,9 @@ export const setupGcp = async () => {
     skeetCloudConfig.api.projectId,
     skeetCloudConfig.api.appName
   )
+  await sleep(500)
   await Skeet.addJsonEnv()
+  await sleep(500)
   await Skeet.dockerLogin()
   fs.rmSync(KEYFILE_PATH)
   await Skeet.runAddAllRole(

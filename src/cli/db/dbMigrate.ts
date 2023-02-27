@@ -10,11 +10,12 @@ export const dbMigrate = async (production: boolean = false) => {
     const buf = Buffer.from(stream)
     const { DATABASE_URL } = dotenv.parse(buf)
     shCmd = [
-      `DATABASE_URL=${DATABASE_URL}`,
       'yarn',
       '--cwd',
       API_PATH,
       'db:deploy',
+      'DATABASE_URL',
+      DATABASE_URL,
     ]
   } else {
     shCmd = ['yarn', '--cwd', API_PATH, 'db:deploy']
