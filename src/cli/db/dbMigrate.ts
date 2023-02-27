@@ -1,17 +1,23 @@
 import { execCmd } from '@/lib/execCmd'
-import { API_PATH } from '@/lib/getNetworkConfig'
+import { API_ENV_BUILD_PATH, API_PATH } from '@/lib/getNetworkConfig'
+import dotenv from 'dotenv'
+import fs from 'fs'
 
 export const dbMigrate = async (production: boolean = false) => {
-  const prismaMigrateCmd = production
-    ? [
-        'dotenv',
-        '-e',
-        `${API_PATH}/.env.build`,
-        'npx',
-        'prisma',
-        'migrate',
-        'deploy',
-      ]
-    : ['npx', 'prisma', 'migrate', 'deploy']
-  await execCmd(prismaMigrateCmd, API_PATH)
+  let shCmd = []
+  if (production) {
+    const stream = fs.readFileSync(API_ENV_BUILD_PATH)
+    const buf = Buffer.from(stream)
+    const { DATABASE_URL } = dotenv.parse(buf)
+    shCmd = [
+      `DATABASE_URL=${DATABASE_URL}`,
+      'yarn',
+      '--cwd',
+      API_PATH,
+      'db:deploy',
+    ]
+  } else {
+    shCmd = ['yarn', '--cwd', API_PATH, 'db:deploy']
+  }
+  await execCmd(shCmd, API_PATH)
 }

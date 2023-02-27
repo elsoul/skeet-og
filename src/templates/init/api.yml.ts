@@ -66,7 +66,7 @@ jobs:
           rm -f .env
           yarn install --jobs 4 --retry 3
           npx prisma generate
-          npx prisma migrate dev
+          npx prisma migrate dev --skip-seed
           yarn test
 
       - name: Configure Docker
