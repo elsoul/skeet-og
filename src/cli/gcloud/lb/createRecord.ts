@@ -30,3 +30,28 @@ export const createRecord = async (
   ]
   await execSyncCmd(shCmd)
 }
+
+export const createCaaRecords = async (
+  projectId: string,
+  zone: string,
+  domain: string
+) => {
+  const defaultRecord = await caaSslDefaultConf(projectId, zone)
+  await createRecord(
+    projectId,
+    zone,
+    domain,
+    defaultRecord.rrdatas,
+    false,
+    defaultRecord.recordType,
+    defaultRecord.ttl
+  )
+}
+
+export const caaSslDefaultConf = async (projectId: string, zone: string) => {
+  return {
+    rrdatas: '0 issue "pki.goog",0 issue "letsencrypt.org"',
+    ttl: '300',
+    recordType: 'CAA',
+  }
+}

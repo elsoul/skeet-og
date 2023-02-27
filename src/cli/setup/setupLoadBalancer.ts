@@ -65,6 +65,11 @@ export const setupLoadBalancer = async (domain: string) => {
       domain,
       ip
     )
+    await Skeet.createCaaRecords(
+      skeetCloudConfig.api.projectId,
+      networkConf.zoneName,
+      domain
+    )
     await Skeet.getZone(
       skeetCloudConfig.api.projectId,
       skeetCloudConfig.api.appName
