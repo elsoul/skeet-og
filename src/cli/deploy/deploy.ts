@@ -1,6 +1,11 @@
 import { execSyncCmd } from '@/lib/execSyncCmd'
 import inquirer from 'inquirer'
-import { getWorkerConfig, getWorkers, setGcloudProject } from '@/cli'
+import {
+  getWorkerConfig,
+  getWorkers,
+  setGcloudProject,
+  syncRunUrl,
+} from '@/cli'
 import {
   getNetworkConfig,
   getContainerImageName,
@@ -84,6 +89,7 @@ export const deploy = async () => {
           )
         }
       }
+      await syncRunUrl()
       console.log(JSON.stringify(answers, null, '  '))
     })
 }

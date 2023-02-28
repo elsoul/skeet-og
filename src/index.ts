@@ -32,11 +32,6 @@ Dotenv.config()
 
 async function test() {
   try {
-    const skeetCloudConfig = await importConfig()
-    await initArmor(
-      skeetCloudConfig.api.projectId,
-      skeetCloudConfig.api.appName
-    )
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -80,7 +75,7 @@ async function main() {
       )
       .option('--service <serviceName>', 'Skeet Service Name', '')
       .option('-p, --p <packageName>', 'npm package name', '')
-      .option('-d, -D', 'Dependency environment', false)
+      .option('-D', 'Dependency environment', false)
       .action(async (yarnCmd: Skeet.YarnCmd, options) => {
         if (!Object.values(Skeet.YarnCmd)?.includes(yarnCmd)) {
           await Logger.error('Invalid Yarn command')
@@ -90,7 +85,7 @@ async function main() {
           await Logger.error('You need to define package name!')
           process.exit(1)
         }
-        await Skeet.yarn(options.service, yarnCmd, options.p, options.d)
+        await Skeet.yarn(options.service, yarnCmd, options.p, options.D)
       })
 
     const add = program.command('add').description('Add Comannd')

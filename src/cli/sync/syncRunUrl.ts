@@ -6,17 +6,19 @@ import fs from 'fs'
 
 export const syncRunUrl = async () => {
   const skeetConfig: SkeetCloudConfig = await importConfig()
-  await syncApiUrl(skeetConfig)
+  if (!skeetConfig.api.hasLoadBalancer) await syncApiUrl(skeetConfig)
   await syncWorkerUrls(skeetConfig)
   await Logger.success(`successfully updated cloud run urls!`)
 }
 
-export const syncApiUrl = async (skeetConfig: SkeetCloudConfig) => {
-  const apiUrl = await getRunUrl(
-    skeetConfig.api.projectId,
-    skeetConfig.api.appName
-  )
-  skeetConfig.api.cloudRun.url = apiUrl
+export const syncApiUrl = async (
+  skeetConfig: SkeetCloudConfig,
+  domain: string = ''
+) => {
+  skeetConfig.api.cloudRun.url =
+    domain !== ''
+      ? `https://${domain}`
+      : await getRunUrl(skeetConfig.api.projectId, skeetConfig.api.appName)
   fs.writeFileSync(SKEET_CONFIG_PATH, JSON.stringify(skeetConfig, null, 2))
 }
 
