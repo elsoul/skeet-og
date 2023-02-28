@@ -6,7 +6,6 @@ import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
 import {
   API_ENV_PRODUCTION_PATH,
-  getRunUrl,
   SKEET_CONFIG_PATH,
 } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
