@@ -1,9 +1,6 @@
 import { importConfig } from '@/index'
 import { Logger } from '@/lib/logger'
-import {
-  createSecurityPolicy,
-  updateBackendSecurityPolicy,
-} from './createSecurityPolicy'
+import { createSecurityPolicy, updateBackendSecurityPolicy } from '@/cli'
 
 export const initArmor = async (projectId: string, appName: string) => {
   const skeetCloudConfig = await importConfig()

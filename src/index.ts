@@ -4,7 +4,7 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
-import { API_ENV_PRODUCTION_PATH } from '@/lib/getNetworkConfig'
+import { API_ENV_PRODUCTION_PATH, getRunUrl } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 
@@ -30,7 +30,7 @@ Dotenv.config()
 
 async function test() {
   try {
-    await Skeet.init()
+    await getRunUrl('skeet-test', 'skeet-test')
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -207,6 +207,9 @@ async function main() {
     })
     sync.command('taskQueue').action(async () => {
       await Skeet.syncTaskQueue()
+    })
+    sync.command('runUrl').action(async () => {
+      await Skeet.syncRunUrl()
     })
 
     const docker = program.command('docker').description('Docker Command')

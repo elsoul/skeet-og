@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { createHash } from 'crypto'
+import { execSync } from 'child_process'
 
 export const KEYFILE_PATH = './keyfile.json'
 export const GRAPHQL_PATH = './apps/api/src/graphql'
@@ -173,5 +174,25 @@ export const regionToTimezone = async (region: string) => {
       return 'Europe/Amsterdam'
     default:
       return 'America/Los_Angeles'
+  }
+}
+
+export const getRunUrl = async (
+  projectId: string,
+  appName: string,
+  workerName: string = ''
+) => {
+  try {
+    const runName =
+      workerName !== ''
+        ? await getWorkerName(appName, workerName)
+        : (await getNetworkConfig(projectId, appName)).cloudRunName
+    console.log(runName)
+    const cmd = `gcloud run services list --project=${projectId} | grep ${runName} | awk '{print $4}'`
+    const res = String(execSync(cmd)).replace(/\r?\n/g, '')
+
+    return res
+  } catch (error) {
+    return ''
   }
 }

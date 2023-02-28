@@ -26,6 +26,9 @@ import {
   createGitRepo,
   setupActions,
   addEnvSync,
+  addIp,
+  sqlIp,
+  dbMigrate,
 } from '@/cli'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 
@@ -37,11 +40,28 @@ const requireLetterAndNumber = (value: string) => {
   return 'Password need to have at least a letter and a number'
 }
 
+const requireRepoName = (value: string) => {
+  if (/.+\/.+/.test(value)) {
+    return true
+  }
+
+  return 'This is not GitHub Repo Name!It must be repoOwner/repoName'
+}
+
+const requireDomainName = (value: string) => {
+  if (/.+\..+/.test(value)) {
+    return true
+  }
+
+  return 'This is not Domain Name!It must be example.com'
+}
+
 const questions = [
   {
     type: 'input',
     name: 'githubRepo',
     message: "What's your GitHub Repo Name",
+    validate: requireRepoName,
     default() {
       return 'elsoul/skeet'
     },
@@ -61,9 +81,19 @@ const questions = [
     validate: requireLetterAndNumber,
   },
   {
+    type: 'list',
+    name: 'lb',
+    message: 'Do you want to setup Cloud Load Balancer?',
+    choices: ['Yes', 'No'],
+  },
+]
+
+const domainQuestion = [
+  {
     type: 'input',
     name: 'domain',
     message: "What's domain address",
+    validate: requireDomainName,
     default() {
       return 'skeet.dev'
     },
@@ -73,26 +103,31 @@ const questions = [
 export const init = async () => {
   inquirer.prompt(questions).then(async (answers) => {
     const answersJson = JSON.parse(JSON.stringify(answers))
+    const skeetCloudConfig = await importConfig()
     if (answersJson.password1 !== answersJson.password2)
       throw new Error("password doesn't match!")
-    console.log(JSON.stringify(answers, null, '  '))
-    const skeetCloudConfig = await importConfig()
-    await Logger.sync(`setting up your google cloud platform...`)
-    await setGcloudProject(skeetCloudConfig.api.projectId)
-    await gitInit()
-    await gitCryptInit()
-    await gitCommit()
-    await createGitRepo(answersJson.repoName)
-    await setupGcp(skeetCloudConfig)
-    await createCloudSQL(skeetCloudConfig, answersJson.password1)
-    await addEnvSync(API_ENV_PRODUCTION_PATH)
-    await setupActions()
-    await apiRunDeploy(skeetCloudConfig)
-    await setupLoadBalancer(skeetCloudConfig, answersJson.domain)
-    await initArmor(
-      skeetCloudConfig.api.projectId,
-      skeetCloudConfig.api.appName
-    )
+
+    if (answersJson.lb === 'Yes') {
+      inquirer.prompt(domainQuestion).then(async (answer) => {
+        const domain = JSON.parse(JSON.stringify(answer)).domain
+        await setupCloud(
+          skeetCloudConfig,
+          answersJson.repoName,
+          answersJson.password1
+        )
+        await setupLoadBalancer(skeetCloudConfig, domain)
+        await initArmor(
+          skeetCloudConfig.api.projectId,
+          skeetCloudConfig.api.appName
+        )
+      })
+    } else {
+      await setupCloud(
+        skeetCloudConfig,
+        answersJson.repoName,
+        answersJson.password1
+      )
+    }
   })
 }
 
@@ -166,4 +201,25 @@ export const apiRunDeploy = async (skeetCloudConfig: SkeetCloudConfig) => {
     String(skeetCloudConfig.api.cloudRun.maxInstances),
     String(skeetCloudConfig.api.cloudRun.minInstances)
   )
+}
+
+export const setupCloud = async (
+  skeetCloudConfig: SkeetCloudConfig,
+  repoName: string,
+  dbPass: string
+) => {
+  await Logger.sync(`setting up your google cloud platform...`)
+  await setGcloudProject(skeetCloudConfig.api.projectId)
+  await gitInit()
+  await gitCryptInit()
+  await gitCommit()
+  await createGitRepo(repoName)
+  await setupGcp(skeetCloudConfig)
+  await createCloudSQL(skeetCloudConfig, dbPass)
+  await addIp()
+  await sqlIp()
+  await dbMigrate(true)
+  await addEnvSync(API_ENV_PRODUCTION_PATH)
+  await setupActions()
+  await apiRunDeploy(skeetCloudConfig)
 }

@@ -19,7 +19,8 @@ export const setupActions = async () => {
       String(skeetConfig.api.cloudRun.cpu),
       String(skeetConfig.api.cloudRun.maxConcurrency),
       String(skeetConfig.api.cloudRun.maxInstances),
-      String(skeetConfig.api.cloudRun.minInstances)
+      String(skeetConfig.api.cloudRun.minInstances),
+      skeetConfig.api.hasLoadBalancer
     )
     fs.writeFileSync(result.filePath, result.body, { flag: 'w' })
     await Logger.success(`Successfully updated ${result.filePath}!`)

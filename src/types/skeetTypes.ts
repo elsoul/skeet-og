@@ -17,6 +17,7 @@ export type GCPConfig = {
   appName: string
   projectId: string
   region: string
+  hasLoadBalancer: boolean
   cloudRun: CloudRunConfig
   db: DbConfig
 }
@@ -57,4 +58,13 @@ export type SecurityPolicy = {
       options: { [key: string]: string }
     }
   ]
+}
+
+export enum ArmorAction {
+  ALLOW = 'allow',
+  DENY1 = 'deny-403',
+  DENY2 = 'deny-404',
+  DENY3 = 'deny-429',
+  DENY4 = 'deny-502',
+  REDIRECT = 'redirect',
 }

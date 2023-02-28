@@ -1,9 +1,9 @@
 import * as Skeet from '@/cli'
 import { getIp, setGcloudProject } from '@/cli'
-import { importConfig } from '@/index'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
-import { getNetworkConfig } from '@/lib/getNetworkConfig'
+import { getNetworkConfig, SKEET_CONFIG_PATH } from '@/lib/getNetworkConfig'
 import { Logger } from '@/lib/logger'
+import fs from 'fs'
 
 export const setupLoadBalancer = async (
   skeetCloudConfig: SkeetCloudConfig,
@@ -76,6 +76,7 @@ export const setupLoadBalancer = async (
       skeetCloudConfig.api.projectId,
       skeetCloudConfig.api.appName
     )
+    await hasLoadBalancerTrue(skeetCloudConfig)
     await Logger.success(`Successfully created Load Balancer!\n`)
     await Logger.sync(
       `Copy nameServers addresses above and paste them to your DNS settings`
@@ -84,4 +85,9 @@ export const setupLoadBalancer = async (
     await Logger.error(`setupLoadBalancer error: ${JSON.stringify(error)}`)
     process.exit(1)
   }
+}
+
+export const hasLoadBalancerTrue = async (skeetConfig: SkeetCloudConfig) => {
+  skeetConfig.api.hasLoadBalancer = true
+  fs.writeFileSync(SKEET_CONFIG_PATH, JSON.stringify(skeetConfig, null, 2))
 }

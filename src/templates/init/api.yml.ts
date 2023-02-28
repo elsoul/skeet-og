@@ -6,10 +6,14 @@ export const apiYml = async (
   cpu: string,
   maxConcurrency: string,
   maxInstances: string,
-  minInstances: string
+  minInstances: string,
+  hasLoadBalancer: boolean = false
 ) => {
   fs.mkdirSync('.github/workflows', { recursive: true })
   const filePath = `.github/workflows/api.yml`
+  const allowUnauthenticated = hasLoadBalancer
+    ? '--allow-unauthenticated'
+    : '--no-allow-unauthenticated'
   const body = `name: Api
 on:
   push:
@@ -89,7 +93,7 @@ jobs:
             --max-instances=${maxInstances} \\
             --min-instances=${minInstances} \\
             --region=\${{ secrets.SKEET_GCP_REGION }} \\
-            --allow-unauthenticated \\
+            ${allowUnauthenticated} \\
             --platform=managed \\
             --quiet \\
             --port=8080 \\

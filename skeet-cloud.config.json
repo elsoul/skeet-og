@@ -3,6 +3,7 @@
     "appName": "skeet-test",
     "projectId": "skeet-test",
     "region": "europe-west4",
+    "hasLoadBalancer": true,
     "cloudRun": {
       "name": "",
       "url": "",

@@ -1,6 +1,5 @@
 import * as Skeet from '@/cli'
 import { setGcloudProject } from '@/cli'
-import { importConfig } from '@/index'
 import { KEYFILE_PATH } from '@/lib/getNetworkConfig'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import { sleep } from '@/utils/time'
