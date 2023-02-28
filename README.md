@@ -79,7 +79,7 @@ $ skeet init
 
 ### Document
 
-![Skeet Document](https://skeet.dev)
+- [Skeet Document](https://skeet.dev)
 
 ### Deploy All Services to Google Cloud Run
 
