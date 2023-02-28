@@ -6,8 +6,7 @@ import { SkeetCloudConfig } from '@/types/skeetTypes'
 import { sleep } from '@/utils/time'
 import fs from 'fs'
 
-export const setupGcp = async () => {
-  const skeetCloudConfig: SkeetCloudConfig = await importConfig()
+export const setupGcp = async (skeetCloudConfig: SkeetCloudConfig) => {
   await setGcloudProject(skeetCloudConfig.api.projectId)
   await Skeet.runEnableAllPermission(skeetCloudConfig.api.projectId)
   await Skeet.createServiceAccount(

@@ -17,6 +17,9 @@ export const WORKER_REPO_URL = 'https://github.com/elsoul/skeet-worker'
 export const getWorkerEnvPath = async (workerName: string) => {
   return `${WORKER_PATH}/${workerName}/.env`
 }
+export const getWorkerName = async (appName: string, workerName: string) => {
+  return `skeet-${appName}-worker-${workerName}`
+}
 
 export const genSecret = async (name: string) => {
   return createHash('sha256').update(name).digest('hex')

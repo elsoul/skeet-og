@@ -8,10 +8,10 @@ import { sleep } from '@/utils/time'
 import { API_REPO_URL } from '@/lib/getNetworkConfig'
 
 export const create = async (initAppName: string) => {
-  await init(initAppName)
+  await skeetCreate(initAppName)
 }
 
-export const init = async (appName: string) => {
+export const skeetCreate = async (appName: string) => {
   const appDir = await createApiDir(appName)
   await createWorkerDir(appName)
   const gitCloneCmd = ['git', 'clone', API_REPO_URL, appDir]

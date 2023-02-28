@@ -9,6 +9,7 @@ import {
   ROUTE_PACKAGE_JSON_PATH,
   getWorkerEnvPath,
   WORKER_REPO_URL,
+  getWorkerName,
 } from '@/lib/getNetworkConfig'
 
 export const addWorker = async (workerName: string) => {
@@ -34,10 +35,13 @@ export const addWorker = async (workerName: string) => {
 
 export const updateSkeetCloudConfig = async (workerName: string) => {
   let skeetConfig: SkeetCloudConfig = await importConfig()
+  const name = await getWorkerName(skeetConfig.api.appName, workerName)
   if (skeetConfig.workers)
     skeetConfig.workers.push({
       workerName,
       cloudRun: {
+        name,
+        url: '',
         cpu: 1,
         maxConcurrency: 80,
         maxInstances: 100,

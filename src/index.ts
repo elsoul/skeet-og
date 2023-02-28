@@ -30,8 +30,7 @@ Dotenv.config()
 
 async function test() {
   try {
-    const config = await importConfig()
-    await Skeet.syncArmor()
+    await Skeet.init()
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -47,6 +46,12 @@ async function main() {
       .argument('<initAppName>', 'Skeet App Name')
       .action(async (initAppName) => {
         await Skeet.create(initAppName)
+      })
+    program
+      .command('init')
+      .description('Setup Google Cloud Platform')
+      .action(async () => {
+        await Skeet.init()
       })
     program
       .command('server')
@@ -129,36 +134,6 @@ async function main() {
         await Skeet.deleteDir(modelNameUpper)
       })
 
-    const run = program.command('run').description('Cloud Run Command')
-    run
-      .command('list')
-      .description('Google Cloud Run List')
-      .action(async () => {
-        const skeetCloudConfig: SkeetCloudConfig = await importConfig()
-        await Skeet.runList(skeetCloudConfig.api.projectId)
-      })
-
-    const git = program.command('git').description('GitHub Command')
-    git
-      .command('create')
-      .description('Create GitHub Repository')
-      .argument(
-        '<repoPath>',
-        `example: 
-            $ skeet git create elsoul/skeet`
-      )
-      .option('--public', 'Create Public Repository for OpenSouce Buidlers 🛠️')
-      .action(async (repoPath, options) => {
-        const openSource = options.public || false
-        const repoName = repoPath || ''
-        await Skeet.createGitRepo(repoName, openSource)
-      })
-    git.command('init').action(async () => {
-      Skeet.gitInit()
-      Skeet.gitCryptInit()
-    })
-    git.command('json').action(Skeet.addJsonEnv)
-
     const db = program.command('db').description('DB Command')
     db.command('generate').action(Skeet.dbGen)
     db.command('migrate')
@@ -200,14 +175,18 @@ async function main() {
     sql.command('ip').action(Skeet.sqlIp)
 
     const setup = program.command('setup').description('Setup Command')
-    setup.command('gcp').action(Skeet.setupGcp)
+    setup.command('gcp').action(async () => {
+      const skeetCloudConfig = await importConfig()
+      await Skeet.setupGcp(skeetCloudConfig)
+    })
     setup.command('iam').action(Skeet.setupIam)
     setup.command('network').action(Skeet.setupNetwork)
     setup
       .command('lb')
       .argument('<domainName>', 'Domain Name - e.g. epics.dev')
       .action(async (domainName: string) => {
-        await Skeet.setupLoadBalancer(domainName)
+        const skeetCloudConfig = await importConfig()
+        await Skeet.setupLoadBalancer(skeetCloudConfig, domainName)
       })
 
     const sync = program.command('sync').description('Sync Command')
@@ -222,6 +201,12 @@ async function main() {
     })
     sync.command('armor').action(async () => {
       await Skeet.syncArmor()
+    })
+    sync.command('sql').action(async () => {
+      await Skeet.syncSql()
+    })
+    sync.command('taskQueue').action(async () => {
+      await Skeet.syncTaskQueue()
     })
 
     const docker = program.command('docker').description('Docker Command')

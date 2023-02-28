@@ -70,7 +70,7 @@ export const runSqlCreate = async (
   })
 }
 
-const generateEnvBuild = async (
+export const generateEnvBuild = async (
   appName: string,
   databaseIp: string,
   encodedPassword: string
@@ -112,7 +112,7 @@ export const generateEnvProduction = async (
   Logger.success(`successfully exported! - ${filePath}`)
 }
 
-const getDatabaseIp = async (
+export const getDatabaseIp = async (
   projectId: string,
   appName: string,
   privateIp: boolean = false

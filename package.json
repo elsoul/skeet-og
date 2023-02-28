@@ -1,6 +1,6 @@
 {
   "name": "skeet",
-  "version": "0.31.1",
+  "version": "0.31.2",
   "description": "Full-stack TypeScript Serverless Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/elsoul/skeet.git",
@@ -22,6 +22,7 @@
   "dependencies": {
     "@stdlib/string-percent-encode": "0.0.9",
     "chalk": "4.1.2",
+    "chalk-pipe": "^6.0.0",
     "commander": "9.4.1",
     "dotenv": "16.0.3",
     "dotenv-cli": "7.0.0",

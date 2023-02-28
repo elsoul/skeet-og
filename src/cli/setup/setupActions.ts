@@ -4,6 +4,7 @@ import { SkeetCloudConfig, WorkerConfig } from '@/types/skeetTypes'
 import {
   API_ENV_PRODUCTION_PATH,
   getActionsEnvString,
+  getWorkerName,
 } from '@/lib/getNetworkConfig'
 import { Logger } from '@/lib/logger'
 import fs from 'fs'
@@ -51,9 +52,12 @@ export const setupActions = async () => {
 export const getWorkerConfig = async (workerName: string) => {
   try {
     const skeetConfig: SkeetCloudConfig = await importConfig()
+    const name = await getWorkerName(skeetConfig.api.appName, workerName)
     const workerConf = {
       workerName,
       cloudRun: {
+        name,
+        url: '',
         cpu: 1,
         memory: '1Gi',
         maxConcurrency: 80,
