@@ -19,6 +19,7 @@ export const updateSecurityPolicyRule = async (
     appConf.securityPolicyName,
     '--project',
     projectId,
+    '--enable-layer7-ddos-defense',
   ]
   if (Object.keys(options).length !== 0) {
     for await (const [key, value] of Object.entries(options)) {
