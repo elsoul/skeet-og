@@ -30,6 +30,7 @@ import {
   sqlIp,
   dbMigrate,
   syncRunUrl,
+  syncArmor,
 } from '@/cli'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 
@@ -121,6 +122,7 @@ export const init = async () => {
           skeetCloudConfig.api.projectId,
           skeetCloudConfig.api.appName
         )
+        await syncArmor()
       })
     } else {
       await setupCloud(

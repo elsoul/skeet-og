@@ -16,6 +16,7 @@ export const createSecurityPolicy = async (
     'policy for external users',
     '--project',
     projectId,
+    '--enable-layer7-ddos-defense',
   ]
   await execSyncCmd(shCmd)
 }

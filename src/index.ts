@@ -32,12 +32,12 @@ Dotenv.config()
 
 async function test() {
   try {
-  } catch (error) {
     const skeetCloudConfig = await importConfig()
     await initArmor(
       skeetCloudConfig.api.projectId,
       skeetCloudConfig.api.appName
     )
+  } catch (error) {
     console.log(`error: ${error}`)
   }
 }
