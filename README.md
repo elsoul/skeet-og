@@ -74,72 +74,14 @@ Now you can access;
 ### Git Init
 
 ```bash
-$ skeet git init
+$ skeet init
 ```
 
-### Make a first commit
+### Document
 
-```bash
-$ git add .
-$ git commit -m "first commit"
-```
+![Skeet Document](https://skeet.dev)
 
-### Create/Push GitHub Repo
-
-```bash
-$ skeet git create elsoul/skeet
-```
-
-If you want to go with OpenSource;
-
-```bash
-$ skeet git create elsoul/skeet --public
-```
-
-### Setup Google Cloud IAM
-
-```bash
-$ skeet setup gcp
-```
-
-### Create Google CloudSQL
-
-```bash
-$ skeet sql create
-```
-
-### Add Secret ENV to GitHub Secrets
-
-```bash
-$ skeet sync env
-```
-
-### Commit and Push then CI/CD starts
-
-```bash
-$ git add .
-$ git commit -m 'first deploy'
-$ git push origin main
-```
-
-## Deploy with command
-
-### Add your global IP to DB whiteList
-
-Add your global IP to DB white list
-This command will automatically add your IP in ./skeet-cloud.config.json
-
-```bash
-$ skeet add ip
-```
-
-### DB migrate
-
-```bash
-$ skeet db deploy --production
-```
-
-### Deploy to Google Cloud Run
+### Deploy All Services to Google Cloud Run
 
 ```bash
 $ skeet deploy
