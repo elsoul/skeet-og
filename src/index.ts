@@ -8,6 +8,7 @@ import { API_ENV_PRODUCTION_PATH } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import inquirer from 'inquirer'
+import { initArmor } from '@/cli'
 
 export const importConfig = async () => {
   try {
@@ -32,6 +33,11 @@ Dotenv.config()
 async function test() {
   try {
   } catch (error) {
+    const skeetCloudConfig = await importConfig()
+    await initArmor(
+      skeetCloudConfig.api.projectId,
+      skeetCloudConfig.api.appName
+    )
     console.log(`error: ${error}`)
   }
 }

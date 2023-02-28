@@ -16,6 +16,7 @@ export const updateBackendSecurityPolicy = async (
     appConf.securityPolicyName,
     '--project',
     projectId,
+    '--global',
   ]
   await execSyncCmd(shCmd)
 }
