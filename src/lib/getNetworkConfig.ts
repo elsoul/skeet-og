@@ -115,13 +115,14 @@ export const getNetworkConfig = async (projectId: string, appName: string) => {
     loadBalancerIpName: skeetHeader + '-lb-ip',
     ipRangeName: skeetHeader + '-ip-range',
     serviceAccountName: `${appName}@${projectId}.iam.gserviceaccount.com`,
-    networkEndpointGroupName: `${appName}-neg`,
-    backendServiceName: `${appName}-bs`,
-    loadBalancerName: `${appName}-lb`,
-    sslName: `${appName}-ssl`,
-    proxyName: `${appName}-px`,
-    forwardingRuleName: `${appName}-fr`,
-    zoneName: `${appName}-zone`,
+    networkEndpointGroupName: `${skeetHeader}-neg`,
+    backendServiceName: `${skeetHeader}-bs`,
+    loadBalancerName: `${skeetHeader}-lb`,
+    sslName: `${skeetHeader}-ssl`,
+    proxyName: `${skeetHeader}-px`,
+    forwardingRuleName: `${skeetHeader}-fr`,
+    zoneName: `${skeetHeader}-zone`,
+    securityPolicyName: `${skeetHeader}-armor`,
   }
 }
 

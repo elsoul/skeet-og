@@ -1,9 +1,11 @@
 {
   "api": {
-    "appName": "skeet-framework",
-    "projectId": "skeet-framework",
+    "appName": "skeet-test",
+    "projectId": "skeet-test",
     "region": "europe-west4",
     "cloudRun": {
+      "name": "",
+      "url": "",
       "cpu": 1,
       "maxConcurrency": 80,
       "maxInstances": 100,
@@ -22,6 +24,8 @@
     {
       "workerName": "sol",
       "cloudRun": {
+        "name": "",
+        "url": "",
         "cpu": 1,
         "maxConcurrency": 80,
         "maxInstances": 100,
@@ -30,5 +34,34 @@
       }
     }
   ],
-  "taskQueues": []
+  "taskQueues": [],
+  "cloudArmor": [
+    {
+      "securityPolicyName": "skeet-armor",
+      "rules": [
+        {
+          "priority": "1000",
+          "description": "ban 300sec if exceed 50 access in 60sec",
+          "options": {
+            "action": "rate-based-ban",
+            "src-ip-ranges": "*",
+            "rate-limit-threshold-count": "50",
+            "rate-limit-threshold-interval-sec": "60",
+            "ban-duration-sec": "300",
+            "conform-action": "allow",
+            "exceed-action": "deny-404",
+            "enforce-on-key": "IP"
+          }
+        },
+        {
+          "priority": "1100",
+          "description": "Diffence from SQLi attack",
+          "options": {
+            "action": "deny-403",
+            "expression": "evaluatePreconfiguredExpr('sqli-stable')"
+          }
+        }
+      ]
+    }
+  ]
 }

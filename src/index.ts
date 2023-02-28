@@ -30,6 +30,8 @@ Dotenv.config()
 
 async function test() {
   try {
+    const config = await importConfig()
+    await Skeet.syncArmor()
   } catch (error) {
     console.log(`error: ${error}`)
   }
@@ -217,6 +219,9 @@ async function main() {
     sync.command('env').action(async () => {
       await Skeet.addEnvSync(API_ENV_PRODUCTION_PATH)
       await Skeet.setupActions()
+    })
+    sync.command('armor').action(async () => {
+      await Skeet.syncArmor()
     })
 
     const docker = program.command('docker').description('Docker Command')

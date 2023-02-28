@@ -2,6 +2,7 @@ export type SkeetCloudConfig = {
   api: GCPConfig
   workers?: Array<WorkerConfig>
   taskQueues?: Array<TaskQueue>
+  cloudArmor?: CloudArmor
 }
 
 export type DbConfig = {
@@ -26,6 +27,8 @@ export type WorkerConfig = {
 }
 
 export type CloudRunConfig = {
+  name: string
+  url: string
   cpu: number
   memory: string
   maxConcurrency: number
@@ -41,4 +44,17 @@ export type TaskQueue = {
   minInterval: string
   maxConcurrent: number
   maxRate: number
+}
+
+export type CloudArmor = Array<SecurityPolicy>
+
+export type SecurityPolicy = {
+  securityPolicyName: string
+  rules: [
+    {
+      priority: string
+      description: string
+      options: { [key: string]: string }
+    }
+  ]
 }

@@ -46,4 +46,5 @@ export const roleList = [
   'roles/logging.admin',
   'roles/cloudtranslate.admin',
   'roles/cloudtasks.admin',
+  'roles/compute.networkAdmin',
 ]
