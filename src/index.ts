@@ -11,7 +11,7 @@ import {
 } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
-import { addJsonEnv } from '@/cli'
+import inquirer from 'inquirer'
 
 export const importConfig = async () => {
   try {
@@ -35,7 +35,26 @@ Dotenv.config()
 
 async function test() {
   try {
-    await addJsonEnv()
+    const questions = [
+      {
+        type: 'input',
+        name: 'githubRepo',
+        message: "What's your GitHub Repo Name",
+        default() {
+          return 'elsoul/skeet'
+        },
+      },
+    ]
+    inquirer.prompt(questions).then(async (answers) => {
+      const skeetCloudConfig = await importConfig()
+      const answersJson = JSON.parse(JSON.stringify(answers))
+      await Skeet.setGcloudProject(skeetCloudConfig.api.projectId)
+      await Skeet.gitInit()
+      await Skeet.gitCryptInit()
+      await Skeet.gitCommit()
+      await Skeet.createGitRepo(answers.repoName)
+      console.log(answersJson.githubRepo)
+    })
   } catch (error) {
     console.log(`error: ${error}`)
   }

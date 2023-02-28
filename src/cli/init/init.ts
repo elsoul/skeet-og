@@ -112,7 +112,7 @@ export const init = async () => {
         const domain = JSON.parse(JSON.stringify(answer)).domain
         await setupCloud(
           skeetCloudConfig,
-          answersJson.repoName,
+          answersJson.githubRepo,
           answersJson.password1
         )
         await setupLoadBalancer(skeetCloudConfig, domain)
@@ -124,7 +124,7 @@ export const init = async () => {
     } else {
       await setupCloud(
         skeetCloudConfig,
-        answersJson.repoName,
+        answersJson.githubRepo,
         answersJson.password1
       )
     }
