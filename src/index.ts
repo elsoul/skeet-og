@@ -4,13 +4,18 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
-import { API_ENV_PRODUCTION_PATH, getRunUrl } from '@/lib/getNetworkConfig'
+import {
+  API_ENV_PRODUCTION_PATH,
+  getRunUrl,
+  SKEET_CONFIG_PATH,
+} from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
+import { addJsonEnv } from '@/cli'
 
 export const importConfig = async () => {
   try {
-    const config = fs.readFileSync(`${process.cwd()}/skeet-cloud.config.json`)
+    const config = fs.readFileSync(SKEET_CONFIG_PATH)
     const json: SkeetCloudConfig = JSON.parse(String(config))
     return json
   } catch (error) {
@@ -30,7 +35,7 @@ Dotenv.config()
 
 async function test() {
   try {
-    await getRunUrl('skeet-test', 'skeet-test')
+    await addJsonEnv()
   } catch (error) {
     console.log(`error: ${error}`)
   }

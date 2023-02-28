@@ -44,3 +44,4 @@ firebase-debug.log
 .env.production
 
 /apps/
+keyfile.json

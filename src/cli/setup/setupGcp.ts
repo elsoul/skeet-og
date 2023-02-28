@@ -16,10 +16,11 @@ export const setupGcp = async (skeetCloudConfig: SkeetCloudConfig) => {
     skeetCloudConfig.api.projectId,
     skeetCloudConfig.api.appName
   )
-  await sleep(500)
+  await sleep(2000)
   await Skeet.addJsonEnv()
-  await sleep(500)
+  await sleep(2000)
   await Skeet.dockerLogin()
+  await sleep(2000)
   fs.rmSync(KEYFILE_PATH)
   await Skeet.runAddAllRole(
     skeetCloudConfig.api.projectId,
