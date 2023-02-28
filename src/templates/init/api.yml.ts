@@ -12,8 +12,8 @@ export const apiYml = async (
   fs.mkdirSync('.github/workflows', { recursive: true })
   const filePath = `.github/workflows/api.yml`
   const allowUnauthenticated = hasLoadBalancer
-    ? '--allow-unauthenticated'
-    : '--no-allow-unauthenticated'
+    ? '--ingress=internal-and-cloud-load-balancing'
+    : '--ingress=all'
   const body = `name: Api
 on:
   push:

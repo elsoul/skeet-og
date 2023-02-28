@@ -71,6 +71,7 @@ jobs:
             --concurrency=${maxConcurrency} \\
             --max-instances=${maxInstances} \\
             --min-instances=${minInstances} \\
+            --ingress=internal \\
             --region=\${{ secrets.SKEET_GCP_REGION }} \\
             --platform=managed \\
             --quiet \\
