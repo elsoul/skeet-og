@@ -21,7 +21,7 @@ export const syncApiUrl = async (skeetConfig: SkeetCloudConfig) => {
 }
 
 export const syncWorkerUrls = async (skeetConfig: SkeetCloudConfig) => {
-  if (skeetConfig.workers)
+  if (skeetConfig.workers && skeetConfig.workers.length !== 0) {
     for await (const worker of skeetConfig.workers) {
       worker.cloudRun.url = await getRunUrl(
         skeetConfig.api.projectId,
@@ -29,5 +29,7 @@ export const syncWorkerUrls = async (skeetConfig: SkeetCloudConfig) => {
         worker.workerName
       )
     }
+  }
+
   fs.writeFileSync(SKEET_CONFIG_PATH, JSON.stringify(skeetConfig, null, 2))
 }

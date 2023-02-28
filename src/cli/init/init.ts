@@ -29,6 +29,7 @@ import {
   addIp,
   sqlIp,
   dbMigrate,
+  syncRunUrl,
 } from '@/cli'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 
@@ -222,4 +223,5 @@ export const setupCloud = async (
   await addEnvSync(API_ENV_PRODUCTION_PATH)
   await setupActions()
   await apiRunDeploy(skeetCloudConfig)
+  await syncRunUrl()
 }
