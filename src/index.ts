@@ -4,17 +4,14 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
-import {
-  API_ENV_PRODUCTION_PATH,
-  SKEET_CONFIG_PATH,
-} from '@/lib/getNetworkConfig'
+import { API_ENV_PRODUCTION_PATH } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import inquirer from 'inquirer'
 
 export const importConfig = async () => {
   try {
-    const config = fs.readFileSync(SKEET_CONFIG_PATH)
+    const config = fs.readFileSync(`${process.cwd()}/skeet-cloud.config.json`)
     const json: SkeetCloudConfig = JSON.parse(String(config))
     return json
   } catch (error) {
@@ -34,26 +31,6 @@ Dotenv.config()
 
 async function test() {
   try {
-    const questions = [
-      {
-        type: 'input',
-        name: 'githubRepo',
-        message: "What's your GitHub Repo Name",
-        default() {
-          return 'elsoul/skeet'
-        },
-      },
-    ]
-    inquirer.prompt(questions).then(async (answers) => {
-      const skeetCloudConfig = await importConfig()
-      const answersJson = JSON.parse(JSON.stringify(answers))
-      await Skeet.setGcloudProject(skeetCloudConfig.api.projectId)
-      await Skeet.gitInit()
-      await Skeet.gitCryptInit()
-      await Skeet.gitCommit()
-      await Skeet.createGitRepo(answers.repoName)
-      console.log(answersJson.githubRepo)
-    })
   } catch (error) {
     console.log(`error: ${error}`)
   }
