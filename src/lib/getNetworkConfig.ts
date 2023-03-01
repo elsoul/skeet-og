@@ -93,7 +93,12 @@ export const getBuidEnvString = async () => {
     hash['TZ']
   )
   const newEnv = envArray.filter((value) => {
-    if (!value.match('SKEET_') && !value.match('TZ')) {
+    if (
+      !value.match('SKEET_') &&
+      !value.match('TZ') &&
+      !value.match('SKEET_API_URL') &&
+      !value.match('SKEET_GCP_PROJECT_ID')
+    ) {
       return value
     }
   })

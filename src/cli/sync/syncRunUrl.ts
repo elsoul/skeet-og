@@ -1,5 +1,10 @@
 import { importConfig } from '@/index'
-import { getRunUrl, SKEET_CONFIG_PATH } from '@/lib/getNetworkConfig'
+import {
+  API_ENV_PRODUCTION_PATH,
+  API_PATH,
+  getRunUrl,
+  SKEET_CONFIG_PATH,
+} from '@/lib/getNetworkConfig'
 import { Logger } from '@/lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import fs from 'fs'
@@ -20,6 +25,8 @@ export const syncApiUrl = async (
       ? `https://${domain}`
       : await getRunUrl(skeetConfig.api.projectId, skeetConfig.api.appName)
   fs.writeFileSync(SKEET_CONFIG_PATH, JSON.stringify(skeetConfig, null, 2))
+  const addEnvString = `\nSKEET_API_URL=${skeetConfig.api.cloudRun.url}`
+  fs.writeFileSync(API_ENV_PRODUCTION_PATH, addEnvString, { flag: 'a' })
 }
 
 export const syncWorkerUrls = async (skeetConfig: SkeetCloudConfig) => {
