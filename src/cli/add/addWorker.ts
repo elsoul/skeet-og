@@ -10,6 +10,7 @@ import {
   getWorkerEnvPath,
   WORKER_REPO_URL,
   getWorkerName,
+  WORKER_PATH,
 } from '@/lib/getNetworkConfig'
 
 export const addWorker = async (workerName: string) => {
@@ -30,6 +31,8 @@ export const addWorker = async (workerName: string) => {
   await updateSkeetCloudConfig(workerName)
   await addWorkerToPackageJson(workerName)
   await setupActions()
+  const yarnCmd = ['yarn']
+  await execSyncCmd(yarnCmd, `${WORKER_PATH}/${workerName}`)
   Logger.success(`Successfully created ${workerName}!`)
 }
 
