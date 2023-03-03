@@ -57,6 +57,11 @@ export const modelCodes = async (modelName: string) => {
     }
   } else {
     const modelEnums = enumNames.map((value) => value.name)
+    for await (const data of enumNames) {
+      if (data.type.match('Enum$')) {
+        modelEnums.push(data.type)
+      }
+    }
     importArray = await enumImport(modelName, modelEnums)
 
     for await (const importString of importArray.reverse()) {
