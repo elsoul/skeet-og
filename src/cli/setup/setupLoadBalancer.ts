@@ -7,7 +7,9 @@ import fs from 'fs'
 
 export const setupLoadBalancer = async (
   skeetCloudConfig: SkeetCloudConfig,
-  domain: string
+  domain: string,
+  dnsProjectId: string = '',
+  dnsZoneName: string = ''
 ) => {
   try {
     await setGcloudProject(skeetCloudConfig.api.projectId)
@@ -52,36 +54,49 @@ export const setupLoadBalancer = async (
       skeetCloudConfig.api.projectId,
       skeetCloudConfig.api.appName
     )
-    await Skeet.createZone(
-      skeetCloudConfig.api.projectId,
-      skeetCloudConfig.api.appName,
-      domain
-    )
-    const ip = await getIp(
-      skeetCloudConfig.api.projectId,
-      networkConf.loadBalancerIpName
-    )
-    await Skeet.createRecord(
-      skeetCloudConfig.api.projectId,
-      networkConf.zoneName,
-      domain,
-      ip
-    )
-    await Skeet.createCaaRecords(
-      skeetCloudConfig.api.projectId,
-      networkConf.zoneName,
-      domain
-    )
-    await Skeet.getZone(
-      skeetCloudConfig.api.projectId,
-      skeetCloudConfig.api.appName
-    )
-    await hasLoadBalancerTrue(skeetCloudConfig)
-    await syncApiUrl(skeetCloudConfig, domain)
-    await Logger.success(`Successfully created Load Balancer!\n`)
-    await Logger.sync(
-      `Copy nameServers addresses above and paste them to your DNS settings`
-    )
+    if (dnsProjectId == '' && dnsZoneName == '') {
+      await Skeet.createZone(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName,
+        domain
+      )
+      const ip = await getIp(
+        skeetCloudConfig.api.projectId,
+        networkConf.loadBalancerIpName
+      )
+      await Skeet.createRecord(
+        skeetCloudConfig.api.projectId,
+        networkConf.zoneName,
+        domain,
+        ip
+      )
+      await Skeet.createCaaRecords(
+        skeetCloudConfig.api.projectId,
+        networkConf.zoneName,
+        domain
+      )
+      await Skeet.getZone(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName
+      )
+      await hasLoadBalancerTrue(skeetCloudConfig)
+      await syncApiUrl(skeetCloudConfig, domain)
+      await Logger.success(
+        `Successfully created Load Balancer!\nhttps will be ready in about an hour 🎉`
+      )
+      await Logger.sync(
+        `Copy nameServers addresses above and paste them to your DNS settings`
+      )
+    } else {
+      const ip = await getIp(
+        skeetCloudConfig.api.projectId,
+        networkConf.loadBalancerIpName
+      )
+      await Skeet.createRecord(dnsProjectId, dnsZoneName, domain, ip)
+      await Logger.success(
+        `Successfully created Load Balancer!\nhttps will be ready in about an hour 🎉`
+      )
+    }
   } catch (error) {
     await Logger.error(`setupLoadBalancer error: ${JSON.stringify(error)}`)
     process.exit(1)
