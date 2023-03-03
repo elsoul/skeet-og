@@ -17,11 +17,11 @@ export const enumImport = async (
   modelName: string,
   enumArray: Array<string>
 ) => {
-  const upperEnumNames = []
+  const lowerEnum = []
   for await (const enumName of enumArray) {
-    upperEnumNames.push(`${enumName}Enum`)
+    lowerEnum.push(`${await toLowerCase(enumName)}`)
   }
-  const enumString = upperEnumNames.join(', ')
+  const enumString = lowerEnum.join(', ')
   const body = [
     `import { objectType } from 'nexus'`,
     `import { ${modelName} } from 'nexus-prisma'`,
@@ -56,13 +56,14 @@ export const modelCodes = async (modelName: string) => {
       modelCodeArray.unshift(importString)
     }
   } else {
-    const modelEnums = enumNames.map((value) => value.name)
+    const modelEnums = []
     for await (const data of enumNames) {
       if (data.type.match('Enum$')) {
         modelEnums.push(data.type)
       }
     }
-    importArray = await enumImport(modelName, modelEnums)
+    const enumBox = Array.from(new Set(modelEnums))
+    importArray = await enumImport(modelName, enumBox)
 
     for await (const importString of importArray.reverse()) {
       modelCodeArray.unshift(importString)
