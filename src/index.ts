@@ -9,6 +9,7 @@ import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import inquirer from 'inquirer'
 import { initArmor } from '@/cli'
+import { getEnums, syncEnumFile } from './lib/getModelInfo'
 
 export const importConfig = async () => {
   try {
@@ -32,6 +33,8 @@ Dotenv.config()
 
 async function test() {
   try {
+    const enums = await syncEnumFile()
+    console.log(enums)
   } catch (error) {
     console.log(`error: ${error}`)
   }

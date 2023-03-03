@@ -1,4 +1,5 @@
 import { getEnumCols, getModelCols } from '@/lib/getModelInfo'
+import { toUpperCase, toLowerCase } from '@/lib/strLib'
 import { GRAPHQL_PATH } from '@/lib/getNetworkConfig'
 import { ModelSchema } from '@/lib/getModelInfo'
 export type ModelSchemaArray = Array<ModelSchema>
@@ -10,6 +11,23 @@ export const graphqlModel = async (modelName: string) => {
     filePath,
     body,
   }
+}
+
+export const enumImport = async (
+  modelName: string,
+  enumArray: Array<string>
+) => {
+  const upperEnumNames = []
+  for await (const enumName of enumArray) {
+    upperEnumNames.push(`${enumName}Enum`)
+  }
+  const enumString = upperEnumNames.join(', ')
+  const body = [
+    `import { objectType } from 'nexus'`,
+    `import { ${modelName} } from 'nexus-prisma'`,
+    `import { ${enumString} } from '../../enums.ts'\n`,
+  ]
+  return body
 }
 
 export const normalImport = async (modelName: string) => {
@@ -32,14 +50,30 @@ export const modelCodes = async (modelName: string) => {
     `    t.relayGlobalId('id', {})`,
   ]
 
-  importArray = await normalImport(modelName)
-  for await (const importString of importArray.reverse()) {
-    modelCodeArray.unshift(importString)
+  if (enumNames.length === 0) {
+    importArray = await normalImport(modelName)
+    for await (const importString of importArray.reverse()) {
+      modelCodeArray.unshift(importString)
+    }
+  } else {
+    const modelEnums = enumNames.map((value) => value.name)
+    importArray = await enumImport(modelName, modelEnums)
+
+    for await (const importString of importArray.reverse()) {
+      modelCodeArray.unshift(importString)
+    }
   }
 
+  let enumParams = []
   for await (const model of modelCols) {
-    const addLine = `    t.field(${modelName}.${model.name})`
-    modelCodeArray.push(addLine)
+    if (model.type.match('Enum$')) {
+      const addLine = `    t.field(${modelName}.${model.name}.name, { type: ${model.type} })`
+      modelCodeArray.push(addLine)
+      enumParams.push(model.name)
+    } else {
+      const addLine = `    t.field(${modelName}.${model.name})`
+      modelCodeArray.push(addLine)
+    }
   }
 
   modelCodeArray.push('  },', '})')

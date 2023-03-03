@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { Logger } from '@/lib/logger'
-import { PRISMA_SCHEMA_PATH } from '@/lib/getNetworkConfig'
+import { ENUM_FILE_PATH, PRISMA_SCHEMA_PATH } from '@/lib/getNetworkConfig'
+import { toLowerCase } from './strLib'
 
 export type ModelSchema = {
   name: string
@@ -40,11 +41,39 @@ export const getColType = async (type: string) => {
 export const getEnumCols = async (modelCols: Array<ModelSchema>) => {
   let enumCols = []
   for await (const model of modelCols) {
-    if (model.type == 'Enum') {
-      enumCols.push(model.name)
+    if (model.type.match('Enum$')) {
+      enumCols.push({ name: model.name, type: model.type })
     }
   }
   return enumCols
+}
+
+export const getEnums = async () => {
+  const prismaSchema = fs.readFileSync(PRISMA_SCHEMA_PATH)
+  let splitSchema = String(prismaSchema).split(`enum `)
+  splitSchema.shift()
+  let enums: Array<string> = []
+  for await (const line of splitSchema) {
+    let enumName = line.match('(.+) {') || ''
+    enums.push(enumName[1])
+  }
+  return enums
+}
+
+export const syncEnumFile = async () => {
+  const enums = await getEnums()
+  const fileBody = [
+    `import { enumType } from 'nexus'`,
+    `import { ${enums.join(', ')} } from 'nexus-prisma'\n`,
+  ]
+  for await (const enumName of enums) {
+    fileBody.push(
+      `export const ${await toLowerCase(enumName)}Enum = enumType(${enumName})`
+    )
+  }
+  fs.writeFileSync(`${ENUM_FILE_PATH}/enums.ts`, fileBody.join('\n'), {
+    flag: 'w',
+  })
 }
 
 export const getModelCols = async (modelName: string) => {
@@ -69,7 +98,10 @@ export const getModelCols = async (modelName: string) => {
       if (splitArray[0].includes('@@')) continue
 
       let getColTypeResult = await getColType(splitArray[1])
-      const type = getColTypeResult === ColType.Enum ? 'Enum' : splitArray[1]
+      const type =
+        getColTypeResult === ColType.Enum
+          ? `${splitArray[1]}Enum`
+          : splitArray[1]
 
       if (splitArray[2]) {
         if (splitArray[2].includes('@relation')) {

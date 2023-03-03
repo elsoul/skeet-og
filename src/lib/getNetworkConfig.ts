@@ -14,6 +14,7 @@ export const SKEET_CONFIG_PATH = './skeet-cloud.config.json'
 export const ROUTE_PACKAGE_JSON_PATH = './package.json'
 export const API_REPO_URL = 'https://github.com/elsoul/skeet-api'
 export const WORKER_REPO_URL = 'https://github.com/elsoul/skeet-worker'
+export const ENUM_FILE_PATH = './apps/api/src/graphql'
 
 export const getWorkerEnvPath = async (workerName: string) => {
   return `${WORKER_PATH}/${workerName}/.env`

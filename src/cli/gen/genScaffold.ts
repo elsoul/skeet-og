@@ -2,9 +2,11 @@ import fs from 'fs'
 import { Logger } from '@/lib/logger'
 import { GRAPHQL_PATH, PRISMA_SCHEMA_PATH } from '@/lib/getNetworkConfig'
 import * as Skeet from '.'
+import { syncEnumFile } from '@/lib/getModelInfo'
 
 export const genScaffoldAll = async () => {
   const newModels = await getNewModels()
+  await syncEnumFile()
   for await (const modelName of newModels) {
     await genScaffold(modelName)
   }
