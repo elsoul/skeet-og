@@ -71,7 +71,7 @@ export const syncEnumFile = async () => {
       `export const ${await toLowerCase(enumName)}Enum = enumType(${enumName})`
     )
   }
-  fs.writeFileSync(`${ENUM_FILE_PATH}/enums.ts`, fileBody.join('\n'), {
+  fs.writeFileSync(`${ENUM_FILE_PATH}/enums`, fileBody.join('\n'), {
     flag: 'w',
   })
 }

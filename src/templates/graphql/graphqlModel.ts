@@ -67,7 +67,9 @@ export const modelCodes = async (modelName: string) => {
   let enumParams = []
   for await (const model of modelCols) {
     if (model.type.match('Enum$')) {
-      const addLine = `    t.field(${modelName}.${model.name}.name, { type: ${model.type} })`
+      const addLine = `    t.field(${modelName}.${
+        model.name
+      }.name, { type: ${toLowerCase(model.type)} })`
       modelCodeArray.push(addLine)
       enumParams.push(model.name)
     } else {
