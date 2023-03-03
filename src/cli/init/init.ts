@@ -90,38 +90,17 @@ const questions = [
   },
 ]
 
-const domainQuestion = async (
-  defaultProjectId: string,
-  defaultZoneName: string
-) => {
-  return [
-    {
-      type: 'input',
-      name: 'domain',
-      message: "What's your domain address",
-      validate: requireDomainName,
-      default() {
-        return 'skeet.dev'
-      },
+const domainQuestion = [
+  {
+    type: 'input',
+    name: 'domain',
+    message: "What's your domain address",
+    validate: requireDomainName,
+    default() {
+      return 'skeet.dev'
     },
-    {
-      type: 'input',
-      name: 'dnsProjectId',
-      message: "What's your domain's DNS project(Enter as default)",
-      default() {
-        return defaultProjectId
-      },
-    },
-    {
-      type: 'input',
-      name: 'dnsZoneName',
-      message: "What's your domain's Zone Name(Enter as default)",
-      default() {
-        return defaultZoneName
-      },
-    },
-  ]
-}
+  },
+]
 
 export const init = async () => {
   inquirer.prompt(questions).then(async (answers) => {
@@ -135,35 +114,22 @@ export const init = async () => {
       throw new Error("password doesn't match!")
 
     if (answersJson.lb === 'Yes') {
-      inquirer
-        .prompt(await domainQuestion(skeetCloudConfig.api.projectId, zoneName))
-        .then(async (answer) => {
-          const answers = JSON.parse(JSON.stringify(answer))
-          await setupCloud(
-            skeetCloudConfig,
-            answersJson.githubRepo,
-            answersJson.password1
-          )
-          if (
-            answers.dnsProjectId == skeetCloudConfig.api.projectId &&
-            answers.dnsZoneName == zoneName
-          ) {
-            await setupLoadBalancer(skeetCloudConfig, answers.domain)
-          } else {
-            await setupLoadBalancer(
-              skeetCloudConfig,
-              answers.domain,
-              answers.dnsProjectId,
-              answers.dnsZoneName
-            )
-          }
+      inquirer.prompt(domainQuestion).then(async (answer) => {
+        const answers = JSON.parse(JSON.stringify(answer))
+        await setupCloud(
+          skeetCloudConfig,
+          answersJson.githubRepo,
+          answersJson.password1
+        )
 
-          await initArmor(
-            skeetCloudConfig.api.projectId,
-            skeetCloudConfig.api.appName
-          )
-          await syncArmor()
-        })
+        await setupLoadBalancer(skeetCloudConfig, answers.domain)
+
+        await initArmor(
+          skeetCloudConfig.api.projectId,
+          skeetCloudConfig.api.appName
+        )
+        await syncArmor()
+      })
     } else {
       await setupCloud(
         skeetCloudConfig,
