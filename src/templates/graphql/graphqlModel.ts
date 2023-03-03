@@ -25,7 +25,7 @@ export const enumImport = async (
   const body = [
     `import { objectType } from 'nexus'`,
     `import { ${modelName} } from 'nexus-prisma'`,
-    `import { ${enumString} } from '../../enums.ts'\n`,
+    `import { ${enumString} } from '../../enums'\n`,
   ]
   return body
 }
@@ -69,7 +69,7 @@ export const modelCodes = async (modelName: string) => {
     if (model.type.match('Enum$')) {
       const addLine = `    t.field(${modelName}.${
         model.name
-      }.name, { type: ${toLowerCase(model.type)} })`
+      }.name, { type: ${await toLowerCase(model.type)} })`
       modelCodeArray.push(addLine)
       enumParams.push(model.name)
     } else {

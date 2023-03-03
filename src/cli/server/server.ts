@@ -13,7 +13,7 @@ export const server = async () => {
 }
 
 export const runApiServer = async () => {
-  const shCmd = ['yarn', 'dev']
+  const shCmd = ['yarn', 's']
   await execCmd(shCmd, API_PATH)
 }
 

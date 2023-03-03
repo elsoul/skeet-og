@@ -8,7 +8,7 @@ import { API_ENV_PRODUCTION_PATH } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import inquirer from 'inquirer'
-import { initArmor } from '@/cli'
+import { initArmor, runApiServer } from '@/cli'
 import { getEnums, syncEnumFile } from './lib/getModelInfo'
 
 export const importConfig = async () => {
@@ -129,6 +129,7 @@ async function main() {
         skeetCloudConfig.api.appName
       )
     })
+    gen.command('type').action(runApiServer)
 
     const d = program.command('d').alias('delete').description('Delete Comannd')
     d.command('scaffold')
