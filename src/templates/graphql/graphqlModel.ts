@@ -16,12 +16,7 @@ export const graphqlModel = async (modelName: string) => {
 const graphqlEnum = async (param: string) => {
   const lowerParam = await toLowerCase(param)
   const upperParam = await toUpperCase(param)
-  const body = [
-    `const ${lowerParam}Enum = enumType({`,
-    `  name: '${upperParam}',`,
-    `  members: Object.values(${upperParam}),`,
-    `})\n`,
-  ]
+  const body = [`const ${lowerParam} = enumType(${upperParam})\n`]
   return body
 }
 
@@ -35,9 +30,8 @@ export const enumImport = async (
   }
   const enumString = upperEnumNames.join(', ')
   const body = [
-    `import { ${enumString} } from '@prisma/client'`,
     `import { enumType, objectType } from 'nexus'`,
-    `import { ${modelName} } from 'nexus-prisma'\n`,
+    `import { ${modelName}, ${enumString} } from 'nexus-prisma'\n`,
   ]
   return body
 }
@@ -86,7 +80,7 @@ export const modelCodes = async (modelName: string) => {
   let enumParams = []
   for await (const model of modelCols) {
     if (model.type === 'Enum') {
-      const addLine = `    t.field(${modelName}.${model.name}.name, { type: ${model.name}Enum })`
+      const addLine = `    t.field(${modelName}.${model.name}.name, { type: ${model.name} })`
       modelCodeArray.push(addLine)
       enumParams.push(model.name)
     } else {
