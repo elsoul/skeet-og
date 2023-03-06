@@ -18,6 +18,7 @@ export const syncArmor = async () => {
           rule.options
         )
       } else {
+        console.log('creating...')
         await createSecurityPolicyRule(
           skeetConfig.api.projectId,
           skeetConfig.api.appName,

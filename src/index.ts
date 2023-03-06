@@ -4,7 +4,12 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
-import { API_ENV_PRODUCTION_PATH, isWorkerPlugin } from '@/lib/getNetworkConfig'
+import {
+  API_ENV_PRODUCTION_PATH,
+  getBuidEnvArray,
+  getBuidEnvString,
+  isWorkerPlugin,
+} from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import inquirer from 'inquirer'
@@ -33,7 +38,8 @@ Dotenv.config()
 async function test() {
   try {
     const a = 'solana-tra'
-    const enums = await getWorkersFromConfig()
+    const skeetConfig = await importConfig()
+    const enums = await getBuidEnvString()
     console.log(enums)
   } catch (error) {
     console.log(`error: ${error}`)

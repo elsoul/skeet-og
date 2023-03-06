@@ -56,12 +56,10 @@ export const getBuidEnvArray = async (
   projectId: string,
   fbProjectId: string,
   databaseUrl: string,
-  secretKey: string,
   tz: string
 ) => {
   return [
     'NO_PEER_DEPENDENCY_CHECK=1',
-    `SKEET_SECRET_KEY_BASE=${secretKey}`,
     `SKEET_GCP_PROJECT_ID=${projectId}`,
     `SKEET_FB_PROJECT_ID=${fbProjectId}`,
     `TZ=${tz}`,
@@ -105,15 +103,14 @@ export const getBuidEnvString = async () => {
     hash['SKEET_GCP_PROJECT_ID'],
     hash['SKEET_GCP_FB_PROJECT_ID'],
     dabaseUrl,
-    hash['SKEET_SECRET_KEY_BASE'],
     hash['TZ']
   )
   const newEnv = envArray.filter((value) => {
     if (
-      !value.match('SKEET_') &&
-      !value.match('TZ') &&
-      !value.match('SKEET_API_URL') &&
-      !value.match('SKEET_GCP_PROJECT_ID')
+      !value.match('SKEET_GCP_PROJECT_ID') &&
+      !value.match('SKEET_GCP_DB_PASSWORD') //&&
+      // !value.match('SKEET_API_URL') &&
+      // !value.match('SKEET_GCP_PROJECT_ID')
     ) {
       return value
     }
