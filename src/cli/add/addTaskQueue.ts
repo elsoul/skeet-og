@@ -17,9 +17,10 @@ export const addTaskQueue = async (
   isUpdate: boolean = false
 ) => {
   const method = isUpdate ? 'update' : 'create'
+  const location = region.slice(0, -1) + '1'
   const taskQueue: TaskQueue = {
     queueName,
-    location: region,
+    location,
     maxAttempts,
     maxConcurrent,
     maxRate,

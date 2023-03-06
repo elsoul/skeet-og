@@ -34,10 +34,8 @@ Dotenv.config()
 
 async function test() {
   try {
-    const a = 'solana-tra'
-    const skeetConfig = await importConfig()
-    const enums = await getBuidEnvString()
-    console.log(enums)
+    const location = 'heyhey!'.slice(0, -1) + '1'
+    console.log(location)
   } catch (error) {
     console.log(`error: ${error}`)
   }
