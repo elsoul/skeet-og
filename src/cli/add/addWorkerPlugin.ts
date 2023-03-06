@@ -23,6 +23,7 @@ export const addWorkerPlugin = async (pluginName: string) => {
     skeetConfig.api.region,
     workerConf.cloudRun.memory,
     String(workerConf.cloudRun.cpu),
+    String(workerConf.cloudRun.maxConcurrency),
     String(workerConf.cloudRun.maxInstances),
     String(workerConf.cloudRun.minInstances),
     pluginName,

@@ -64,6 +64,7 @@ export const cloudRunDeploy = async (
   region: string,
   memory: string = '1Gi',
   cpu: string = '1',
+  maxConcurrency: string = '80',
   maxInstances: string = '100',
   minInstances: string = '0',
   workerName: string = '',
@@ -102,6 +103,8 @@ export const cloudRunDeploy = async (
     memory,
     '--cpu',
     cpu,
+    '--concurrency',
+    maxConcurrency,
     '--max-instances',
     maxInstances,
     '--min-instances',
@@ -190,6 +193,7 @@ export const workerDeploy = async (
     skeetConfig.api.region,
     workerConf.cloudRun.memory,
     String(workerConf.cloudRun.cpu),
+    String(workerConf.cloudRun.maxConcurrency),
     String(workerConf.cloudRun.maxInstances),
     String(workerConf.cloudRun.minInstances),
     service
@@ -214,6 +218,7 @@ export const apiDeploy = async (skeetConfig: SkeetCloudConfig) => {
     skeetConfig.api.region,
     skeetConfig.api.cloudRun.memory,
     String(skeetConfig.api.cloudRun.cpu),
+    String(skeetConfig.api.cloudRun.maxConcurrency),
     String(skeetConfig.api.cloudRun.maxInstances),
     String(skeetConfig.api.cloudRun.minInstances)
   )
@@ -231,6 +236,7 @@ export const workerPluginDeploy = async (
     skeetConfig.api.region,
     workerConf.cloudRun.memory,
     String(workerConf.cloudRun.cpu),
+    String(workerConf.cloudRun.maxConcurrency),
     String(workerConf.cloudRun.maxInstances),
     String(workerConf.cloudRun.minInstances),
     service,
