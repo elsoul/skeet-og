@@ -159,11 +159,14 @@ export const getContainerImageUrl = async (
   isPlugin: boolean = false
 ) => {
   const cRegion = await getContainerRegion(region)
-  const imageName =
+  let imageName =
     workerName !== ''
       ? 'skeet-' + appName + '-worker-' + workerName
       : 'skeet-' + appName + '-api'
   let containerProjectName = isPlugin ? 'skeet-framework' : projectId
+  imageName = isPlugin
+    ? 'skeet-worker-solana-transfer'
+    : 'skeet-' + appName + '-worker-' + workerName
   return cRegion + '/' + containerProjectName + '/' + imageName + ':latest'
 }
 
