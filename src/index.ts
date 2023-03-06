@@ -6,14 +6,11 @@ import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
 import {
   API_ENV_PRODUCTION_PATH,
-  getBuidEnvArray,
   getBuidEnvString,
-  isWorkerPlugin,
 } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
-import inquirer from 'inquirer'
-import { getWorkersFromConfig, runApiServer } from '@/cli'
+import { runApiServer } from '@/cli'
 
 export const importConfig = async () => {
   try {

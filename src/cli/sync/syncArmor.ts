@@ -1,12 +1,17 @@
 import { importConfig } from '@/index'
 import { execSync } from 'child_process'
 import { getNetworkConfig } from '@/lib/getNetworkConfig'
-import { createSecurityPolicyRule, updateSecurityPolicyRule } from '@/cli'
+import {
+  createSecurityPolicyRule,
+  setGcloudProject,
+  updateSecurityPolicyRule,
+} from '@/cli'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import { Logger } from '@/lib/logger'
 
 export const syncArmor = async () => {
   const skeetConfig = await importConfig()
+  await setGcloudProject(skeetConfig.api.projectId)
   if (skeetConfig.cloudArmor)
     for await (const rule of skeetConfig.cloudArmor[0].rules) {
       const result = await isRuleExist(skeetConfig, rule.priority)
