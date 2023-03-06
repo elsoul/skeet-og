@@ -2,7 +2,6 @@ import { execSyncCmd } from '@/lib/execSyncCmd'
 import inquirer from 'inquirer'
 import {
   getWorkerConfig,
-  getWorkers,
   getWorkersFromConfig,
   setGcloudProject,
   syncRunUrl,
@@ -49,7 +48,9 @@ export const deploy = async () => {
           await apiDeploy(skeetConfig)
         } else {
           const isWorkerPluginBoolean = await isWorkerPlugin(service)
-          await workerDeploy(service, skeetConfig, isWorkerPluginBoolean)
+          isWorkerPluginBoolean
+            ? await workerPluginDeploy(service, skeetConfig)
+            : await workerDeploy(service, skeetConfig)
         }
       }
       await syncRunUrl()
@@ -168,8 +169,7 @@ export const cloudRunTag = async (
 
 export const workerDeploy = async (
   service: string,
-  skeetConfig: SkeetCloudConfig,
-  isWorkerPlugin: boolean = false
+  skeetConfig: SkeetCloudConfig
 ) => {
   await cloudRunBuild(skeetConfig.api.appName, service)
   await cloudRunTag(
@@ -192,8 +192,7 @@ export const workerDeploy = async (
     String(workerConf.cloudRun.cpu),
     String(workerConf.cloudRun.maxInstances),
     String(workerConf.cloudRun.minInstances),
-    service,
-    isWorkerPlugin
+    service
   )
 }
 
@@ -217,5 +216,24 @@ export const apiDeploy = async (skeetConfig: SkeetCloudConfig) => {
     String(skeetConfig.api.cloudRun.cpu),
     String(skeetConfig.api.cloudRun.maxInstances),
     String(skeetConfig.api.cloudRun.minInstances)
+  )
+}
+
+export const workerPluginDeploy = async (
+  service: string,
+  skeetConfig: SkeetCloudConfig
+) => {
+  const isWorkerPlugin = true
+  const workerConf = await getWorkerConfig(service)
+  await cloudRunDeploy(
+    skeetConfig.api.projectId,
+    skeetConfig.api.appName,
+    skeetConfig.api.region,
+    workerConf.cloudRun.memory,
+    String(workerConf.cloudRun.cpu),
+    String(workerConf.cloudRun.maxInstances),
+    String(workerConf.cloudRun.minInstances),
+    service,
+    isWorkerPlugin
   )
 }
