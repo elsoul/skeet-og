@@ -8,7 +8,7 @@ import { API_ENV_PRODUCTION_PATH, isWorkerPlugin } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import inquirer from 'inquirer'
-import { runApiServer } from '@/cli'
+import { getWorkersFromConfig, runApiServer } from '@/cli'
 
 export const importConfig = async () => {
   try {
@@ -33,7 +33,7 @@ Dotenv.config()
 async function test() {
   try {
     const a = 'solana-tra'
-    const enums = await isWorkerPlugin(a)
+    const enums = await getWorkersFromConfig()
     console.log(enums)
   } catch (error) {
     console.log(`error: ${error}`)

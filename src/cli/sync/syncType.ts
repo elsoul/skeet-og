@@ -1,3 +1,4 @@
+import { importConfig } from '@/index'
 import { API_TYPE_PATH, WORKER_PATH } from '@/lib/getNetworkConfig'
 import { Logger } from '@/lib/logger'
 import fs from 'fs'
@@ -20,6 +21,16 @@ export const getWorkers = async () => {
     .map((item) => item.name)
 
   return workerDirs
+}
+
+export const getWorkersFromConfig = async () => {
+  const skeetCloudConfig = await importConfig()
+  if (skeetCloudConfig.workers) {
+    const workers = skeetCloudConfig.workers?.map((item) => item.workerName)
+    return workers
+  } else {
+    return []
+  }
 }
 
 export const getWorkerTypeFilePaths = async (workerName: string) => {

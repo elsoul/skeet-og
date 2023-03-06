@@ -3,6 +3,7 @@ import inquirer from 'inquirer'
 import {
   getWorkerConfig,
   getWorkers,
+  getWorkersFromConfig,
   setGcloudProject,
   syncRunUrl,
 } from '@/cli'
@@ -19,7 +20,7 @@ import { importConfig } from '@/index'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 
 export const deploy = async () => {
-  const workers = await getWorkers()
+  const workers = await getWorkersFromConfig()
   let workerNames = [{ name: 'api' }]
   for await (const workerName of workers) {
     workerNames.push({ name: workerName })
