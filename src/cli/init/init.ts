@@ -106,10 +106,6 @@ export const init = async () => {
   inquirer.prompt(questions).then(async (answers) => {
     const answersJson = JSON.parse(JSON.stringify(answers))
     const skeetCloudConfig = await importConfig()
-    const { zoneName } = await getNetworkConfig(
-      skeetCloudConfig.api.projectId,
-      skeetCloudConfig.api.appName
-    )
     if (answersJson.password1 !== answersJson.password2)
       throw new Error("password doesn't match!")
 
