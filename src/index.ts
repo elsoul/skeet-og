@@ -8,7 +8,7 @@ import { API_ENV_PRODUCTION_PATH } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import inquirer from 'inquirer'
-import { initArmor, runApiServer } from '@/cli'
+import { initArmor, isWorkerPlugin, runApiServer, WorkerPlugins } from '@/cli'
 import { getEnums, syncEnumFile } from './lib/getModelInfo'
 
 export const importConfig = async () => {
@@ -95,8 +95,13 @@ async function main() {
     add
       .command('worker')
       .argument('<workerName>', 'Worker Name - e.g. TwitterApi')
-      .action(async (workerName: string) => {
-        await Skeet.addWorker(workerName)
+      .option('-plugin, --plugin', 'Skeet Worker Plugin Name', false)
+      .action(async (workerName: string, options) => {
+        if (options.plugin) {
+          await Skeet.addWorkerPlugin(workerName)
+        } else {
+          await Skeet.addWorker(workerName)
+        }
       })
     add
       .command('taskQueue')

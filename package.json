@@ -1,6 +1,6 @@
 {
   "name": "skeet",
-  "version": "0.34.0",
+  "version": "0.34.1",
   "description": "Full-stack TypeScript Serverless Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/elsoul/skeet.git",
@@ -17,7 +17,8 @@
     "build": "yarn update:version && npx ts-node build.ts && npx ts-node add-line.ts",
     "publish": "npm publish",
     "dev": "nodemon",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "skeet:hey": "yarn --cwd ./apps/workers/hey dev"
   },
   "dependencies": {
     "@stdlib/string-percent-encode": "0.0.9",

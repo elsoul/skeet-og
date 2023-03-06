@@ -15,6 +15,7 @@ import {
   WORKER_PATH,
 } from '@/lib/getNetworkConfig'
 import { importConfig } from '@/index'
+import { SkeetCloudConfig } from '@/types/skeetTypes'
 
 export const deploy = async () => {
   const workers = await getWorkers()
@@ -43,50 +44,9 @@ export const deploy = async () => {
       await setGcloudProject(skeetConfig.api.projectId)
       for await (const service of answers.deploying) {
         if (service === 'api') {
-          await cloudRunBuild(skeetConfig.api.appName)
-          await cloudRunTag(
-            skeetConfig.api.projectId,
-            skeetConfig.api.appName,
-            skeetConfig.api.region
-          )
-          await cloudRunPush(
-            skeetConfig.api.projectId,
-            skeetConfig.api.appName,
-            skeetConfig.api.region
-          )
-          await cloudRunDeploy(
-            skeetConfig.api.projectId,
-            skeetConfig.api.appName,
-            skeetConfig.api.region,
-            skeetConfig.api.cloudRun.memory,
-            String(skeetConfig.api.cloudRun.cpu),
-            String(skeetConfig.api.cloudRun.maxInstances),
-            String(skeetConfig.api.cloudRun.minInstances)
-          )
+          await apiDeploy(skeetConfig)
         } else {
-          await cloudRunBuild(skeetConfig.api.appName, service)
-          await cloudRunTag(
-            skeetConfig.api.projectId,
-            skeetConfig.api.appName,
-            skeetConfig.api.region
-          )
-          await cloudRunPush(
-            skeetConfig.api.projectId,
-            skeetConfig.api.appName,
-            skeetConfig.api.region,
-            service
-          )
-          const workerConf = await getWorkerConfig(service)
-          await cloudRunDeploy(
-            skeetConfig.api.projectId,
-            skeetConfig.api.appName,
-            skeetConfig.api.region,
-            workerConf.cloudRun.memory,
-            String(workerConf.cloudRun.cpu),
-            String(workerConf.cloudRun.maxInstances),
-            String(workerConf.cloudRun.minInstances),
-            service
-          )
+          await workerDeploy(service, skeetConfig)
         }
       }
       await syncRunUrl()
@@ -194,4 +154,56 @@ export const cloudRunTag = async (
   const imageUrl = await getContainerImageUrl(projectId, appName, region)
   const shCmd = ['docker', 'tag', imageName, imageUrl]
   execSyncCmd(shCmd)
+}
+
+export const workerDeploy = async (
+  service: string,
+  skeetConfig: SkeetCloudConfig
+) => {
+  await cloudRunBuild(skeetConfig.api.appName, service)
+  await cloudRunTag(
+    skeetConfig.api.projectId,
+    skeetConfig.api.appName,
+    skeetConfig.api.region
+  )
+  await cloudRunPush(
+    skeetConfig.api.projectId,
+    skeetConfig.api.appName,
+    skeetConfig.api.region,
+    service
+  )
+  const workerConf = await getWorkerConfig(service)
+  await cloudRunDeploy(
+    skeetConfig.api.projectId,
+    skeetConfig.api.appName,
+    skeetConfig.api.region,
+    workerConf.cloudRun.memory,
+    String(workerConf.cloudRun.cpu),
+    String(workerConf.cloudRun.maxInstances),
+    String(workerConf.cloudRun.minInstances),
+    service
+  )
+}
+
+export const apiDeploy = async (skeetConfig: SkeetCloudConfig) => {
+  await cloudRunBuild(skeetConfig.api.appName)
+  await cloudRunTag(
+    skeetConfig.api.projectId,
+    skeetConfig.api.appName,
+    skeetConfig.api.region
+  )
+  await cloudRunPush(
+    skeetConfig.api.projectId,
+    skeetConfig.api.appName,
+    skeetConfig.api.region
+  )
+  await cloudRunDeploy(
+    skeetConfig.api.projectId,
+    skeetConfig.api.appName,
+    skeetConfig.api.region,
+    skeetConfig.api.cloudRun.memory,
+    String(skeetConfig.api.cloudRun.cpu),
+    String(skeetConfig.api.cloudRun.maxInstances),
+    String(skeetConfig.api.cloudRun.minInstances)
+  )
 }
