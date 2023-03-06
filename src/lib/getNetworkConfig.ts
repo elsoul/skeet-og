@@ -18,6 +18,19 @@ export const WORKER_SOLANA_TRANSFER_REPO_URL =
   'https://github.com/elsoul/skeet-worker-solana-transfer'
 export const ENUM_FILE_PATH = './apps/api/src/graphql'
 
+export enum WorkerPlugins {
+  SOLANA_TRANSFER = 'solana-transfer',
+  ORCA_SWAP = 'orca-swap',
+  JUPITER_SWAP = 'jupiter-swap',
+}
+
+export const isWorkerPlugin = async (workerName: string) => {
+  if (!Object.values(WorkerPlugins)?.includes(workerName as WorkerPlugins)) {
+    return false
+  }
+  return true
+}
+
 export const getWorkerEnvPath = async (workerName: string) => {
   return `${WORKER_PATH}/${workerName}/.env`
 }
@@ -142,14 +155,16 @@ export const getContainerImageUrl = async (
   projectId: string,
   appName: string,
   region: string,
-  workerName: string = ''
+  workerName: string = '',
+  isPlugin: boolean = false
 ) => {
   const cRegion = await getContainerRegion(region)
   const imageName =
     workerName !== ''
       ? 'skeet-' + appName + '-worker-' + workerName
       : 'skeet-' + appName + '-api'
-  return cRegion + '/' + projectId + '/' + imageName + ':latest'
+  let containerProjectName = isPlugin ? 'skeet-framework' : projectId
+  return cRegion + '/' + containerProjectName + '/' + imageName + ':latest'
 }
 
 export const getContainerImageName = async (

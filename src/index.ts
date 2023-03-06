@@ -4,12 +4,11 @@ import { VERSION } from '@/lib/version'
 import * as Skeet from '@/cli'
 import fs from 'fs'
 import { toUpperCase } from '@/lib/strLib'
-import { API_ENV_PRODUCTION_PATH } from '@/lib/getNetworkConfig'
+import { API_ENV_PRODUCTION_PATH, isWorkerPlugin } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
 import inquirer from 'inquirer'
-import { initArmor, isWorkerPlugin, runApiServer, WorkerPlugins } from '@/cli'
-import { getEnums, syncEnumFile } from './lib/getModelInfo'
+import { runApiServer } from '@/cli'
 
 export const importConfig = async () => {
   try {
@@ -33,7 +32,8 @@ Dotenv.config()
 
 async function test() {
   try {
-    const enums = await syncEnumFile()
+    const a = 'solana-tra'
+    const enums = await isWorkerPlugin(a)
     console.log(enums)
   } catch (error) {
     console.log(`error: ${error}`)

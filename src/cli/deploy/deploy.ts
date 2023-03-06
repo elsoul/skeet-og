@@ -13,6 +13,7 @@ import {
   getBuidEnvString,
   API_PATH,
   WORKER_PATH,
+  isWorkerPlugin,
 } from '@/lib/getNetworkConfig'
 import { importConfig } from '@/index'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
@@ -46,7 +47,8 @@ export const deploy = async () => {
         if (service === 'api') {
           await apiDeploy(skeetConfig)
         } else {
-          await workerDeploy(service, skeetConfig)
+          const isWorkerPluginBoolean = await isWorkerPlugin(service)
+          await workerDeploy(service, skeetConfig, isWorkerPluginBoolean)
         }
       }
       await syncRunUrl()
@@ -62,7 +64,8 @@ export const cloudRunDeploy = async (
   cpu: string = '1',
   maxInstances: string = '100',
   minInstances: string = '0',
-  workerName: string = ''
+  workerName: string = '',
+  isWorkerPlugin: boolean = false
 ) => {
   let cloudRunName = ''
   let image = ''
@@ -70,8 +73,13 @@ export const cloudRunDeploy = async (
     cloudRunName = await getContainerImageName(appName)
     image = await getContainerImageUrl(projectId, appName, region)
   } else {
-    cloudRunName = await getContainerImageName(appName, workerName)
-    image = await getContainerImageUrl(projectId, appName, region, workerName)
+    image = await getContainerImageUrl(
+      projectId,
+      appName,
+      region,
+      workerName,
+      isWorkerPlugin
+    )
   }
   const { connectorName, serviceAccountName } = await getNetworkConfig(
     projectId,
@@ -158,7 +166,8 @@ export const cloudRunTag = async (
 
 export const workerDeploy = async (
   service: string,
-  skeetConfig: SkeetCloudConfig
+  skeetConfig: SkeetCloudConfig,
+  isWorkerPlugin: boolean = false
 ) => {
   await cloudRunBuild(skeetConfig.api.appName, service)
   await cloudRunTag(
@@ -181,7 +190,8 @@ export const workerDeploy = async (
     String(workerConf.cloudRun.cpu),
     String(workerConf.cloudRun.maxInstances),
     String(workerConf.cloudRun.minInstances),
-    service
+    service,
+    isWorkerPlugin
   )
 }
 

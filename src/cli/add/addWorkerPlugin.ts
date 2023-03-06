@@ -14,17 +14,6 @@ import {
   addWorkerToPackageJson,
 } from '@/cli'
 
-export enum WorkerPlugins {
-  SOLANA_TRANSFER = 'solana-transfer',
-}
-
-export const isWorkerPlugin = async (workerName: WorkerPlugins) => {
-  if (!Object.values(WorkerPlugins)?.includes(workerName)) {
-    return false
-  }
-  return true
-}
-
 export const addWorkerPlugin = async (pluginName: string) => {
   const skeetConfig = await importConfig()
   const workerName = pluginName
@@ -53,6 +42,7 @@ export const addWorkerPlugin = async (pluginName: string) => {
   await setupActions()
   const yarnCmd = ['yarn']
   await execSyncCmd(yarnCmd, `${WORKER_PATH}/${workerName}`)
-  await workerDeploy(workerName, skeetConfig)
+  const isWorkerPlugin = true
+  await workerDeploy(workerName, skeetConfig, isWorkerPlugin)
   Logger.success(`Successfully created ${workerName}!`)
 }
