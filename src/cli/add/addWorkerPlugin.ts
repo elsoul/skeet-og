@@ -12,7 +12,6 @@ import {
 export const addWorkerPlugin = async (pluginName: string) => {
   const skeetConfig = await importConfig()
   const workerName = pluginName
-  await addWorkerEnv(workerName)
   await updateSkeetCloudConfig(workerName)
   await addWorkerToPackageJson(workerName)
   await setupActions()
