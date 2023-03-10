@@ -11,7 +11,7 @@ import {
 } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
-import { runApiServer } from '@/cli'
+import { addApp, runApiServer } from '@/cli'
 
 export const importConfig = async () => {
   try {
@@ -105,6 +105,9 @@ async function main() {
           await Skeet.addWorker(workerName)
         }
       })
+    add.command('app').action(async () => {
+      await addApp()
+    })
     add
       .command('taskQueue')
       .argument('<queueName>', 'CloudTask Queue Name')

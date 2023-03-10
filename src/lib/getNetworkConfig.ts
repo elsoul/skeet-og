@@ -18,6 +18,8 @@ export const WORKER_REPO_URL = 'https://github.com/elsoul/skeet-worker'
 export const WORKER_SOLANA_TRANSFER_REPO_URL =
   'https://github.com/elsoul/skeet-worker-solana-transfer'
 export const ENUM_FILE_PATH = './apps/api/src/graphql'
+export const FRONT_APP_REPO_URL = 'https://github.com/elsoul/skeet-app-template'
+export const FRONT_APP_PATH = './apps/app'
 
 export enum WorkerPlugins {
   SOLANA_TRANSFER = 'solana-transfer',

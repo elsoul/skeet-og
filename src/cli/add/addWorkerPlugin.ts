@@ -2,15 +2,12 @@ import { Logger } from '@/lib/logger'
 import { importConfig } from '@/index'
 import {
   setupActions,
-  addWorkerEnv,
   updateSkeetCloudConfig,
-  addWorkerToPackageJson,
   getWorkerConfig,
   cloudRunDeploy,
 } from '@/cli'
 import {
   getContainerRegion,
-  getNetworkConfig,
   getPluginData,
   ROUTE_PACKAGE_JSON_PATH,
 } from '@/lib/getNetworkConfig'
