@@ -62,6 +62,8 @@ export const defaultProductionEnvArray = [
   'DATABASE_URL=postgresql://postgres:${{ secrets.SKEET_GCP_DB_PASSWORD }}@${{ secrets.SKEET_GCP_DB_PRIVATE_IP }}:5432/skeet-${{ secrets.SKEET_APP_NAME }}-production?schema=public',
   'SKEET_JWT_SALT=${{ secrets.SKEET_JWT_SALT }}',
   'SKEET_BASE_URL=${{ secrets.SKEET_BASE_URL }}',
+  'SKEET_CRYPTO_SALT=${{ secrets.SKEET_CRYPTO_SALT }}',
+  'SKEET_PW_SALT=${{ secrets.SKEET_PW_SALT }}',
   'SKEET_GCP_PROJECT_ID=${{ secrets.SKEET_GCP_PROJECT_ID }}',
   'SKEET_FB_PROJECT_ID=${{ secrets.SKEET_FB_PROJECT_ID }}',
   'TZ=${{ secrets.TZ }}',
@@ -89,12 +91,7 @@ export const getActionsEnvString = async (filePath: string) => {
   for await (const envLine of envArray) {
     let keyAndValue = envLine.match(/([A-Z_]+)="?([^"]*)"?/)
     if (keyAndValue) {
-      if (
-        keyAndValue[1].match('SKEET_') &&
-        !keyAndValue[1].match('SKEET_JWT') &&
-        !keyAndValue[1].match('SKEET_BASE')
-      )
-        continue
+      if (keyAndValue[1].match('SKEET_')) continue
       if (keyAndValue[1] === 'TZ') continue
       const envString =
         `${keyAndValue[1]}=$` + '{{ ' + `secrets.${keyAndValue[1]}` + ' }}'
