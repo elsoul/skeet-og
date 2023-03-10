@@ -26,6 +26,8 @@ export const genGraphqlIndex = async () => {
   let exportArray = [
     `export * from './taskManager'`,
     `export * from './modelManager'`,
+    `export * from './authManager'`,
+    `export * from './responseManager'`,
   ]
 
   const filePath = GRAPHQL_PATH + '/index.ts'
@@ -66,10 +68,11 @@ export const getPrismaModels = async () => {
   let splitSchema = String(prismaSchema).split('model ')
   splitSchema.shift()
   let modelNames: Array<string> = []
-  splitSchema.forEach((line) => {
+  for await (const line of splitSchema) {
     const firstLine = line.split('\n')[0]
     const modelName = firstLine.replace(' {', '')
+    if (modelName === 'EncryptedData') continue
     modelNames.push(modelName)
-  })
+  }
   return modelNames
 }
