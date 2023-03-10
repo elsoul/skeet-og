@@ -20,7 +20,7 @@ export const queryCodes = async (modelName: string) => {
     `export const ${modelNameUpper}sQuery = extendType({`,
     `  type: 'Query',`,
     `  definition(t) {`,
-    `    t.connectionField('${modelNameLower}sConnection', {`,
+    `    t.connectionField('${modelNameLower}Connection', {`,
     `      type: ${modelNameUpper}.$name,`,
     `      async resolve(_, args, ctx, info) {`,
     `        return connectionFromArray(await ctx.prisma.${modelNameLower}.findMany(), args)`,

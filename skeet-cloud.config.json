@@ -28,7 +28,7 @@
         "name": "skeet-skeet-test-worker-solana-transfer",
         "url": "",
         "cpu": 1,
-        "maxConcurrency": 10,
+        "maxConcurrency": 80,
         "maxInstances": 100,
         "minInstances": 0,
         "memory": "1Gi"

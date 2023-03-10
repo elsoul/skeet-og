@@ -68,3 +68,11 @@ export enum ArmorAction {
   DENY4 = 'deny-502',
   REDIRECT = 'redirect',
 }
+
+export type workerPluginList = Array<workerPlugin>
+
+export type workerPlugin = {
+  id: number
+  name: string
+  port: number
+}

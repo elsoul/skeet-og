@@ -7,6 +7,7 @@ import { toUpperCase } from '@/lib/strLib'
 import {
   API_ENV_PRODUCTION_PATH,
   getBuidEnvString,
+  getPluginData,
 } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
@@ -34,7 +35,7 @@ Dotenv.config()
 
 async function test() {
   try {
-    const location = 'heyhey!'.slice(0, -1) + '1'
+    const location = await getPluginData('solana-transfer')
     console.log(location)
   } catch (error) {
     console.log(`error: ${error}`)

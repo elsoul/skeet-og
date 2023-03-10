@@ -1,6 +1,6 @@
 {
   "name": "skeet",
-  "version": "0.35.7",
+  "version": "0.35.8",
   "description": "Full-stack TypeScript Serverless Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/elsoul/skeet.git",
@@ -19,7 +19,9 @@
     "dev": "nodemon",
     "start": "node dist/index.js",
     "skeet:hey": "yarn --cwd ./apps/workers/hey dev",
-    "skeet:solana-transfer": "yarn --cwd ./apps/workers/solana-transfer dev"
+    "skeet:solana-transfer": "yarn rm:solana-transfer-container && yarn run:solana-transfer",
+    "rm:solana-transfer-container": "docker rm -f skeet-worker-solana-transfer-dev",
+    "run:solana-transfer": "docker run -p 1112:1112 --name skeet-worker-solana-transfer-dev --env-file apps/api/.env eu.gcr.io/skeet-framework/skeet-worker-solana-transfer-dev:latest"
   },
   "dependencies": {
     "@stdlib/string-percent-encode": "0.0.9",

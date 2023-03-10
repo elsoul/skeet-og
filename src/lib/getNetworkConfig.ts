@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { createHash } from 'crypto'
 import { execSync } from 'child_process'
+import { workerPluginList } from '@/types/skeetTypes'
 
 export const KEYFILE_PATH = './keyfile.json'
 export const GRAPHQL_PATH = './apps/api/src/graphql'
@@ -29,6 +30,20 @@ export const isWorkerPlugin = async (workerName: string) => {
     return false
   }
   return true
+}
+
+export const getPluginData = async (pluginName: string) => {
+  try {
+    let pluginList: workerPluginList = await import(
+      '../lib/workerPluginList.json'
+    )
+    const plugin = pluginList.filter((value) => value.name === pluginName)
+    if (plugin.length === 0) return { id: 0, name: '', port: 0 }
+    return plugin[0]
+  } catch (error) {
+    console.log(`getPluginData: ${error}`)
+    return { id: 0, name: '', port: 0 }
+  }
 }
 
 export const getWorkerEnvPath = async (workerName: string) => {
