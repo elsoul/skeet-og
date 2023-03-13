@@ -71,7 +71,6 @@ export const getPrismaModels = async () => {
   for await (const line of splitSchema) {
     const firstLine = line.split('\n')[0]
     const modelName = firstLine.replace(' {', '')
-    if (modelName === 'EncryptedData') continue
     modelNames.push(modelName)
   }
   return modelNames

@@ -22,7 +22,7 @@ export const createModelCodes = async (modelName: string) => {
   const modelNameUpper = await toUpperCase(modelName)
   const modelNameLower = await toLowerCase(modelName)
   let codeArray = [
-    `import { extendType, nonNull, stringArg, intArg } from 'nexus'`,
+    `import { extendType, nonNull, stringArg, intArg, floatArg() } from 'nexus'`,
     `import { fromGlobalId } from 'graphql-relay'`,
     `import { ${modelNameUpper} } from 'nexus-prisma'\n`,
     `export const ${modelNameUpper}Mutation = extendType({`,
@@ -168,6 +168,10 @@ export const typeToInputMethodCreate = (type: string) => {
       return 'intArg()'
     case 'DateTime':
       return 'stringArg()'
+    case 'Float':
+      return 'nonNull(floatArg())'
+    case 'Float?':
+      return 'floatArg()'
     default:
       return 'stringArg()'
   }
@@ -185,6 +189,10 @@ export const typeToInputMethodUpdate = (type: string) => {
       return 'intArg()'
     case 'DateTime':
       return 'stringArg()'
+    case 'Float':
+      return 'floatArg()'
+    case 'Float?':
+      return 'floatArg()'
     default:
       return 'stringArg()'
   }

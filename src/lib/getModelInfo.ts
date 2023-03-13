@@ -15,12 +15,14 @@ export const prismaSchemaType = [
   'Float',
   'DateTime',
   'Boolean',
+  'Bytes',
 ]
 
 export enum ColType {
   Enum,
   Relation,
   Normal,
+  Bytes,
 }
 
 export const getColType = async (type: string) => {
@@ -33,6 +35,8 @@ export const getColType = async (type: string) => {
     } else {
       return ColType.Enum
     }
+  } else if (type === 'Bytes') {
+    return ColType.Bytes
   } else {
     return ColType.Normal
   }
@@ -98,6 +102,7 @@ export const getModelCols = async (modelName: string) => {
       if (splitArray[0].includes('@@')) continue
 
       let getColTypeResult = await getColType(splitArray[1])
+      if (getColTypeResult === ColType.Bytes) continue
       const type =
         getColTypeResult === ColType.Enum
           ? `${splitArray[1]}Enum`
