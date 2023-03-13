@@ -68,6 +68,7 @@ export const defaultProductionEnvArray = [
   'SKEET_PW_SALT=${{ secrets.SKEET_PW_SALT }}',
   'SKEET_GCP_PROJECT_ID=${{ secrets.SKEET_GCP_PROJECT_ID }}',
   'SKEET_FB_PROJECT_ID=${{ secrets.SKEET_FB_PROJECT_ID }}',
+  'SKEET_API_ENDPOINT_URL=${{ secrets.SKEET_API_ENDPOINT_URL }}',
   'TZ=${{ secrets.TZ }}',
 ]
 
