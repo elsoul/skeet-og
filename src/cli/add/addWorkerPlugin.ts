@@ -12,6 +12,8 @@ import {
   ROUTE_PACKAGE_JSON_PATH,
 } from '@/lib/getNetworkConfig'
 import fs from 'fs'
+import inquirer from 'inquirer'
+import { skeetWorkerPluginList } from '@/lib/workerPluginList'
 
 export const addWorkerPlugin = async (pluginName: string) => {
   const skeetConfig = await importConfig()
@@ -63,4 +65,34 @@ export const addWorkerPluginToPackageJson = async (
     JSON.stringify(newPackageJson, null, 2)
   )
   Logger.success('Successfully Updated ./package.json!')
+}
+
+export const selectWorkerPlugin = async () => {
+  const workerPluginList = skeetWorkerPluginList.map((value) => value.name)
+  inquirer
+    .prompt([
+      {
+        type: 'checkbox',
+        message: 'Select Services to deploy',
+        name: 'deploying',
+        choices: [new inquirer.Separator(' = Plugins = '), ...workerPluginList],
+        validate(answer) {
+          if (answer.length < 1) {
+            return 'You must choose at least one service.'
+          }
+
+          return true
+        },
+      },
+    ])
+    .then(async (answers) => {
+      switch (answers) {
+        case 'solana-transfer':
+          await addWorkerPlugin(answers)
+          break
+        default:
+          await Logger.sync('Coming soon!')
+          break
+      }
+    })
 }

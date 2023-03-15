@@ -11,7 +11,7 @@ import {
 } from '@/lib/getNetworkConfig'
 import { Logger } from './lib/logger'
 import { SkeetCloudConfig } from '@/types/skeetTypes'
-import { addApp, runApiServer } from '@/cli'
+import { addApp, runApiServer, selectWorkerPlugin } from '@/cli'
 
 export const importConfig = async () => {
   try {
@@ -97,14 +97,12 @@ async function main() {
     add
       .command('worker')
       .argument('<workerName>', 'Worker Name - e.g. TwitterApi')
-      .option('-plugin, --plugin', 'Skeet Worker Plugin Name', false)
-      .action(async (workerName: string, options) => {
-        if (options.plugin) {
-          await Skeet.addWorkerPlugin(workerName)
-        } else {
-          await Skeet.addWorker(workerName)
-        }
+      .action(async (workerName: string) => {
+        await Skeet.addWorkerPlugin(workerName)
       })
+    add.command('workerPlugin').action(async () => {
+      await selectWorkerPlugin()
+    })
     add.command('app').action(async () => {
       await addApp()
     })

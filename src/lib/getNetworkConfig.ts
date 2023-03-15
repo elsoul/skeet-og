@@ -2,6 +2,7 @@ import fs from 'fs'
 import { createHash } from 'crypto'
 import { execSync } from 'child_process'
 import { workerPluginList } from '@/types/skeetTypes'
+import { skeetWorkerPluginList } from './workerPluginList'
 
 export const KEYFILE_PATH = './keyfile.json'
 export const GRAPHQL_PATH = './apps/api/src/graphql'
@@ -36,10 +37,9 @@ export const isWorkerPlugin = async (workerName: string) => {
 
 export const getPluginData = async (pluginName: string) => {
   try {
-    let pluginList: workerPluginList = await import(
-      '../lib/workerPluginList.json'
+    const plugin = skeetWorkerPluginList.filter(
+      (value) => value.name === pluginName
     )
-    const plugin = pluginList.filter((value) => value.name === pluginName)
     if (plugin.length === 0) return { id: 0, name: '', port: 0 }
     return plugin[0]
   } catch (error) {
@@ -123,9 +123,7 @@ export const getBuidEnvString = async () => {
   const newEnv = envArray.filter((value) => {
     if (
       !value.match('SKEET_GCP_PROJECT_ID') &&
-      !value.match('SKEET_GCP_DB_PASSWORD') //&&
-      // !value.match('SKEET_API_URL') &&
-      // !value.match('SKEET_GCP_PROJECT_ID')
+      !value.match('SKEET_GCP_DB_PASSWORD')
     ) {
       return value
     }
