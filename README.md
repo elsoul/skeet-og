@@ -89,6 +89,24 @@ $ skeet deploy
 
 ![Skeet Deploy](https://storage.googleapis.com/skeet-assets/animation/skeet-deploy-compressed.gif)
 
+## Add Web3 Worker Plugins
+
+Add Web3 Worker Plugin by Skeet CLI
+
+```bash
+$ skeet add workerPlugin
+? Select Services to deploy (Press <space> to select, <a> to toggle all, <i> to invert selection, and <enter> to proceed)
+  = Plugins =
+❯◯ solana-transfer
+ ◯ orca-swap
+ ◯ jupiter-swap
+```
+
+This command deploy Skeet Worker Plugin Container To Google Cloud Run.
+Skeet API can run tasks by Google Cloud Task.
+
+Document: [https://skeet.dev](https://skeet.dev)
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/elsoul/skeet This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
@@ -100,3 +118,7 @@ The package is available as open source under the terms of the [Apache-2.0 Licen
 ## Code of Conduct
 
 Everyone interacting in the SKEET project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/elsoul/skeet/blob/master/CODE_OF_CONDUCT.md).
+
+```
+
+```
