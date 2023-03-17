@@ -92,7 +92,7 @@ export const selectWorkerPlugin = async () => {
     .then(async (answers) => {
       switch (answers.deploying) {
         case 'solana-transfer':
-          await addWorkerPlugin(answers)
+          await addWorkerPlugin(answers.deploying)
           break
         default:
           await Logger.sync('Coming soon!')
