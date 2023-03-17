@@ -7,7 +7,8 @@ import fs from 'fs'
 
 export const setupLoadBalancer = async (
   skeetCloudConfig: SkeetCloudConfig,
-  domain: string
+  domain: string,
+  dnsProjectId?: string
 ) => {
   try {
     await setGcloudProject(skeetCloudConfig.api.projectId)
@@ -53,36 +54,45 @@ export const setupLoadBalancer = async (
       skeetCloudConfig.api.appName
     )
 
-    await Skeet.createZone(
-      skeetCloudConfig.api.projectId,
-      skeetCloudConfig.api.appName,
-      domain
-    )
     const ip = await getIp(
       skeetCloudConfig.api.projectId,
       networkConf.loadBalancerIpName
     )
-    await Skeet.createRecord(
-      skeetCloudConfig.api.projectId,
-      networkConf.zoneName,
-      domain,
-      ip
-    )
-    await Skeet.createCaaRecords(
-      skeetCloudConfig.api.projectId,
-      networkConf.zoneName,
-      domain
-    )
-    await Skeet.getZone(
-      skeetCloudConfig.api.projectId,
-      skeetCloudConfig.api.appName
-    )
+
+    if (!dnsProjectId) {
+      await Skeet.createZone(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName,
+        domain
+      )
+
+      await Skeet.createRecord(
+        skeetCloudConfig.api.projectId,
+        networkConf.zoneName,
+        domain,
+        ip
+      )
+      await Skeet.createCaaRecords(
+        skeetCloudConfig.api.projectId,
+        networkConf.zoneName,
+        domain
+      )
+      await Skeet.getZone(
+        skeetCloudConfig.api.projectId,
+        skeetCloudConfig.api.appName
+      )
+
+      await Logger.sync(
+        `Copy nameServer's addresses above and paste them to your DNS settings`
+      )
+    } else {
+      await Skeet.createRecord(dnsProjectId, networkConf.zoneName, domain, ip)
+      await Skeet.createCaaRecords(dnsProjectId, networkConf.zoneName, domain)
+    }
+
     await hasLoadBalancerTrue(skeetCloudConfig)
     await syncApiUrl(skeetCloudConfig, domain)
 
-    await Logger.sync(
-      `Copy nameServer's addresses above and paste them to your DNS settings`
-    )
     await Logger.success(
       `Successfully created Load Balancer!\nhttps will be ready in about an hour after your DNS settings 🎉`
     )
