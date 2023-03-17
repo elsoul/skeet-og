@@ -1,1 +1,0 @@
-cd hey/apps/api && yarn

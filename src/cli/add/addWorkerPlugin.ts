@@ -5,6 +5,8 @@ import {
   updateSkeetCloudConfig,
   getWorkerConfig,
   cloudRunDeploy,
+  syncRunUrl,
+  syncWorkerPluginUrl,
 } from '@/cli'
 import {
   getContainerRegion,
@@ -41,6 +43,8 @@ export const addWorkerPlugin = async (pluginName: string) => {
     pluginName,
     isWorkerPlugin
   )
+  await syncRunUrl()
+  await syncWorkerPluginUrl(pluginName)
   Logger.success(`Successfully created ${pluginName}!`)
 }
 

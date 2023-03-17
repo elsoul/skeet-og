@@ -55,6 +55,19 @@ export const getWorkerName = async (appName: string, workerName: string) => {
   return `skeet-${appName}-worker-${workerName}`
 }
 
+export const getWorkerEnvName = async (workerName: string) => {
+  const str = await getEnvString(`${workerName}_WORKER_URL`)
+  return str
+}
+
+export const getEnvString = async (str: string) => {
+  const output = str
+    .replace(/-/g, '_')
+    .replace(/([a-z])([A-Z])/g, '$1_$2')
+    .toUpperCase()
+  return output
+}
+
 export const genSecret = async (name: string) => {
   return createHash('sha256').update(name).digest('hex')
 }
