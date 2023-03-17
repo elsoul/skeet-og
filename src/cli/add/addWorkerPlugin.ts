@@ -76,7 +76,7 @@ export const selectWorkerPlugin = async () => {
   inquirer
     .prompt([
       {
-        type: 'checkbox',
+        type: 'list',
         message: 'Select Services to deploy',
         name: 'deploying',
         choices: [new inquirer.Separator(' = Plugins = '), ...workerPluginList],
@@ -90,7 +90,7 @@ export const selectWorkerPlugin = async () => {
       },
     ])
     .then(async (answers) => {
-      switch (answers) {
+      switch (answers.deploying) {
         case 'solana-transfer':
           await addWorkerPlugin(answers)
           break
