@@ -7,6 +7,7 @@ import {
   cloudRunDeploy,
   syncRunUrl,
   syncWorkerPluginUrl,
+  saveSkeetSolanaTransfer,
 } from '@/cli'
 import {
   API_PATH,
@@ -98,10 +99,23 @@ export const selectWorkerPlugin = async () => {
       switch (answers.deploying) {
         case 'solana-transfer':
           await addWorkerPlugin(answers.deploying)
+          const yarnAddSolanaPlugin = [
+            'yarn',
+            'add',
+            '@skeet-framework/api-plugin-solana-transfer',
+          ]
+          await execSyncCmd(yarnAddSolanaPlugin, API_PATH)
+          await addSolanaResponse()
           break
         default:
           await Logger.sync('Coming soon!')
           break
       }
     })
+}
+
+const addSolanaResponse = async () => {
+  const fileData = await saveSkeetSolanaTransfer()
+  fs.writeFileSync(fileData.filePath, JSON.stringify(fileData.body, null, 2))
+  await Logger.success(`Successfully added ${fileData.filePath}`)
 }

@@ -1,5 +1,5 @@
 import { getEnumCols, getModelCols } from '@/lib/getModelInfo'
-import { toUpperCase, toLowerCase } from '@/lib/strLib'
+import { toLowerCase } from '@/lib/strLib'
 import { GRAPHQL_PATH } from '@/lib/getNetworkConfig'
 import { ModelSchema } from '@/lib/getModelInfo'
 export type ModelSchemaArray = Array<ModelSchema>
