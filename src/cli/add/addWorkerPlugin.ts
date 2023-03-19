@@ -9,6 +9,7 @@ import {
   syncWorkerPluginUrl,
 } from '@/cli'
 import {
+  API_PATH,
   getContainerRegion,
   getPluginData,
   ROUTE_PACKAGE_JSON_PATH,
@@ -16,6 +17,7 @@ import {
 import fs from 'fs'
 import inquirer from 'inquirer'
 import { skeetWorkerPluginList } from '@/lib/workerPluginList'
+import { execSyncCmd } from '@/lib/execSyncCmd'
 
 export const addWorkerPlugin = async (pluginName: string) => {
   const skeetConfig = await importConfig()
@@ -41,10 +43,13 @@ export const addWorkerPlugin = async (pluginName: string) => {
     String(workerConf.cloudRun.maxInstances),
     String(workerConf.cloudRun.minInstances),
     pluginName,
-    isWorkerPlugin
+    isWorkerPlugin,
+    skeetConfig.api.hasLoadBalancer
   )
   await syncRunUrl()
   await syncWorkerPluginUrl(pluginName)
+  const shCmd = ['yarn', 'add', `@skeet-framework/api-plugin-${pluginName}`]
+  await execSyncCmd(shCmd, API_PATH)
   Logger.success(`Successfully created ${pluginName}!`)
 }
 

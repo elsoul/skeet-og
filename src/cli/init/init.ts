@@ -224,7 +224,10 @@ export const apiRunDeploy = async (skeetCloudConfig: SkeetCloudConfig) => {
     String(skeetCloudConfig.api.cloudRun.cpu),
     String(skeetCloudConfig.api.cloudRun.maxConcurrency),
     String(skeetCloudConfig.api.cloudRun.maxInstances),
-    String(skeetCloudConfig.api.cloudRun.minInstances)
+    String(skeetCloudConfig.api.cloudRun.minInstances),
+    '',
+    false,
+    skeetCloudConfig.api.hasLoadBalancer
   )
 }
 

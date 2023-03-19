@@ -68,7 +68,8 @@ export const cloudRunDeploy = async (
   maxInstances: string = '100',
   minInstances: string = '0',
   workerName: string = '',
-  isWorkerPlugin: boolean = false
+  isWorkerPlugin: boolean = false,
+  hasBalancer: boolean = false
 ) => {
   let cloudRunName = ''
   let image = ''
@@ -111,7 +112,6 @@ export const cloudRunDeploy = async (
     minInstances,
     '--region',
     region,
-    '--allow-unauthenticated',
     '--platform=managed',
     '--quiet',
     '--vpc-connector',
@@ -121,6 +121,13 @@ export const cloudRunDeploy = async (
     '--set-env-vars',
     envString,
   ]
+  if (hasBalancer && workerName === '') {
+    shCmd.push('--ingress', 'internal-and-cloud-load-balancing')
+  } else if (!hasBalancer && workerName === '') {
+    shCmd.push('--allow-unauthenticated')
+  } else {
+    shCmd.push('--ingress', 'internal')
+  }
   await execSyncCmd(shCmd)
 }
 
@@ -220,7 +227,10 @@ export const apiDeploy = async (skeetConfig: SkeetCloudConfig) => {
     String(skeetConfig.api.cloudRun.cpu),
     String(skeetConfig.api.cloudRun.maxConcurrency),
     String(skeetConfig.api.cloudRun.maxInstances),
-    String(skeetConfig.api.cloudRun.minInstances)
+    String(skeetConfig.api.cloudRun.minInstances),
+    '',
+    false,
+    skeetConfig.api.hasLoadBalancer
   )
 }
 
