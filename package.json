@@ -1,9 +1,17 @@
 {
   "name": "skeet",
-  "version": "0.37.1",
+  "version": "0.37.3",
   "description": "Full-stack TypeScript Serverless Framework",
   "main": "dist/index.js",
   "repository": "https://github.com/elsoul/skeet.git",
+  "keywords": [
+    "TypeScript",
+    "Serverless",
+    "Web3js",
+    "GCP",
+    "GraphQL",
+    "Solana"
+  ],
   "author": "POPPIN-FUMI,KishiTheMechanic",
   "license": "Apache-2.0",
   "private": false,

@@ -107,6 +107,36 @@ Skeet API can run tasks by Google Cloud Task.
 
 Document: [https://skeet.dev](https://skeet.dev)
 
+## Skeet CLI
+
+```bash
+$ skeet --help
+Usage: skeet [options] [command]
+
+CLI to Skeet TypeScript Serverless Framework
+
+Options:
+  -V, --version             output the version number
+  -h, --help                display help for command
+
+Commands:
+  test
+  create <initAppName>      Create Skeet App
+  init                      Setup Google Cloud Platform
+  server|s                  Run Skeet Server
+  deploy                    Deploy to Google Cloud Run
+  yarn [options] <yarnCmd>
+  add                       Add Comannd
+  g|generate                Generate Comannd
+  d|delete                  Delete Comannd
+  db                        DB Command
+  sql                       CloudSQL Comannd
+  setup                     Setup Command
+  sync                      Sync Command
+  docker                    Docker Command
+  help [command]            display help for command
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/elsoul/skeet This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
@@ -118,7 +148,3 @@ The package is available as open source under the terms of the [Apache-2.0 Licen
 ## Code of Conduct
 
 Everyone interacting in the SKEET project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/elsoul/skeet/blob/master/CODE_OF_CONDUCT.md).
-
-```
-
-```
