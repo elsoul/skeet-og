@@ -80,7 +80,8 @@ export const defaultProductionEnvArray = [
   'SKEET_CRYPTO_SALT=${{ secrets.SKEET_CRYPTO_SALT }}',
   'SKEET_PW_SALT=${{ secrets.SKEET_PW_SALT }}',
   'SKEET_GCP_PROJECT_ID=${{ secrets.SKEET_GCP_PROJECT_ID }}',
-  'SKEET_FB_PROJECT_ID=${{ secrets.SKEET_FB_PROJECT_ID }}',
+  'SKEET_GCP_TASK_REGION=${{ secrets.SKEET_GCP_TASK_REGION }}',
+  'GOOGLE_CLOUD_PROJECT=${{ secrets.SKEET_FB_PROJECT_ID }}',
   'SKEET_API_ENDPOINT_URL=${{ secrets.SKEET_API_ENDPOINT_URL }}',
   'TZ=${{ secrets.TZ }}',
 ]
