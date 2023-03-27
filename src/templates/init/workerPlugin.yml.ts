@@ -45,7 +45,7 @@ jobs:
         run: |
           gcloud run deploy skeet-\${{ secrets.SKEET_APP_NAME }}-worker-${workerName} \\
             --service-account=\${{ secrets.SKEET_APP_NAME }}@\${{ secrets.SKEET_GCP_PROJECT_ID }}.iam.gserviceaccount.com \\
-            --image=\${{ secrets.SKEET_CONTAINER_REGION }}/skeet-framework/skeet-worker-solana-transfer \\
+            --image=\${{ secrets.SKEET_CONTAINER_REGION }}/skeet-framework/skeet-worker-${workerName} \\
             --memory=${memory} \\
             --cpu=${cpu} \\
             --concurrency=${maxConcurrency} \\

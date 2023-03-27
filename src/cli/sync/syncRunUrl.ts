@@ -33,7 +33,7 @@ export const syncApiUrl = async (
       skeetConfig.api.projectId,
       skeetConfig.api.appName
     )
-    const addEnvString = `\nSKEET_API_URL=${skeetConfig.api.cloudRun.url}`
+    const addEnvString = `\nSKEET_API_ENDPOINT_URL=${skeetConfig.api.cloudRun.url}`
     fs.writeFileSync(API_ENV_PRODUCTION_PATH, addEnvString, { flag: 'a' })
   }
   fs.writeFileSync(SKEET_CONFIG_PATH, JSON.stringify(skeetConfig, null, 2))

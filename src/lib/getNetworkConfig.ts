@@ -130,7 +130,7 @@ export const getBuidEnvString = async () => {
   const dabaseUrl = `postgresql://postgres:${hash['SKEET_GCP_DB_PASSWORD']}@${hash['SKEET_GCP_DB_PRIVATE_IP']}:5432/skeet-${hash['SKEET_APP_NAME']}-production?schema=public`
   const buildEnvArray = await getBuidEnvArray(
     hash['SKEET_GCP_PROJECT_ID'],
-    hash['SKEET_GCP_FB_PROJECT_ID'],
+    hash['GOOGLE_CLOUD_PROJECT'],
     dabaseUrl,
     hash['TZ']
   )
