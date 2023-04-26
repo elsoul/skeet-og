@@ -24,6 +24,10 @@
 
 Nexus Prisma, GraphQL, Relay Connection, ApolloServer with Express, TypeScript, PostgreSQL, Jest Test, Google Cloud Run
 
+🚧🚧🚧 This architecture of Skeet is deprecated. 🚧🚧🚧
+
+The new architecture of Skeet is here: https://github.com/elsoul/skeet-cli
+
 ## What's Skeet?
 
 TypeScript Serverless Framework 'Skeet'.
